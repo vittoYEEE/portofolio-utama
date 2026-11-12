@@ -6,10 +6,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuNav = document.getElementById("menuNav") || document.querySelector(".menu-nav");
   const menuItems = document.querySelectorAll(".menu-item");
   const goBadge = document.getElementById("goBadge") || document.querySelector(".go-badge");
-  const panels = Array.from(document.querySelectorAll(".page-panel"));
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
+  const panels = Array.from(document.querySelectorAll(".page-panel"));
+  const textRevealSelector =
+    ".about-section :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature)";
+  const originalAriaLabels = new Map();
+  let textBlocks = [];
   let stackUpdateFrame = null;
+  let textRevealFrame = null;
 
   function updateStackingPanels() {
     stackUpdateFrame = null;
@@ -44,6 +48,117 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", scheduleStackingUpdate, { passive: true });
   reducedMotion.addEventListener("change", scheduleStackingUpdate);
   scheduleStackingUpdate();
+
+  function updateTextReveal() {
+    textRevealFrame = null;
+    const viewportHeight = window.innerHeight;
+    if (viewportHeight === 0 || reducedMotion.matches) return;
+
+    textBlocks.forEach((block) => {
+      const rect = block.getBoundingClientRect();
+      if (
+        rect.bottom < -viewportHeight * 0.5 ||
+        rect.top > viewportHeight * 1.5
+      ) {
+        return;
+      }
+
+      const progress = Math.min(
+        1,
+        Math.max(0, (viewportHeight * 0.85 - rect.top) / (viewportHeight * 0.45)),
+      );
+      const words = block.querySelectorAll(".word");
+      const wordCount = words.length;
+
+      words.forEach((word, index) => {
+        const wordProgress = Math.min(
+          1,
+          Math.max(0, progress * wordCount - index),
+        );
+        word.style.opacity = String(0.15 + 0.85 * wordProgress);
+      });
+    });
+  }
+
+  function scheduleTextRevealUpdate() {
+    if (textRevealFrame !== null) return;
+    textRevealFrame = window.requestAnimationFrame(updateTextReveal);
+  }
+
+  function splitTextNode(textNode) {
+    const parts = textNode.textContent.match(/\s+|\S+/g);
+    if (!parts) return;
+
+    const fragment = document.createDocumentFragment();
+    parts.forEach((part) => {
+      if (/^\s+$/.test(part)) {
+        fragment.append(document.createTextNode(part));
+        return;
+      }
+
+      const word = document.createElement("span");
+      word.className = "word";
+      word.setAttribute("aria-hidden", "true");
+      word.textContent = part;
+      word.style.opacity = "0.15";
+      fragment.append(word);
+    });
+
+    textNode.replaceWith(fragment);
+  }
+
+  function restoreOriginalText() {
+    textBlocks = [];
+
+    document.querySelectorAll(".about-section .word").forEach((word) => {
+      word.replaceWith(document.createTextNode(word.textContent));
+    });
+
+    originalAriaLabels.forEach((ariaLabel, block) => {
+      if (ariaLabel === null) {
+        block.removeAttribute("aria-label");
+      } else {
+        block.setAttribute("aria-label", ariaLabel);
+      }
+    });
+    originalAriaLabels.clear();
+  }
+
+  function initializeTextReveal() {
+    restoreOriginalText();
+    if (reducedMotion.matches) return;
+
+    textBlocks = Array.from(
+      document.querySelectorAll(textRevealSelector),
+    ).filter((block) => !block.querySelector(textRevealSelector));
+
+    textBlocks.forEach((block) => {
+      originalAriaLabels.set(block, block.getAttribute("aria-label"));
+      block.setAttribute(
+        "aria-label",
+        block.textContent.replace(/\s+/g, " ").trim(),
+      );
+
+      const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      const textNodes = [];
+      while (walker.nextNode()) {
+        if (/\S/.test(walker.currentNode.textContent)) {
+          textNodes.push(walker.currentNode);
+        }
+      }
+      textNodes.forEach(splitTextNode);
+    });
+
+    scheduleTextRevealUpdate();
+  }
+
+  window.addEventListener("scroll", scheduleTextRevealUpdate, { passive: true });
+  window.addEventListener("resize", scheduleTextRevealUpdate, { passive: true });
+  document
+    .querySelector(".about-section > .panel-content")
+    ?.addEventListener("scroll", scheduleTextRevealUpdate, { passive: true });
+  reducedMotion.addEventListener("change", initializeTextReveal);
+  initializeTextReveal();
 
   // 1. Efek Navbar Menyempit Jadi Kapsul Saat Halaman Di-Scroll
   if (navbar) {
