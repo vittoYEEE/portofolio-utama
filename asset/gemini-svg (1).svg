@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="purpleBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c0e8f" />
+      <stop offset="55%" stop-color="#2d0754" />
+      <stop offset="100%" stop-color="#140329" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Persegi Ungu -->
+  <rect width="512" height="512" rx="112" fill="url(#purpleBg)" />
+
+  <!-- Logo ve. -->
+  <g fill="#ffffff">
+    <!-- Huruf v -->
+    <path d="M58 172 H118 L151 281 L184 172 H244 L186 340 H116 Z" />
+
+    <!-- Huruf e -->
+    <path fill-rule="evenodd" d="M397 268 C397 212 361 170 312 170 C263 170 227 208 227 256 C227 305 263 342 314 342 C346 342 372 327 386 304 L344 283 C336 293 326 298 313 298 C293 298 281 287 279 271 H397 Z M280 238 C282 220 295 208 312 208 C329 208 342 220 344 238 Z" />
+
+    <!-- Titik -->
+    <circle cx="423" cy="311" r="31" />
+  </g>
+</svg>
