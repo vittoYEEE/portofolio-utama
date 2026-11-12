@@ -6,6 +6,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuNav = document.getElementById("menuNav") || document.querySelector(".menu-nav");
   const menuItems = document.querySelectorAll(".menu-item");
   const goBadge = document.getElementById("goBadge") || document.querySelector(".go-badge");
+  const panels = Array.from(document.querySelectorAll(".page-panel"));
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let stackUpdateFrame = null;
+
+  function updateStackingPanels() {
+    stackUpdateFrame = null;
+    const viewportHeight = window.innerHeight;
+
+    panels.forEach((panel, index) => {
+      const content = panel.querySelector(".panel-content");
+      if (!content) return;
+
+      const nextPanel = panels[index + 1];
+      if (!nextPanel || reducedMotion.matches || viewportHeight === 0) {
+        content.style.transform = "scale(1)";
+        content.style.filter = "brightness(1)";
+        return;
+      }
+
+      const progress = Math.min(
+        1,
+        Math.max(0, 1 - nextPanel.getBoundingClientRect().top / viewportHeight),
+      );
+      content.style.transform = `scale(${1 - progress * 0.08})`;
+      content.style.filter = `brightness(${1 - progress * 0.45})`;
+    });
+  }
+
+  function scheduleStackingUpdate() {
+    if (stackUpdateFrame !== null) return;
+    stackUpdateFrame = window.requestAnimationFrame(updateStackingPanels);
+  }
+
+  window.addEventListener("scroll", scheduleStackingUpdate, { passive: true });
+  window.addEventListener("resize", scheduleStackingUpdate, { passive: true });
+  reducedMotion.addEventListener("change", scheduleStackingUpdate);
+  scheduleStackingUpdate();
 
   // 1. Efek Navbar Menyempit Jadi Kapsul Saat Halaman Di-Scroll
   if (navbar) {
