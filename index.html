@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vittorio Veneto — Portfolio</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Hubungkan ke file CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar" id="navbar">
+      <a href="#home" class="logo">ve.</a>
+      <span class="nav-center">VENETO</span>
+      <button class="menu-btn" id="openMenuBtn" aria-label="Buka Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
+
+    <!-- Halaman Overlay Menu Navigasi -->
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true">
+      <div class="menu-container">
+        <div class="menu-header">
+          <span class="studio-badge">VENETO STUDIO</span>
+          <button
+            class="close-menu-btn"
+            id="closeMenuBtn"
+            aria-label="Tutup Menu"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <nav class="menu-nav" id="menuNav">
+          <div class="go-badge" id="goBadge" aria-hidden="true">
+            <span>GO</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </div>
+
+          <a href="#home" class="menu-item is-active">
+            <span class="menu-label">HOME</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+
+          <a href="#about" class="menu-item">
+            <span class="menu-label">ABOUT</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+
+          <a href="#tools" class="menu-item">
+            <span class="menu-label">TOOLS</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+
+          <a href="#projects" class="menu-item">
+            <span class="menu-label">PROJECTS</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+
+          <a href="#reviews" class="menu-item">
+            <span class="menu-label">REVIEWS</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+
+          <a href="#contact" class="menu-item">
+            <span class="menu-label">CONTACT</span>
+            <svg
+              class="menu-arrow"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="8 7 17 7 17 16"></polyline>
+            </svg>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Konten Utama -->
+    <div class="page-wrapper" id="home">
+      <main class="hero">
+        <h1 class="hero-title">
+          <span class="line-port">port</span>
+          <span class="line-folio">folio</span>
+        </h1>
+
+        <aside class="profile-card">
+          <h2>Vittorio Veneto</h2>
+          <p class="role">Web Developer</p>
+          <p class="bio">
+            Membuat desain yang menghubungkan ide, brand, dan kreativitas.
+          </p>
+        </aside>
+      </main>
+
+      <section class="next-section" id="about">
+        <p>Scroll ke atas untuk mengembalikan navbar ke posisi semula.</p>
+      </section>
+    </div>
+
+    <!-- Hubungkan ke file JavaScript terpisah -->
+    <script src="script.js"></script>
+  </body>
+</html>
