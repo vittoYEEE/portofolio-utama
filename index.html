@@ -22,10 +22,53 @@
     />
     <link rel="icon" type="image/x-icon" href="./asset/gemini-svg (1).svg" />
 
+    <link rel="stylesheet" href="loader.css" />
+
     <!-- Hubungkan ke file CSS -->
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div
+      id="loader"
+      role="status"
+      aria-label="Memuat: Web Developer, Web Design"
+    >
+      <div class="ld-atmosphere" aria-hidden="true">
+        <div class="ld-blob-field">
+          <span class="ld-blob ld-blob-1"></span>
+          <span class="ld-blob ld-blob-2"></span>
+          <span class="ld-blob ld-blob-3"></span>
+          <span class="ld-blob ld-blob-4"></span>
+        </div>
+        <div class="ld-vignette"></div>
+        <div class="ld-grain"></div>
+      </div>
+
+      <div class="ld-content">
+        <div class="ld-words" aria-hidden="true">
+          <span class="ld-wheel ld-wheel-1">
+            <span class="ld-number">01</span>
+            <span class="ld-window">
+              <span class="ld-measure">Web Developer</span>
+              <span class="ld-word">Web Developer</span>
+            </span>
+            <span class="ld-underline"></span>
+          </span>
+
+          <span class="ld-divider">/</span>
+
+          <span class="ld-wheel ld-wheel-2">
+            <span class="ld-number">02</span>
+            <span class="ld-window">
+              <span class="ld-measure">Web Design</span>
+              <span class="ld-word">Web Design</span>
+            </span>
+            <span class="ld-underline"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <!-- Navbar -->
     <header class="navbar" id="navbar">
       <div class="logo">
@@ -319,6 +362,7 @@
     </div>
 
     <!-- Hubungkan ke file JavaScript terpisah -->
+    <script src="loader.js" defer></script>
     <script src="script.js" defer></script>
     <script src="tools-scroll.js" defer></script>
   </body>

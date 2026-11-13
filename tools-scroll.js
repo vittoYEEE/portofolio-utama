@@ -36,16 +36,17 @@
     const scrollDistance = rect.height - viewportHeight;
     if (viewportHeight === 0 || scrollDistance <= 0) return;
 
-    const progress = clamp(-rect.top / scrollDistance, 0, 1);
-    const holdProgress = 0.35;
-    const animationProgress = clamp(
-      (progress - holdProgress) / (0.8 - holdProgress),
+    const scrollProgress = clamp(-rect.top / scrollDistance, 0, 1);
+    const holdProgress = 0.25;
+    const revealEndProgress = 0.85;
+    const revealProgress = clamp(
+      (scrollProgress - holdProgress) / (revealEndProgress - holdProgress),
       0,
       1,
     );
-    const revealProgress = clamp(animationProgress / 0.8, 0, 1);
-    const easedReveal = 1 - (1 - revealProgress) ** 3;
-    const baseProgress = clamp(animationProgress / 0.5, 0, 1);
+    const easedReveal =
+      revealProgress * revealProgress * (3 - 2 * revealProgress);
+    const baseProgress = clamp(revealProgress / 0.85, 0, 1);
 
     revealLayer.style.clipPath = `circle(${easedReveal * 100}% at 50% 50%)`;
     baseContent.style.transform = `scale(${1 + baseProgress * 1.4})`;

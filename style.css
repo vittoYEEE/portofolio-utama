@@ -713,12 +713,12 @@ body.menu-open {
   min-height: 0;
   overflow: visible;
   content-visibility: auto;
-  contain-intrinsic-size: auto 350svh;
+  contain-intrinsic-size: auto 500svh;
 }
 
 #about .tools-portal {
   position: relative;
-  height: 350svh;
+  height: 500svh;
 }
 
 #about .tools-portal-sticky {

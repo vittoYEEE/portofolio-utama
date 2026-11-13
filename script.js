@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const targetScroll =
             window.scrollY +
             portal.getBoundingClientRect().top +
-            scrollDistance * 0.65;
+            scrollDistance * 0.88;
           window.scrollTo({
             top: targetScroll,
             behavior: reducedMotion.matches ? "auto" : "smooth",

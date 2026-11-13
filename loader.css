@@ -1,0 +1,405 @@
+#loader {
+  --ld-bg: #08040d;
+  --ld-bg-deep: #260044;
+  --ld-blob-1: #6311a1;
+  --ld-blob-2: #3b096e;
+  --ld-blob-3: #4c0e8f;
+  --ld-blob-4: #f99b45;
+  --ld-text: #ffffff;
+  --ld-accent: #f99b45;
+  --ld-word-reveal-duration: 850ms;
+  --ld-wheel-1-delay: 300ms;
+  --ld-wheel-2-delay: 950ms;
+  --ld-divider-delay: 1500ms;
+  --ld-underline-duration: 600ms;
+  --ld-number-duration: 300ms;
+  --ld-blob-1-duration: 18000ms;
+  --ld-blob-2-duration: 21000ms;
+  --ld-blob-3-duration: 23000ms;
+  --ld-blob-4-duration: 19000ms;
+  --ld-exit-text-duration: 500ms;
+  --ld-sweep-duration: 1150ms;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  overflow: hidden;
+  color: var(--ld-text);
+  background:
+    radial-gradient(
+      ellipse at 85% 12%,
+      rgba(99, 17, 161, 0.3) 0%,
+      transparent 42%
+    ),
+    linear-gradient(
+      128deg,
+      var(--ld-bg-deep) 0%,
+      var(--ld-bg) 50%,
+      var(--ld-blob-2) 100%
+    );
+  clip-path: polygon(0 0, 160% 0, 100% 100%, 0 100%);
+  isolation: isolate;
+}
+
+#loader .ld-atmosphere,
+#loader .ld-blob-field,
+#loader .ld-vignette,
+#loader .ld-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#loader .ld-atmosphere {
+  overflow: hidden;
+}
+
+#loader .ld-blob-field {
+  inset: -14%;
+  filter: blur(64px);
+  opacity: 0.52;
+}
+
+#loader .ld-blob {
+  position: absolute;
+  display: block;
+  width: min(52vw, 680px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+#loader .ld-blob-1 {
+  top: -18%;
+  left: -12%;
+  background: var(--ld-blob-1);
+  animation: ld-drift-one var(--ld-blob-1-duration) ease-in-out infinite
+    alternate;
+}
+
+#loader .ld-blob-2 {
+  top: -12%;
+  right: -14%;
+  width: min(58vw, 760px);
+  background: var(--ld-blob-2);
+  animation: ld-drift-two var(--ld-blob-2-duration) ease-in-out infinite
+    alternate;
+}
+
+#loader .ld-blob-3 {
+  bottom: -34%;
+  left: 18%;
+  width: min(54vw, 720px);
+  background: var(--ld-blob-3);
+  animation: ld-drift-three var(--ld-blob-3-duration) ease-in-out infinite
+    alternate;
+}
+
+#loader .ld-blob-4 {
+  right: 12%;
+  bottom: -28%;
+  width: min(42vw, 560px);
+  background: var(--ld-blob-4);
+  opacity: 0.16;
+  animation: ld-drift-four var(--ld-blob-4-duration) ease-in-out infinite
+    alternate;
+}
+
+#loader .ld-vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 38%,
+    rgba(8, 4, 13, 0.42) 100%
+  );
+}
+
+#loader .ld-grain {
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+}
+
+#loader .ld-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding:
+    calc(24px + env(safe-area-inset-top))
+    calc(24px + env(safe-area-inset-right))
+    calc(24px + env(safe-area-inset-bottom))
+    calc(24px + env(safe-area-inset-left));
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(24px, min(4.7vw, calc(5vw - 2.4px)), 62px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-align: center;
+}
+
+#loader .ld-words {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(12px, 1.35vw, 24px);
+  white-space: nowrap;
+}
+
+#loader .ld-wheel {
+  position: relative;
+  display: inline-block;
+  color: var(--ld-text);
+}
+
+#loader .ld-wheel-1 {
+  --ld-wheel-delay: var(--ld-wheel-1-delay);
+}
+
+#loader .ld-wheel-2 {
+  --ld-wheel-delay: var(--ld-wheel-2-delay);
+}
+
+#loader .ld-window {
+  position: relative;
+  display: inline-block;
+  width: max-content;
+  height: 1.18em;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+#loader .ld-measure {
+  display: block;
+  visibility: hidden;
+  line-height: 1.18;
+  white-space: nowrap;
+}
+
+#loader .ld-word {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  color: var(--ld-text);
+  line-height: 1.18;
+  white-space: nowrap;
+  opacity: 0;
+  filter: blur(2.5px);
+  transform: translateY(100%);
+  animation: ld-word-reveal var(--ld-word-reveal-duration)
+    cubic-bezier(0.7, 0, 0.12, 1) var(--ld-wheel-delay) both;
+  animation-play-state: paused;
+}
+
+#loader.ld-started .ld-word {
+  animation-play-state: running;
+}
+
+#loader .ld-number {
+  position: absolute;
+  top: -0.8em;
+  left: 0;
+  width: 100%;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.26em;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  opacity: 0;
+  animation:
+    ld-number-in var(--ld-number-duration) ease
+    calc(var(--ld-wheel-delay) + var(--ld-word-reveal-duration)) both;
+  animation-play-state: paused;
+}
+
+#loader.ld-started .ld-number {
+  animation-play-state: running;
+}
+
+#loader .ld-underline {
+  position: absolute;
+  right: 0;
+  bottom: -0.12em;
+  left: 0;
+  height: 1px;
+  background: var(--ld-accent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation:
+    ld-underline var(--ld-underline-duration) cubic-bezier(0.65, 0, 0.35, 1)
+    calc(var(--ld-wheel-delay) + var(--ld-word-reveal-duration)) both;
+  animation-play-state: paused;
+}
+
+#loader.ld-started .ld-underline {
+  animation-play-state: running;
+}
+
+#loader .ld-divider {
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+  opacity: 0;
+  animation: ld-divider-in 400ms ease-out var(--ld-divider-delay) both;
+  animation-play-state: paused;
+}
+
+#loader.ld-started .ld-divider {
+  animation-play-state: running;
+}
+
+#loader.ld-exit-text .ld-content {
+  animation: ld-content-out var(--ld-exit-text-duration) ease forwards;
+}
+
+#loader.ld-sweeping {
+  animation:
+    ld-sweep var(--ld-sweep-duration) cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+#loader.ld-finished .ld-blob {
+  animation-play-state: paused;
+}
+
+@keyframes ld-word-reveal {
+  from {
+    opacity: 0;
+    filter: blur(2.5px);
+    transform: translateY(100%);
+  }
+
+  to {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ld-divider-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ld-number-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ld-underline {
+  to {
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ld-content-out {
+  to {
+    opacity: 0;
+    transform: translateY(-28px);
+  }
+}
+
+@keyframes ld-sweep {
+  from {
+    clip-path: polygon(0 0, 160% 0, 100% 100%, 0 100%);
+  }
+
+  to {
+    clip-path: polygon(0 0, 0 0, -60% 100%, 0 100%);
+  }
+}
+
+@keyframes ld-drift-one {
+  to {
+    transform: translate3d(8%, 12%, 0) scale(1.06);
+  }
+}
+
+@keyframes ld-drift-two {
+  to {
+    transform: translate3d(-10%, 8%, 0) scale(0.94);
+  }
+}
+
+@keyframes ld-drift-three {
+  to {
+    transform: translate3d(10%, -8%, 0) scale(1.08);
+  }
+}
+
+@keyframes ld-drift-four {
+  to {
+    transform: translate3d(-8%, -12%, 0) scale(0.95);
+  }
+}
+
+@media (max-width: 700px) {
+  #loader .ld-content {
+    font-size: clamp(28px, 8.4vw, 44px);
+  }
+
+  #loader .ld-words {
+    flex-direction: column;
+    gap: 0.72em;
+    white-space: normal;
+  }
+
+  #loader .ld-divider {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #loader .ld-blob {
+    animation: none;
+  }
+
+  #loader .ld-wheel,
+  #loader .ld-word,
+  #loader .ld-number,
+  #loader .ld-underline {
+    animation: none;
+  }
+
+  #loader .ld-word {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  #loader .ld-divider {
+    opacity: 1;
+  }
+
+  #loader .ld-number {
+    opacity: 1;
+  }
+
+  #loader .ld-underline {
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+
+  #loader.ld-exit-text .ld-content {
+    animation: ld-content-fade var(--ld-exit-text-duration) ease forwards;
+  }
+
+  #loader.ld-exiting {
+    animation: ld-reduced-fade var(--ld-sweep-duration) ease forwards;
+  }
+
+  @keyframes ld-content-fade {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes ld-reduced-fade {
+    to {
+      opacity: 0;
+    }
+  }
+}
