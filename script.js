@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const panels = Array.from(document.querySelectorAll(".page-panel"));
   const textRevealSelector =
-    ".about-section :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature)";
+    ".tools-portal-about-content :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature)";
   const originalAriaLabels = new Map();
   let textBlocks = [];
   let stackUpdateFrame = null;
@@ -203,7 +203,25 @@ document.addEventListener("DOMContentLoaded", () => {
       item.classList.add("is-active");
     });
 
-    item.addEventListener("click", closeMenu);
+    item.addEventListener("click", (event) => {
+      if (item.getAttribute("href") === "#tools") {
+        const portal = document.querySelector("#about [data-tools-portal]");
+        if (portal) {
+          event.preventDefault();
+          const scrollDistance = portal.offsetHeight - window.innerHeight;
+          const targetScroll =
+            window.scrollY +
+            portal.getBoundingClientRect().top +
+            scrollDistance * 0.65;
+          window.scrollTo({
+            top: targetScroll,
+            behavior: reducedMotion.matches ? "auto" : "smooth",
+          });
+        }
+      }
+
+      closeMenu();
+    });
   });
 
   // 4. Custom Cursor "GO ↗" Super Smooth (Lerp + RequestAnimationFrame)
