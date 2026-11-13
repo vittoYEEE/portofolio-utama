@@ -9,6 +9,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      href="https://fonts.gstatic.com/s/poppins/v24/pxiByp8kv8JHgFVrLDD4Z1xlFQ.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      fetchpriority="high"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
@@ -20,7 +28,9 @@
   <body>
     <!-- Navbar -->
     <header class="navbar" id="navbar">
-      <div class="logo"><img src="./asset/logo Ve.png" alt="" /></div>
+      <div class="logo">
+        <img src="./asset/logo Ve.png" alt="" width="423" height="185" />
+      </div>
       <span class="nav-center">VENETO</span>
       <button class="menu-btn" id="openMenuBtn" aria-label="Buka Menu">
         <span></span>
@@ -309,7 +319,7 @@
     </div>
 
     <!-- Hubungkan ke file JavaScript terpisah -->
-    <script src="script.js"></script>
-    <script src="tools-scroll.js"></script>
+    <script src="script.js" defer></script>
+    <script src="tools-scroll.js" defer></script>
   </body>
 </html>

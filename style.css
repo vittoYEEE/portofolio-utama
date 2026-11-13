@@ -712,6 +712,8 @@ body.menu-open {
   height: auto;
   min-height: 0;
   overflow: visible;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 350svh;
 }
 
 #about .tools-portal {

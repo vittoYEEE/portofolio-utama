@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
       content.style.transform = `scale(${1 - progress * 0.08})`;
       content.style.filter = `brightness(${1 - progress * 0.45})`;
     });
+
+    if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
   }
 
   function scheduleStackingUpdate() {
@@ -160,17 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
   reducedMotion.addEventListener("change", initializeTextReveal);
   initializeTextReveal();
 
-  // 1. Efek Navbar Menyempit Jadi Kapsul Saat Halaman Di-Scroll
-  if (navbar) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add("scrolled");
-      } else {
-        navbar.classList.remove("scrolled");
-      }
-    });
-  }
-
   // 2. Fungsi Buka & Tutup Halaman Menu Navigasi
   function openMenu() {
     if (!menuOverlay) return;
@@ -234,9 +225,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentScale = 0;
   let targetOpacity = 0;
   let currentOpacity = 0;
+  let cursorFrame = null;
 
   let isInsideMenu = false;
   let hasInitializedPos = false;
+
+  function scheduleCursorAnimation() {
+    if (!goBadge || cursorFrame !== null) return;
+    cursorFrame = window.requestAnimationFrame(animateCursor);
+  }
 
   function showCustomCursor(e) {
     if (!goBadge) return;
@@ -257,12 +254,37 @@ document.addEventListener("DOMContentLoaded", () => {
     isInsideMenu = true;
     targetScale = 1;
     targetOpacity = 1;
+    scheduleCursorAnimation();
   }
 
   function hideCustomCursor() {
     isInsideMenu = false;
     targetScale = 0;
     targetOpacity = 0;
+    scheduleCursorAnimation();
+  }
+
+  function animateCursor() {
+    cursorFrame = null;
+    const posEase = 0.16;
+    const scaleEase = 0.2;
+
+    currentX += (targetX - currentX) * posEase;
+    currentY += (targetY - currentY) * posEase;
+    currentScale += (targetScale - currentScale) * scaleEase;
+    currentOpacity += (targetOpacity - currentOpacity) * scaleEase;
+
+    goBadge.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) scale(${currentScale.toFixed(3)})`;
+    goBadge.style.opacity = currentOpacity.toFixed(3);
+
+    if (
+      Math.abs(targetX - currentX) > 0.1 ||
+      Math.abs(targetY - currentY) > 0.1 ||
+      Math.abs(targetScale - currentScale) > 0.001 ||
+      Math.abs(targetOpacity - currentOpacity) > 0.001
+    ) {
+      scheduleCursorAnimation();
+    }
   }
 
   if (menuNav && goBadge) {
@@ -275,10 +297,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Efek membesar sedikit saat diklik
     menuNav.addEventListener("mousedown", () => {
-      if (isInsideMenu) targetScale = 0.88;
+      if (isInsideMenu) {
+        targetScale = 0.88;
+        scheduleCursorAnimation();
+      }
     });
     menuNav.addEventListener("mouseup", () => {
-      if (isInsideMenu) targetScale = 1;
+      if (isInsideMenu) {
+        targetScale = 1;
+        scheduleCursorAnimation();
+      }
     });
 
     // Sembunyikan juga jika kursor keluar dari jendela browser
@@ -287,22 +315,5 @@ document.addEventListener("DOMContentLoaded", () => {
       hasInitializedPos = false;
     });
 
-    // Loop animasi 60/120fps
-    function animateCursor() {
-      const posEase = 0.16;   // Kehalusan gerakan mengikuti kursor
-      const scaleEase = 0.2;  // Kehalusan efek muncul & menghilang
-
-      currentX += (targetX - currentX) * posEase;
-      currentY += (targetY - currentY) * posEase;
-      currentScale += (targetScale - currentScale) * scaleEase;
-      currentOpacity += (targetOpacity - currentOpacity) * scaleEase;
-
-      goBadge.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) scale(${currentScale.toFixed(3)})`;
-      goBadge.style.opacity = currentOpacity.toFixed(3);
-
-      requestAnimationFrame(animateCursor);
-    }
-
-    requestAnimationFrame(animateCursor);
   }
 });
