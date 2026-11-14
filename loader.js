@@ -69,6 +69,7 @@
     loader.style.pointerEvents = "none";
     root.style.overflow = previousRootOverflow;
     body.style.overflow = previousBodyOverflow;
+    window.dispatchEvent(new Event("portfolio:loader-finished"));
   }
 
   async function start() {

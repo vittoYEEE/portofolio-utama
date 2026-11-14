@@ -75,7 +75,14 @@
         <img src="./asset/logo Ve.png" alt="" width="423" height="185" />
       </div>
       <span class="nav-center">VENETO</span>
-      <button class="menu-btn" id="openMenuBtn" aria-label="Buka Menu">
+      <button
+        class="menu-btn"
+        id="openMenuBtn"
+        type="button"
+        aria-label="Buka Menu"
+        aria-expanded="false"
+        aria-controls="menuOverlay"
+      >
         <span></span>
         <span></span>
         <span></span>
@@ -87,152 +94,33 @@
       <div class="menu-container">
         <div class="menu-header">
           <span class="studio-badge">VENETO STUDIO</span>
-          <button
-            class="close-menu-btn"
-            id="closeMenuBtn"
-            aria-label="Tutup Menu"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+          <span class="menu-count">MENU / 01—05</span>
         </div>
 
-        <nav class="menu-nav" id="menuNav">
-          <div class="go-badge" id="goBadge" aria-hidden="true">
-            <span>GO</span>
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
-          </div>
-
-          <a href="#home" class="menu-item is-active">
-            <span class="menu-label">HOME</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
+        <nav class="menu-nav" id="menuNav" aria-label="Navigasi utama">
+          <a href="#home" class="menu-item">
+            <span class="menu-mask"><span class="menu-label">Home</span></span>
+            <span class="menu-item-number">01</span>
           </a>
-
           <a href="#about" class="menu-item">
-            <span class="menu-label">ABOUT</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
+            <span class="menu-mask"><span class="menu-label">About</span></span>
+            <span class="menu-item-number">02</span>
           </a>
-
           <a href="#tools" class="menu-item">
-            <span class="menu-label">TOOLS</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
+            <span class="menu-mask"><span class="menu-label">Tools</span></span>
+            <span class="menu-item-number">03</span>
           </a>
-
           <a href="#projects" class="menu-item">
-            <span class="menu-label">PROJECTS</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
+            <span class="menu-mask"><span class="menu-label">Projects</span></span>
+            <span class="menu-item-number">04</span>
           </a>
-
-          <a href="#reviews" class="menu-item">
-            <span class="menu-label">REVIEWS</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
-          </a>
-
           <a href="#contact" class="menu-item">
-            <span class="menu-label">CONTACT</span>
-            <svg
-              class="menu-arrow"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <line x1="7" y1="17" x2="17" y2="7"></line>
-              <polyline points="8 7 17 7 17 16"></polyline>
-            </svg>
+            <span class="menu-mask"><span class="menu-label">Contact</span></span>
+            <span class="menu-item-number">05</span>
           </a>
         </nav>
+
+        <p class="menu-footer">Independent designer &amp; developer / Indonesia</p>
       </div>
     </div>
 
@@ -360,6 +248,118 @@
       </section>
 
     </div>
+
+    <section class="projects-section" id="projects" aria-labelledby="projectsTitle">
+      <div class="projects-inner">
+        <div class="projects-heading">
+          <p id="projectsTitle">Selected work <span>2026</span></p>
+          <span class="projects-heading-note">A few things made with care</span>
+        </div>
+
+        <div class="project-list" id="project-list">
+          <article class="project-entry" data-project-entry>
+            <button
+              class="project-row"
+              type="button"
+              aria-expanded="false"
+              aria-controls="preview-seven-summit"
+            >
+              <span class="project-row-main">
+                <span class="project-number">01</span>
+                <span class="project-name">SevenSummit</span>
+              </span>
+              <span class="project-year">2026</span>
+            </button>
+            <div class="project-preview" id="preview-seven-summit" aria-hidden="true">
+              <img
+                src="../project/7SUMMIT/7summit/assets/hero-mountain.png"
+                alt="Preview website SevenSummit"
+                loading="lazy"
+              />
+              <span class="preview-go">GO <span aria-hidden="true">↗</span></span>
+            </div>
+          </article>
+
+          <article class="project-entry" data-project-entry>
+            <button
+              class="project-row"
+              type="button"
+              aria-expanded="false"
+              aria-controls="preview-svara"
+            >
+              <span class="project-row-main">
+                <span class="project-number">02</span>
+                <span class="project-name">Svara Nusantara</span>
+              </span>
+              <span class="project-year">2026</span>
+            </button>
+            <div class="project-preview" id="preview-svara" aria-hidden="true">
+              <img
+                src="./asset/SVARA.png"
+                alt="Preview website Svara Nusantara"
+                loading="lazy"
+              />
+              <span class="preview-go">GO <span aria-hidden="true">↗</span></span>
+            </div>
+          </article>
+
+          <article class="project-entry" data-project-entry>
+            <button
+              class="project-row"
+              type="button"
+              aria-expanded="false"
+              aria-controls="preview-sekolah"
+            >
+              <span class="project-row-main">
+                <span class="project-number">03</span>
+                <span class="project-name">Sekolah Unggul</span>
+              </span>
+              <span class="project-year">2026</span>
+            </button>
+            <div class="project-preview" id="preview-sekolah" aria-hidden="true">
+              <img
+                src="./asset/SEKOLAH.png"
+                alt="Preview website Sekolah Unggul"
+                loading="lazy"
+              />
+              <span class="preview-go">GO <span aria-hidden="true">↗</span></span>
+            </div>
+          </article>
+
+          <article class="project-entry" data-project-entry>
+            <button
+              class="project-row"
+              type="button"
+              aria-expanded="false"
+              aria-controls="preview-havza"
+            >
+              <span class="project-row-main">
+                <span class="project-number">04</span>
+                <span class="project-name">HAVZA</span>
+              </span>
+              <span class="project-year">2026</span>
+            </button>
+            <div class="project-preview" id="preview-havza" aria-hidden="true">
+              <img
+                src="./asset/Screenshot%202026-11-13%20210405.png"
+                alt="Preview website HAVZA"
+                loading="lazy"
+              />
+              <span class="preview-go">GO <span aria-hidden="true">↗</span></span>
+            </div>
+          </article>
+        </div>
+
+        <footer class="projects-outro" id="contact">
+          <p class="projects-contact-note">Open for meaningful projects &amp; collaborations</p>
+          <h2>Project</h2>
+          <a class="more-button" href="#project-list">
+            <span>More</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        </footer>
+      </div>
+    </section>
 
     <!-- Hubungkan ke file JavaScript terpisah -->
     <script src="loader.js" defer></script>

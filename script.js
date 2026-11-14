@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const navbar = document.getElementById("navbar") || document.querySelector(".navbar");
   const openMenuBtn = document.getElementById("openMenuBtn") || document.querySelector(".menu-btn");
-  const closeMenuBtn = document.getElementById("closeMenuBtn") || document.querySelector(".close-menu-btn");
   const menuOverlay = document.getElementById("menuOverlay") || document.querySelector(".menu-overlay");
-  const menuNav = document.getElementById("menuNav") || document.querySelector(".menu-nav");
   const menuItems = document.querySelectorAll(".menu-item");
-  const goBadge = document.getElementById("goBadge") || document.querySelector(".go-badge");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const panels = Array.from(document.querySelectorAll(".page-panel"));
   const textRevealSelector =
@@ -162,158 +159,214 @@ document.addEventListener("DOMContentLoaded", () => {
   reducedMotion.addEventListener("change", initializeTextReveal);
   initializeTextReveal();
 
-  // 2. Fungsi Buka & Tutup Halaman Menu Navigasi
+  const projectEntries = Array.from(
+    document.querySelectorAll("[data-project-entry]"),
+  );
+  const desktopHover = window.matchMedia(
+    "(hover: hover) and (pointer: fine)",
+  );
+
+  function updateProjectPreviewPosition(entry, event) {
+    const preview = entry.querySelector(".project-preview");
+    if (!preview) return;
+
+    const bounds = preview.getBoundingClientRect();
+    const gap = 24;
+    let left = event.clientX + gap;
+    if (left + bounds.width > window.innerWidth - 16) {
+      left = event.clientX - bounds.width - gap;
+    }
+    left = Math.max(16, Math.min(window.innerWidth - bounds.width - 16, left));
+
+    const halfHeight = bounds.height / 2;
+    const top = Math.min(
+      window.innerHeight - halfHeight - 16,
+      Math.max(halfHeight + 16, event.clientY),
+    );
+    preview.style.setProperty("--preview-x", `${left}px`);
+    preview.style.setProperty("--preview-y", `${top}px`);
+  }
+
+  projectEntries.forEach((entry) => {
+    const row = entry.querySelector(".project-row");
+    const preview = entry.querySelector(".project-preview");
+    if (!row || !preview) return;
+
+    entry.addEventListener("pointerenter", (event) => {
+      if (!desktopHover.matches) return;
+      entry.classList.add("is-active");
+      preview.setAttribute("aria-hidden", "false");
+      updateProjectPreviewPosition(entry, event);
+    });
+
+    entry.addEventListener("pointermove", (event) => {
+      if (desktopHover.matches) updateProjectPreviewPosition(entry, event);
+    });
+
+    entry.addEventListener("pointerleave", () => {
+      entry.classList.remove("is-active");
+      if (!entry.contains(document.activeElement)) {
+        preview.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    entry.addEventListener("focusin", () => {
+      if (!desktopHover.matches) return;
+      entry.classList.add("is-active");
+      preview.setAttribute("aria-hidden", "false");
+    });
+
+    entry.addEventListener("focusout", (event) => {
+      if (entry.contains(event.relatedTarget)) return;
+      entry.classList.remove("is-active");
+      preview.setAttribute("aria-hidden", "true");
+    });
+
+    row.addEventListener("click", () => {
+      if (desktopHover.matches) return;
+
+      const shouldOpen = !entry.classList.contains("is-open");
+      projectEntries.forEach((otherEntry) => {
+        otherEntry.classList.remove("is-open");
+        otherEntry.querySelector(".project-row")?.setAttribute(
+          "aria-expanded",
+          "false",
+        );
+        otherEntry.querySelector(".project-preview")?.setAttribute(
+          "aria-hidden",
+          "true",
+        );
+      });
+
+      if (shouldOpen) {
+        entry.classList.add("is-open");
+        row.setAttribute("aria-expanded", "true");
+        preview.setAttribute("aria-hidden", "false");
+      }
+    });
+  });
+
+  if (projectEntries.length) {
+    if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+      projectEntries.forEach((entry) => entry.classList.add("is-visible"));
+    } else {
+      const projectObserver = new IntersectionObserver(
+        (entries, observer) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.16 },
+      );
+
+      projectEntries.forEach((entry) => projectObserver.observe(entry));
+      reducedMotion.addEventListener("change", (event) => {
+        if (!event.matches) return;
+        projectObserver.disconnect();
+        projectEntries.forEach((entry) => entry.classList.add("is-visible"));
+      });
+    }
+  }
+
+  let menuClosing = false;
+
   function openMenu() {
-    if (!menuOverlay) return;
+    if (!menuOverlay || menuClosing) return;
+    menuOverlay.style.pointerEvents = "";
+    menuOverlay.classList.remove("closing");
     menuOverlay.classList.add("active");
     menuOverlay.setAttribute("aria-hidden", "false");
     document.body.classList.add("menu-open");
-  }
-
-  function closeMenu() {
-    if (!menuOverlay) return;
-    menuOverlay.classList.remove("active");
-    menuOverlay.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("menu-open");
-    hideCustomCursor();
-  }
-
-  if (openMenuBtn) openMenuBtn.addEventListener("click", openMenu);
-  if (closeMenuBtn) closeMenuBtn.addEventListener("click", closeMenu);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && menuOverlay && menuOverlay.classList.contains("active")) {
-      closeMenu();
+    if (openMenuBtn) {
+      openMenuBtn.classList.add("is-open");
+      openMenuBtn.setAttribute("aria-expanded", "true");
+      openMenuBtn.setAttribute("aria-label", "Tutup Menu");
     }
-  });
+  }
 
-  // 3. Sorotan Oranye pada Item Menu
-  menuItems.forEach((item) => {
-    item.addEventListener("mouseenter", () => {
-      menuItems.forEach((el) => el.classList.remove("is-active"));
-      item.classList.add("is-active");
-    });
+  function navigateToMenuItem(href) {
+    const target = document.querySelector(href);
+    if (!target) return;
 
-    item.addEventListener("click", (event) => {
-      if (item.getAttribute("href") === "#tools") {
-        const portal = document.querySelector("#about [data-tools-portal]");
-        if (portal) {
-          event.preventDefault();
-          const scrollDistance = portal.offsetHeight - window.innerHeight;
-          const targetScroll =
-            window.scrollY +
-            portal.getBoundingClientRect().top +
-            scrollDistance * 0.88;
-          window.scrollTo({
-            top: targetScroll,
-            behavior: reducedMotion.matches ? "auto" : "smooth",
-          });
-        }
+    let targetScroll = window.scrollY + target.getBoundingClientRect().top;
+    if (href === "#tools") {
+      const portal = document.querySelector("#about [data-tools-portal]");
+      if (portal) {
+        const scrollDistance = portal.offsetHeight - window.innerHeight;
+        targetScroll =
+          window.scrollY +
+          portal.getBoundingClientRect().top +
+          scrollDistance * 0.88;
       }
-
-      closeMenu();
-    });
-  });
-
-  // 4. Custom Cursor "GO ↗" Super Smooth (Lerp + RequestAnimationFrame)
-  let targetX = 0;
-  let targetY = 0;
-  let currentX = 0;
-  let currentY = 0;
-
-  let targetScale = 0;
-  let currentScale = 0;
-  let targetOpacity = 0;
-  let currentOpacity = 0;
-  let cursorFrame = null;
-
-  let isInsideMenu = false;
-  let hasInitializedPos = false;
-
-  function scheduleCursorAnimation() {
-    if (!goBadge || cursorFrame !== null) return;
-    cursorFrame = window.requestAnimationFrame(animateCursor);
-  }
-
-  function showCustomCursor(e) {
-    if (!goBadge) return;
-    const halfW = goBadge.offsetWidth / 2;
-    const halfH = goBadge.offsetHeight / 2;
-
-    targetX = e.clientX - halfW;
-    targetY = e.clientY - halfH;
-
-    // Jika baru masuk area menu, langsung tempatkan titik awal tepat di kursor
-    // agar lingkaran tidak terbang dari pojok kiri atas layar
-    if (!hasInitializedPos) {
-      currentX = targetX;
-      currentY = targetY;
-      hasInitializedPos = true;
     }
 
-    isInsideMenu = true;
-    targetScale = 1;
-    targetOpacity = 1;
-    scheduleCursorAnimation();
+    window.scrollTo({
+      top: targetScroll,
+      behavior: reducedMotion.matches ? "auto" : "smooth",
+    });
   }
 
-  function hideCustomCursor() {
-    isInsideMenu = false;
-    targetScale = 0;
-    targetOpacity = 0;
-    scheduleCursorAnimation();
-  }
-
-  function animateCursor() {
-    cursorFrame = null;
-    const posEase = 0.16;
-    const scaleEase = 0.2;
-
-    currentX += (targetX - currentX) * posEase;
-    currentY += (targetY - currentY) * posEase;
-    currentScale += (targetScale - currentScale) * scaleEase;
-    currentOpacity += (targetOpacity - currentOpacity) * scaleEase;
-
-    goBadge.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) scale(${currentScale.toFixed(3)})`;
-    goBadge.style.opacity = currentOpacity.toFixed(3);
-
+  function closeMenu(href) {
     if (
-      Math.abs(targetX - currentX) > 0.1 ||
-      Math.abs(targetY - currentY) > 0.1 ||
-      Math.abs(targetScale - currentScale) > 0.001 ||
-      Math.abs(targetOpacity - currentOpacity) > 0.001
+      !menuOverlay ||
+      !menuOverlay.classList.contains("active") ||
+      menuClosing
     ) {
-      scheduleCursorAnimation();
+      return;
     }
+
+    menuClosing = true;
+    menuOverlay.classList.add("closing");
+    menuOverlay.setAttribute("aria-hidden", "true");
+    menuOverlay.style.pointerEvents = "none";
+
+    const linkExitDuration = reducedMotion.matches ? 0 : 460;
+    const curtainDuration = reducedMotion.matches ? 0 : 640;
+    window.setTimeout(() => {
+      menuOverlay.classList.remove("active");
+      window.setTimeout(() => {
+        menuOverlay.classList.remove("closing");
+        menuOverlay.style.pointerEvents = "";
+        document.body.classList.remove("menu-open");
+        if (openMenuBtn) {
+          openMenuBtn.classList.remove("is-open");
+          openMenuBtn.setAttribute("aria-expanded", "false");
+          openMenuBtn.setAttribute("aria-label", "Buka Menu");
+          openMenuBtn.focus();
+        }
+        menuClosing = false;
+        if (href) navigateToMenuItem(href);
+      }, curtainDuration);
+    }, linkExitDuration);
   }
 
-  if (menuNav && goBadge) {
-    menuNav.addEventListener("mouseenter", showCustomCursor);
-    menuNav.addEventListener("mousemove", showCustomCursor);
-    menuNav.addEventListener("mouseleave", () => {
-      hideCustomCursor();
-      hasInitializedPos = false;
-    });
-
-    // Efek membesar sedikit saat diklik
-    menuNav.addEventListener("mousedown", () => {
-      if (isInsideMenu) {
-        targetScale = 0.88;
-        scheduleCursorAnimation();
+  if (openMenuBtn) {
+    openMenuBtn.addEventListener("click", () => {
+      if (menuClosing) return;
+      if (menuOverlay && menuOverlay.classList.contains("active")) {
+        closeMenu();
+      } else {
+        openMenu();
       }
     });
-    menuNav.addEventListener("mouseup", () => {
-      if (isInsideMenu) {
-        targetScale = 1;
-        scheduleCursorAnimation();
-      }
-    });
-
-    // Sembunyikan juga jika kursor keluar dari jendela browser
-    document.addEventListener("mouseleave", () => {
-      hideCustomCursor();
-      hasInitializedPos = false;
-    });
-
   }
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      menuOverlay &&
+      menuOverlay.classList.contains("active")
+    ) {
+      closeMenu();
+    }
+  });
+
+  menuItems.forEach((item) => {
+    item.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeMenu(item.getAttribute("href"));
+    });
+  });
 });
