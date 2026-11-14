@@ -41,6 +41,7 @@
     );
   clip-path: polygon(0 0, 160% 0, 100% 100%, 0 100%);
   isolation: isolate;
+  will-change: clip-path;
 }
 
 #loader .ld-atmosphere,
@@ -50,6 +51,9 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: 0.16;
+  background-image: url("./asset/grain.png");
+  background-size: 128px 128px;
 }
 
 #loader .ld-atmosphere {
@@ -58,22 +62,50 @@
 
 #loader .ld-blob-field {
   inset: -14%;
-  filter: blur(64px);
   opacity: 0.52;
 }
 
+/*
+ * Blob dulu berupa lingkaran solid + filter blur(64px).
+ * Sekarang tepinya dibuat lembut langsung lewat radial-gradient (digambar
+ * satu kali), jadi saat bergerak browser hanya menggeser layer-nya di GPU.
+ * Tampilan tetap sama: lingkaran besar dengan tepi buram.
+ */
 #loader .ld-blob {
   position: absolute;
   display: block;
-  width: min(52vw, 680px);
+  --ld-blob-size: min(52vw, 680px);
+  width: var(--ld-blob-size);
   aspect-ratio: 1;
-  border-radius: 50%;
+  will-change: transform;
+}
+
+#loader .ld-blob::before {
+  content: "";
+  position: absolute;
+  inset: -192px;
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in srgb, var(--ld-blob-color) 99%, transparent) calc(var(--ld-blob-size) / 2 - 160px),
+    color-mix(in srgb, var(--ld-blob-color) 98%, transparent) calc(var(--ld-blob-size) / 2 - 128px),
+    color-mix(in srgb, var(--ld-blob-color) 93%, transparent) calc(var(--ld-blob-size) / 2 - 96px),
+    color-mix(in srgb, var(--ld-blob-color) 84%, transparent) calc(var(--ld-blob-size) / 2 - 64px),
+    color-mix(in srgb, var(--ld-blob-color) 69%, transparent) calc(var(--ld-blob-size) / 2 - 32px),
+    color-mix(in srgb, var(--ld-blob-color) 50%, transparent) calc(var(--ld-blob-size) / 2 + 0px),
+    color-mix(in srgb, var(--ld-blob-color) 31%, transparent) calc(var(--ld-blob-size) / 2 + 32px),
+    color-mix(in srgb, var(--ld-blob-color) 16%, transparent) calc(var(--ld-blob-size) / 2 + 64px),
+    color-mix(in srgb, var(--ld-blob-color) 7%, transparent) calc(var(--ld-blob-size) / 2 + 96px),
+    color-mix(in srgb, var(--ld-blob-color) 2%, transparent) calc(var(--ld-blob-size) / 2 + 128px),
+    color-mix(in srgb, var(--ld-blob-color) 1%, transparent) calc(var(--ld-blob-size) / 2 + 160px),
+    color-mix(in srgb, var(--ld-blob-color) 0%, transparent) calc(var(--ld-blob-size) / 2 + 192px),
+    transparent calc(var(--ld-blob-size) / 2 + 192px)
+  );
 }
 
 #loader .ld-blob-1 {
   top: -18%;
   left: -12%;
-  background: var(--ld-blob-1);
+  --ld-blob-color: var(--ld-blob-1);
   animation: ld-drift-one var(--ld-blob-1-duration) ease-in-out infinite
     alternate;
 }
@@ -81,8 +113,8 @@
 #loader .ld-blob-2 {
   top: -12%;
   right: -14%;
-  width: min(58vw, 760px);
-  background: var(--ld-blob-2);
+  --ld-blob-size: min(58vw, 760px);
+  --ld-blob-color: var(--ld-blob-2);
   animation: ld-drift-two var(--ld-blob-2-duration) ease-in-out infinite
     alternate;
 }
@@ -90,8 +122,8 @@
 #loader .ld-blob-3 {
   bottom: -34%;
   left: 18%;
-  width: min(54vw, 720px);
-  background: var(--ld-blob-3);
+  --ld-blob-size: min(54vw, 720px);
+  --ld-blob-color: var(--ld-blob-3);
   animation: ld-drift-three var(--ld-blob-3-duration) ease-in-out infinite
     alternate;
 }
@@ -99,8 +131,8 @@
 #loader .ld-blob-4 {
   right: 12%;
   bottom: -28%;
-  width: min(42vw, 560px);
-  background: var(--ld-blob-4);
+  --ld-blob-size: min(42vw, 560px);
+  --ld-blob-color: var(--ld-blob-4);
   opacity: 0.16;
   animation: ld-drift-four var(--ld-blob-4-duration) ease-in-out infinite
     alternate;
@@ -124,6 +156,8 @@
   position: relative;
   z-index: 1;
   width: 100%;
+  display: grid;
+  place-items: center;
   padding:
     calc(24px + env(safe-area-inset-top))
     calc(24px + env(safe-area-inset-right))

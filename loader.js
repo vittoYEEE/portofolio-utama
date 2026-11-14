@@ -23,9 +23,14 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const previousRootOverflow = root.style.overflow;
   const previousBodyOverflow = body.style.overflow;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  const previousScrollRestoration = window.history.scrollRestoration;
 
+  window.history.scrollRestoration = "manual";
+  root.style.scrollBehavior = "auto";
   root.style.overflow = "hidden";
   body.style.overflow = "hidden";
+  window.scrollTo(0, 0);
 
   function setDuration(name, value) {
     loader.style.setProperty(name, `${value}ms`);
@@ -67,8 +72,12 @@
     loader.setAttribute("aria-hidden", "true");
     loader.style.visibility = "hidden";
     loader.style.pointerEvents = "none";
+    // display:none menghentikan seluruh animasi blob dan membebaskan layer GPU
+    loader.style.display = "none";
     root.style.overflow = previousRootOverflow;
     body.style.overflow = previousBodyOverflow;
+    root.style.scrollBehavior = previousScrollBehavior;
+    window.history.scrollRestoration = previousScrollRestoration;
     window.dispatchEvent(new Event("portfolio:loader-finished"));
   }
 

@@ -5,84 +5,124 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuItems = document.querySelectorAll(".menu-item");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const panels = Array.from(document.querySelectorAll(".page-panel"));
+  const aboutSection = document.querySelector("#about");
+  const scheduler = window.ScrollScheduler;
   const textRevealSelector =
     ".tools-portal-about-content :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature)";
   const originalAriaLabels = new Map();
   let textBlocks = [];
-  let stackUpdateFrame = null;
-  let textRevealFrame = null;
 
-  function updateStackingPanels() {
-    stackUpdateFrame = null;
-    const viewportHeight = window.innerHeight;
+  const clamp01 = (value) => Math.min(1, Math.max(0, value));
 
-    panels.forEach((panel, index) => {
-      const content = panel.querySelector(".panel-content");
-      if (!content) return;
+  // ---------------------------------------------------------------
+  // 1. Efek hero mengecil + menggelap saat panel berikutnya naik
+  //    (didaftarkan ke scheduler: baca dulu, tulis kemudian)
+  // ---------------------------------------------------------------
+  const stackingPairs = panels
+    .map((panel, index) => ({
+      content: panel.querySelector(".panel-content"),
+      nextPanel: panels[index + 1] || null,
+      transform: "",
+      filter: "",
+    }))
+    .filter((pair) => pair.content);
 
-      const nextPanel = panels[index + 1];
-      if (!nextPanel || reducedMotion.matches || viewportHeight === 0) {
-        content.style.transform = "scale(1)";
-        content.style.filter = "brightness(1)";
-        return;
-      }
-
-      const progress = Math.min(
-        1,
-        Math.max(0, 1 - nextPanel.getBoundingClientRect().top / viewportHeight),
-      );
-      content.style.transform = `scale(${1 - progress * 0.08})`;
-      content.style.filter = `brightness(${1 - progress * 0.45})`;
-    });
-
-    if (navbar) navbar.classList.toggle("scrolled", window.scrollY > 50);
-  }
-
-  function scheduleStackingUpdate() {
-    if (stackUpdateFrame !== null) return;
-    stackUpdateFrame = window.requestAnimationFrame(updateStackingPanels);
-  }
-
-  window.addEventListener("scroll", scheduleStackingUpdate, { passive: true });
-  window.addEventListener("resize", scheduleStackingUpdate, { passive: true });
-  reducedMotion.addEventListener("change", scheduleStackingUpdate);
-  scheduleStackingUpdate();
-
-  function updateTextReveal() {
-    textRevealFrame = null;
-    const viewportHeight = window.innerHeight;
-    if (viewportHeight === 0 || reducedMotion.matches) return;
-
-    textBlocks.forEach((block) => {
-      const rect = block.getBoundingClientRect();
-      if (
-        rect.bottom < -viewportHeight * 0.5 ||
-        rect.top > viewportHeight * 1.5
-      ) {
-        return;
-      }
-
-      const progress = Math.min(
-        1,
-        Math.max(0, (viewportHeight * 0.85 - rect.top) / (viewportHeight * 0.45)),
-      );
-      const words = block.querySelectorAll(".word");
-      const wordCount = words.length;
-
-      words.forEach((word, index) => {
-        const wordProgress = Math.min(
-          1,
-          Math.max(0, progress * wordCount - index),
-        );
-        word.style.opacity = String(0.15 + 0.85 * wordProgress);
+  scheduler.add({
+    read(viewportHeight, scrollY) {
+      const progress = stackingPairs.map(({ nextPanel }) => {
+        if (!nextPanel || reducedMotion.matches || viewportHeight === 0) {
+          return null;
+        }
+        return clamp01(1 - nextPanel.getBoundingClientRect().top / viewportHeight);
       });
-    });
-  }
+      return { progress, scrolled: scrollY > 50 };
+    },
 
-  function scheduleTextRevealUpdate() {
-    if (textRevealFrame !== null) return;
-    textRevealFrame = window.requestAnimationFrame(updateTextReveal);
-  }
+    write({ progress, scrolled }) {
+      let changed = false;
+
+      stackingPairs.forEach((pair, index) => {
+        const value = progress[index];
+        const transform = value === null ? "scale(1)" : `scale(${1 - value * 0.08})`;
+        const filter = value === null ? "brightness(1)" : `brightness(${1 - value * 0.45})`;
+
+        if (transform !== pair.transform) {
+          pair.content.style.transform = transform;
+          pair.transform = transform;
+          changed = true;
+        }
+        if (filter !== pair.filter) {
+          pair.content.style.filter = filter;
+          pair.filter = filter;
+          changed = true;
+        }
+      });
+
+      if (navbar) navbar.classList.toggle("scrolled", scrolled);
+      return changed;
+    },
+  });
+
+  // ---------------------------------------------------------------
+  // 2. Reveal teks kata per kata di section About
+  // ---------------------------------------------------------------
+  scheduler.add({
+    read(viewportHeight) {
+      if (!textBlocks.length || viewportHeight === 0 || reducedMotion.matches) {
+        return null;
+      }
+
+      // Cukup baca posisi section About (satu elemen). Selama section ini
+      // belum mencapai layar, semua kata pasti masih redup, jadi posisi tiap
+      // blok teks tidak perlu dibaca satu per satu.
+      const aboutRect = aboutSection
+        ? aboutSection.getBoundingClientRect()
+        : null;
+      if (aboutRect) {
+        if (aboutRect.bottom < -viewportHeight * 0.5) return null;
+        if (aboutRect.top > viewportHeight) return textBlocks.map(() => 0);
+      }
+
+      return textBlocks.map((item) => {
+        const rect = item.block.getBoundingClientRect();
+        if (
+          rect.bottom < -viewportHeight * 0.5 ||
+          rect.top > viewportHeight * 1.5
+        ) {
+          return undefined;
+        }
+        return clamp01(
+          (viewportHeight * 0.85 - rect.top) / (viewportHeight * 0.45),
+        );
+      });
+    },
+
+    write(progresses) {
+      if (progresses.length !== textBlocks.length) return false;
+      let changed = false;
+
+      textBlocks.forEach((item, index) => {
+        const progress = progresses[index];
+        if (progress === undefined) return;
+        if (Math.abs(progress - item.progress) < 0.0005) return;
+        item.progress = progress;
+
+        const wordCount = item.words.length;
+        item.words.forEach((word, wordIndex) => {
+          const wordProgress = clamp01(progress * wordCount - wordIndex);
+          const opacity = (0.15 + 0.85 * wordProgress).toFixed(3);
+          if (item.opacities[wordIndex] === opacity) return;
+          item.opacities[wordIndex] = opacity;
+          word.style.opacity = opacity;
+          changed = true;
+        });
+      });
+
+      return changed;
+    },
+  });
+
+  reducedMotion.addEventListener("change", () => scheduler.schedule());
 
   function splitTextNode(textNode) {
     const parts = textNode.textContent.match(/\s+|\S+/g);
@@ -127,11 +167,11 @@ document.addEventListener("DOMContentLoaded", () => {
     restoreOriginalText();
     if (reducedMotion.matches) return;
 
-    textBlocks = Array.from(
+    const blocks = Array.from(
       document.querySelectorAll(textRevealSelector),
     ).filter((block) => !block.querySelector(textRevealSelector));
 
-    textBlocks.forEach((block) => {
+    blocks.forEach((block) => {
       originalAriaLabels.set(block, block.getAttribute("aria-label"));
       block.setAttribute(
         "aria-label",
@@ -148,17 +188,26 @@ document.addEventListener("DOMContentLoaded", () => {
       textNodes.forEach(splitTextNode);
     });
 
-    scheduleTextRevealUpdate();
+    // Daftar kata disimpan sekali di sini, tidak dicari ulang tiap frame.
+    textBlocks = blocks.map((block) => {
+      const words = Array.from(block.querySelectorAll(".word"));
+      return {
+        block,
+        words,
+        progress: 0,
+        opacities: words.map(() => "0.150"),
+      };
+    });
+
+    scheduler.schedule();
   }
 
-  window.addEventListener("scroll", scheduleTextRevealUpdate, { passive: true });
-  window.addEventListener("resize", scheduleTextRevealUpdate, { passive: true });
-  document
-    .querySelector(".about-section > .panel-content")
-    ?.addEventListener("scroll", scheduleTextRevealUpdate, { passive: true });
   reducedMotion.addEventListener("change", initializeTextReveal);
   initializeTextReveal();
 
+  // ---------------------------------------------------------------
+  // 3. Preview gambar proyek yang mengikuti kursor
+  // ---------------------------------------------------------------
   const projectEntries = Array.from(
     document.querySelectorAll("[data-project-entry]"),
   );
@@ -166,26 +215,67 @@ document.addEventListener("DOMContentLoaded", () => {
     "(hover: hover) and (pointer: fine)",
   );
 
+  // Ukuran preview disimpan sekali (saat kursor masuk), bukan dibaca ulang di
+  // setiap gerakan mouse. Bounding box dihitung untuk kondisi akhir animasi
+  // (rotasi -6deg, skala 1), sama seperti hasil getBoundingClientRect lama.
+  const previewTilt = (6 * Math.PI) / 180;
+  let previewSize = { width: 0, height: 0 };
+  let activePreview = null;
+  let pendingPoint = null;
+  let previewFrame = null;
+
+  function measurePreview(preview) {
+    const w = preview.offsetWidth;
+    const h = preview.offsetHeight;
+    previewSize = {
+      width: w * Math.cos(previewTilt) + h * Math.sin(previewTilt),
+      height: h * Math.cos(previewTilt) + w * Math.sin(previewTilt),
+    };
+  }
+
+  function applyPreviewPosition() {
+    previewFrame = null;
+    if (!activePreview || !pendingPoint) return;
+
+    const { x, y } = pendingPoint;
+    const gap = 24;
+    let left = x + gap;
+    if (left + previewSize.width > window.innerWidth - 16) {
+      left = x - previewSize.width - gap;
+    }
+    left = Math.max(
+      16,
+      Math.min(window.innerWidth - previewSize.width - 16, left),
+    );
+
+    const halfHeight = previewSize.height / 2;
+    const top = Math.min(
+      window.innerHeight - halfHeight - 16,
+      Math.max(halfHeight + 16, y),
+    );
+
+    // Pakai properti `translate` (tanpa layout ulang), bukan top/left.
+    activePreview.style.translate = `${left}px ${top}px`;
+  }
+
   function updateProjectPreviewPosition(entry, event) {
     const preview = entry.querySelector(".project-preview");
     if (!preview) return;
 
-    const bounds = preview.getBoundingClientRect();
-    const gap = 24;
-    let left = event.clientX + gap;
-    if (left + bounds.width > window.innerWidth - 16) {
-      left = event.clientX - bounds.width - gap;
+    activePreview = preview;
+    pendingPoint = { x: event.clientX, y: event.clientY };
+    if (previewFrame === null) {
+      previewFrame = window.requestAnimationFrame(applyPreviewPosition);
     }
-    left = Math.max(16, Math.min(window.innerWidth - bounds.width - 16, left));
-
-    const halfHeight = bounds.height / 2;
-    const top = Math.min(
-      window.innerHeight - halfHeight - 16,
-      Math.max(halfHeight + 16, event.clientY),
-    );
-    preview.style.setProperty("--preview-x", `${left}px`);
-    preview.style.setProperty("--preview-y", `${top}px`);
   }
+
+  window.addEventListener(
+    "resize",
+    () => {
+      if (activePreview) measurePreview(activePreview);
+    },
+    { passive: true },
+  );
 
   projectEntries.forEach((entry) => {
     const row = entry.querySelector(".project-row");
@@ -196,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!desktopHover.matches) return;
       entry.classList.add("is-active");
       preview.setAttribute("aria-hidden", "false");
+      measurePreview(preview);
       updateProjectPreviewPosition(entry, event);
     });
 
@@ -286,9 +377,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function navigateToMenuItem(href) {
+  function navigateToMenuItem(href, updateHistory = false) {
     const target = document.querySelector(href);
     if (!target) return;
+
+    if (updateHistory && window.location.hash !== href) {
+      window.history.pushState(null, "", href);
+    }
 
     let targetScroll = window.scrollY + target.getBoundingClientRect().top;
     if (href === "#tools") {
@@ -307,6 +402,19 @@ document.addEventListener("DOMContentLoaded", () => {
       behavior: reducedMotion.matches ? "auto" : "smooth",
     });
   }
+
+  window.addEventListener("popstate", () => {
+    const href = window.location.hash;
+    if (href && document.querySelector(href)) {
+      navigateToMenuItem(href);
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: reducedMotion.matches ? "auto" : "smooth",
+    });
+  });
 
   function closeMenu(href) {
     if (
@@ -337,7 +445,7 @@ document.addEventListener("DOMContentLoaded", () => {
           openMenuBtn.focus();
         }
         menuClosing = false;
-        if (href) navigateToMenuItem(href);
+        if (href) navigateToMenuItem(href, true);
       }, curtainDuration);
     }, linkExitDuration);
   }
