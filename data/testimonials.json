@@ -1,0 +1,32 @@
+[
+  {
+    "id": "seed-1",
+    "fullName": "Alya Rahmadani",
+    "profession": "Product Designer",
+    "photoUrl": "",
+    "comment": "Vittorio blends bold typography with smooth motion that feels effortless. Every scroll transition on this portfolio has real craft behind it.",
+    "status": "approved",
+    "createdAt": "2026-11-10T09:00:00.000Z",
+    "updatedAt": "2026-11-10T09:00:00.000Z"
+  },
+  {
+    "id": "seed-2",
+    "fullName": "Dimas Kurniawan",
+    "profession": "Frontend Engineer",
+    "photoUrl": "",
+    "comment": "Clean architecture, snappy interactions, and a distinct visual identity. Working with Veneto turned our rough concept into a memorable web experience.",
+    "status": "approved",
+    "createdAt": "2026-11-11T11:30:00.000Z",
+    "updatedAt": "2026-11-11T11:30:00.000Z"
+  },
+  {
+    "id": "seed-3",
+    "fullName": "Nadia Pratama",
+    "profession": "Creative Director",
+    "photoUrl": "",
+    "comment": "Rarely do you see a developer who cares this deeply about spacing, rhythm, and micro-interactions. Truly standout work.",
+    "status": "approved",
+    "createdAt": "2026-11-12T15:15:00.000Z",
+    "updatedAt": "2026-11-12T15:15:00.000Z"
+  }
+]

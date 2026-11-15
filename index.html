@@ -94,7 +94,7 @@
       <div class="menu-container">
         <div class="menu-header">
           <span class="studio-badge">VENETO STUDIO</span>
-          <span class="menu-count">MENU / 01—05</span>
+          <span class="menu-count">MENU / 01—06</span>
         </div>
 
         <nav class="menu-nav" id="menuNav" aria-label="Navigasi utama">
@@ -116,11 +116,17 @@
             >
             <span class="menu-item-number">04</span>
           </a>
+          <a href="#testimonials" class="menu-item">
+            <span class="menu-mask"
+              ><span class="menu-label">Reviews</span></span
+            >
+            <span class="menu-item-number">05</span>
+          </a>
           <a href="#contact" class="menu-item">
             <span class="menu-mask"
               ><span class="menu-label">Contact</span></span
             >
-            <span class="menu-item-number">05</span>
+            <span class="menu-item-number">06</span>
           </a>
         </nav>
 
@@ -448,6 +454,241 @@
     </section>
 
     <!-- =====================================================================
+         SECTION: INTERACTIVE HORIZONTAL TESTIMONIALS
+         ===================================================================== -->
+    <section
+      class="testimonials-section"
+      id="testimonials"
+      aria-labelledby="testimonialsHeading"
+    >
+      <div class="testimonials-sticky" id="testimonialsSticky">
+        <div class="testimonials-top-bar">
+          <p class="testimonials-kicker" id="testimonialsHeading">
+            Client &amp; Peer Reviews <span>2026</span>
+          </p>
+          <span class="testimonials-hint" aria-hidden="true"
+            >Scroll to explore &rarr;</span
+          >
+        </div>
+
+        <div class="testimonials-viewport" id="testimonialsViewport">
+          <div class="testimonials-track" id="testimonialsTrack">
+            <!-- Initial approved testimonial cards (hydrated/updated from API) -->
+            <article class="testimonial-card card-lavender">
+              <div class="testimonial-card-top">
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar" aria-hidden="true">AR</div>
+                  <div class="testimonial-meta">
+                    <h3>Alya Rahmadani</h3>
+                    <p>Product Designer</p>
+                  </div>
+                </div>
+                <span class="testimonial-index">01</span>
+              </div>
+              <blockquote class="testimonial-quote">
+                “Vittorio blends bold typography with smooth motion that feels
+                effortless. Every scroll transition on this portfolio has real
+                craft behind it.”
+              </blockquote>
+            </article>
+
+            <article class="testimonial-card card-orange">
+              <div class="testimonial-card-top">
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar" aria-hidden="true">DK</div>
+                  <div class="testimonial-meta">
+                    <h3>Dimas Kurniawan</h3>
+                    <p>Frontend Engineer</p>
+                  </div>
+                </div>
+                <span class="testimonial-index">02</span>
+              </div>
+              <blockquote class="testimonial-quote">
+                “Clean architecture, snappy interactions, and a distinct visual
+                identity. Working with Veneto turned our rough concept into a
+                memorable web experience.”
+              </blockquote>
+            </article>
+
+            <article class="testimonial-card card-lilac">
+              <div class="testimonial-card-top">
+                <div class="testimonial-author">
+                  <div class="testimonial-avatar" aria-hidden="true">NP</div>
+                  <div class="testimonial-meta">
+                    <h3>Nadia Pratama</h3>
+                    <p>Creative Director</p>
+                  </div>
+                </div>
+                <span class="testimonial-index">03</span>
+              </div>
+              <blockquote class="testimonial-quote">
+                “Rarely do you see a developer who cares this deeply about
+                spacing, rhythm, and micro-interactions. Truly standout work.”
+              </blockquote>
+            </article>
+
+            <!-- Final Card: Add Comment (+) -->
+            <button
+              type="button"
+              class="testimonial-card testimonial-add-card"
+              id="openTestimonialModalBtn"
+              aria-label="Leave a testimonial comment"
+            >
+              <span class="add-card-plus" aria-hidden="true">+</span>
+              <span class="add-card-label">Share your thoughts</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="testimonials-bottom-display" aria-hidden="true">
+          <h2>What they say</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         MODAL: COMMENT SUBMISSION FORM
+         ===================================================================== -->
+    <div
+      class="testimonial-modal"
+      id="testimonialModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="testimonialModalTitle"
+      aria-hidden="true"
+    >
+      <div
+        class="testimonial-modal-backdrop"
+        id="testimonialModalBackdrop"
+      ></div>
+      <div class="testimonial-modal-dialog" role="document">
+        <div class="testimonial-modal-header">
+          <div>
+            <span class="testimonial-modal-badge">LEAVE A REVIEW</span>
+            <h3 id="testimonialModalTitle">Share your feedback</h3>
+          </div>
+          <button
+            type="button"
+            class="testimonial-modal-close"
+            id="closeTestimonialModalBtn"
+            aria-label="Close modal"
+          >
+            &times;
+          </button>
+        </div>
+
+        <form id="testimonialForm" class="testimonial-form" novalidate>
+          <!-- Honeypot field against spam bots -->
+          <input
+            type="text"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+            class="hp-field"
+            aria-hidden="true"
+          />
+
+          <div class="form-field">
+            <label for="tfFullName"
+              >Full Name <span class="req" aria-hidden="true">*</span></label
+            >
+            <input
+              type="text"
+              id="tfFullName"
+              name="fullName"
+              placeholder="e.g. Raka Pratama"
+              maxlength="80"
+              required
+            />
+            <span
+              class="field-error"
+              id="errFullName"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="form-field">
+            <label for="tfProfession"
+              >Profession / Occupation
+              <span class="req" aria-hidden="true">*</span></label
+            >
+            <input
+              type="text"
+              id="tfProfession"
+              name="profession"
+              placeholder="e.g. UI/UX Designer, Founder, Developer"
+              maxlength="80"
+              required
+            />
+            <span
+              class="field-error"
+              id="errProfession"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="form-field">
+            <label for="tfPhotoUrl"
+              >Profile Photo URL <span class="opt">(optional)</span></label
+            >
+            <input
+              type="url"
+              id="tfPhotoUrl"
+              name="photoUrl"
+              placeholder="https://example.com/your-photo.jpg"
+              maxlength="300"
+            />
+            <span
+              class="field-error"
+              id="errPhotoUrl"
+              aria-live="polite"
+            ></span>
+          </div>
+
+          <div class="form-field">
+            <div class="label-row">
+              <label for="tfComment"
+                >Comment / Feedback
+                <span class="req" aria-hidden="true">*</span></label
+              >
+              <span class="char-counter" id="tfCharCounter">0 / 420</span>
+            </div>
+            <textarea
+              id="tfComment"
+              name="comment"
+              rows="4"
+              placeholder="Write a few words about my portfolio or our collaboration..."
+              maxlength="420"
+              required
+            ></textarea>
+            <span class="field-error" id="errComment" aria-live="polite"></span>
+          </div>
+
+          <div
+            class="form-feedback"
+            id="testimonialFormFeedback"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              id="cancelTestimonialBtn"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="btn-primary" id="submitTestimonialBtn">
+              <span class="btn-label">Submit Review</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =====================================================================
          FLOATING PREVIEW MELAYANG UNTUK HOVER DI DESKTOP/LAPTOP
          Link href-nya otomatis mengikuti proyek yang sedang di-hover!
          ===================================================================== -->
@@ -488,10 +729,7 @@
 
           <!-- Gambar 04: HAVZA -->
           <div class="project-floating-slide">
-            <img
-              src="./asset/Ecommerce.png"
-              alt="Preview website HAVZA"
-            />
+            <img src="./asset/Ecommerce.png" alt="Preview website HAVZA" />
           </div>
         </div>
         <span class="preview-go">GO <span aria-hidden="true">↗</span></span>

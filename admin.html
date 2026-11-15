@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Veneto Studio — Testimonial Moderation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100svh;
+        font-family: "Poppins", sans-serif;
+        color: #f0e5ff;
+        background:
+          radial-gradient(
+            ellipse at 85% 15%,
+            rgba(99, 17, 161, 0.35) 0%,
+            transparent 46%
+          ),
+          linear-gradient(130deg, #240042 0%, #07030d 50%, #33085e 100%);
+      }
+
+      .shell {
+        width: min(1140px, 100%);
+        margin: 0 auto;
+        padding: 32px 24px 64px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 22px;
+        border-radius: 999px;
+        background: rgba(57, 34, 79, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(16px);
+        margin-bottom: 36px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        font-size: 1.15rem;
+      }
+
+      .brand-pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(255, 154, 80, 0.18);
+        color: #ff9a50;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
+      .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .link-btn,
+      .btn {
+        padding: 9px 18px;
+        border-radius: 999px;
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        border: 1px solid rgba(236, 226, 255, 0.22);
+        background: rgba(255, 255, 255, 0.08);
+        color: #f0e5ff;
+        transition: all 0.22s ease;
+      }
+
+      .link-btn:hover,
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.16);
+      }
+
+      .btn-orange {
+        background: #ff9a50;
+        color: #1c0b36;
+        border-color: #ff9a50;
+      }
+
+      .btn-orange:hover {
+        background: #ffab6e;
+      }
+
+      /* Login Card */
+      .login-wrap {
+        min-height: calc(100svh - 180px);
+        display: grid;
+        place-items: center;
+      }
+
+      .login-card {
+        width: min(420px, 100%);
+        padding: 32px;
+        border-radius: 26px;
+        background: rgba(22, 5, 43, 0.92);
+        border: 1px solid rgba(236, 226, 255, 0.2);
+        box-shadow: 0 28px 75px rgba(0, 0, 0, 0.52);
+      }
+
+      .login-card h1 {
+        font-size: 1.65rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        margin-bottom: 6px;
+      }
+
+      .login-card p {
+        font-size: 0.85rem;
+        color: rgba(240, 229, 255, 0.68);
+        margin-bottom: 22px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .field label {
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .field input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(236, 226, 255, 0.22);
+        background: rgba(255, 255, 255, 0.06);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 0.92rem;
+      }
+
+      .field input:focus {
+        outline: none;
+        border-color: #ff9a50;
+      }
+
+      .error-msg {
+        display: none;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: rgba(255, 107, 139, 0.16);
+        border: 1px solid rgba(255, 107, 139, 0.4);
+        color: #fecdd3;
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+      }
+
+      /* Dashboard */
+      .hidden {
+        display: none !important;
+      }
+
+      .dash-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .dash-header h1 {
+        font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+        font-weight: 900;
+        letter-spacing: -0.05em;
+      }
+
+      .dash-header p {
+        font-size: 0.85rem;
+        color: rgba(240, 229, 255, 0.68);
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .tab-btn {
+        padding: 10px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(236, 226, 255, 0.18);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(240, 229, 255, 0.78);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.22s ease;
+      }
+
+      .tab-btn .count {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 0.74rem;
+      }
+
+      .tab-btn.is-active {
+        background: #ff9a50;
+        color: #1c0b36;
+        border-color: #ff9a50;
+      }
+
+      .tab-btn.is-active .count {
+        background: rgba(28, 11, 54, 0.18);
+        color: #1c0b36;
+      }
+
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 18px;
+      }
+
+      .mod-card {
+        padding: 22px;
+        border-radius: 22px;
+        background: rgba(236, 226, 255, 0.07);
+        border: 1px solid rgba(236, 226, 255, 0.16);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .mod-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .mod-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mod-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #ece2ff;
+        color: #1c0b36;
+        font-weight: 800;
+        font-size: 0.9rem;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .mod-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mod-author h3 {
+        font-size: 1rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      .mod-author span {
+        display: block;
+        font-size: 0.78rem;
+        color: rgba(240, 229, 255, 0.68);
+      }
+
+      .status-pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      .status-pending {
+        background: rgba(255, 154, 80, 0.18);
+        color: #ff9a50;
+      }
+
+      .status-approved {
+        background: rgba(110, 231, 183, 0.18);
+        color: #6ee7b7;
+      }
+
+      .status-rejected {
+        background: rgba(255, 107, 139, 0.18);
+        color: #ff859f;
+      }
+
+      .mod-comment {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #f5eeff;
+      }
+
+      .mod-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(236, 226, 255, 0.12);
+      }
+
+      .mod-date {
+        font-size: 0.72rem;
+        color: rgba(240, 229, 255, 0.52);
+      }
+
+      .mod-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .btn-approve {
+        background: #6ee7b7;
+        color: #0b291e;
+        border-color: #6ee7b7;
+      }
+
+      .btn-approve:hover {
+        background: #8ff0c8;
+      }
+
+      .btn-delete {
+        background: rgba(255, 107, 139, 0.16);
+        color: #ff859f;
+        border-color: rgba(255, 107, 139, 0.35);
+      }
+
+      .btn-delete:hover {
+        background: #ff6b8b;
+        color: #1c0b36;
+      }
+
+      .empty-state {
+        grid-column: 1 / -1;
+        padding: 48px 24px;
+        text-align: center;
+        border-radius: 22px;
+        border: 1px dashed rgba(236, 226, 255, 0.2);
+        color: rgba(240, 229, 255, 0.62);
+        font-size: 0.92rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <span>VENETO</span>
+          <span class="brand-pill">ADMIN</span>
+        </div>
+        <div class="topbar-actions">
+          <a href="/" class="link-btn">&larr; Back to Portfolio</a>
+          <button type="button" id="logoutBtn" class="btn hidden">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- Login View -->
+      <section id="loginView" class="login-wrap">
+        <div class="login-card">
+          <h1>Admin Moderation</h1>
+          <p>Sign in to approve or remove submitted portfolio testimonials.</p>
+          <div id="loginError" class="error-msg" role="alert"></div>
+          <form id="loginForm">
+            <div class="field">
+              <label for="adminPassword">Admin Password</label>
+              <input
+                type="password"
+                id="adminPassword"
+                name="password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="btn btn-orange"
+              style="width: 100%; padding: 12px"
+            >
+              Sign In
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Dashboard View -->
+      <main id="dashboardView" class="hidden">
+        <div class="dash-header">
+          <div>
+            <h1>Testimonial Reviews</h1>
+            <p>
+              Notifications are sent to <strong>vvitto878@gmail.com</strong>.
+              Only approved comments appear publicly.
+            </p>
+          </div>
+          <button type="button" id="refreshBtn" class="btn">Refresh</button>
+        </div>
+
+        <div class="tabs" role="tablist">
+          <button
+            type="button"
+            class="tab-btn is-active"
+            data-tab="pending"
+            role="tab"
+          >
+            Pending <span class="count" id="countPending">0</span>
+          </button>
+          <button type="button" class="tab-btn" data-tab="approved" role="tab">
+            Approved <span class="count" id="countApproved">0</span>
+          </button>
+          <button type="button" class="tab-btn" data-tab="rejected" role="tab">
+            Deleted / Rejected <span class="count" id="countRejected">0</span>
+          </button>
+        </div>
+
+        <div id="cardsGrid" class="cards-grid"></div>
+      </main>
+    </div>
+
+    <script>
+      const loginView = document.getElementById("loginView");
+      const dashboardView = document.getElementById("dashboardView");
+      const loginForm = document.getElementById("loginForm");
+      const loginError = document.getElementById("loginError");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const cardsGrid = document.getElementById("cardsGrid");
+      const tabButtons = document.querySelectorAll(".tab-btn");
+
+      let allItems = [];
+      let currentTab = "pending";
+
+      function initials(name) {
+        return String(name || "V")
+          .trim()
+          .split(/\s+/)
+          .slice(0, 2)
+          .map((p) => p[0]?.toUpperCase() || "")
+          .join("") || "V";
+      }
+
+      function formatDate(iso) {
+        try {
+          return new Date(iso).toLocaleString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        } catch (_) {
+          return iso || "";
+        }
+      }
+
+      function renderCards() {
+        const pending = allItems.filter((i) => i.status === "pending");
+        const approved = allItems.filter((i) => i.status === "approved");
+        const rejected = allItems.filter((i) => i.status === "rejected");
+
+        document.getElementById("countPending").textContent = pending.length;
+        document.getElementById("countApproved").textContent = approved.length;
+        document.getElementById("countRejected").textContent = rejected.length;
+
+        const list =
+          currentTab === "pending"
+            ? pending
+            : currentTab === "approved"
+              ? approved
+              : rejected;
+
+        cardsGrid.innerHTML = "";
+
+        if (!list.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-state";
+          empty.textContent = `No ${currentTab} testimonials right now.`;
+          cardsGrid.appendChild(empty);
+          return;
+        }
+
+        list.forEach((item) => {
+          const card = document.createElement("article");
+          card.className = "mod-card";
+
+          const top = document.createElement("div");
+          top.className = "mod-top";
+
+          const author = document.createElement("div");
+          author.className = "mod-author";
+
+          const avatar = document.createElement("div");
+          avatar.className = "mod-avatar";
+          if (item.photoUrl) {
+            const img = document.createElement("img");
+            img.src = item.photoUrl;
+            img.alt = "";
+            img.onerror = () => {
+              avatar.textContent = initials(item.fullName);
+            };
+            avatar.appendChild(img);
+          } else {
+            avatar.textContent = initials(item.fullName);
+          }
+
+          const info = document.createElement("div");
+          const h3 = document.createElement("h3");
+          h3.textContent = item.fullName;
+          const span = document.createElement("span");
+          span.textContent = item.profession;
+          info.append(h3, span);
+          author.append(avatar, info);
+
+          const badge = document.createElement("span");
+          badge.className = `status-pill status-${item.status}`;
+          badge.textContent = item.status;
+
+          top.append(author, badge);
+
+          const comment = document.createElement("p");
+          comment.className = "mod-comment";
+          comment.textContent = `“${item.comment}”`;
+
+          const footer = document.createElement("div");
+          footer.className = "mod-footer";
+
+          const date = document.createElement("span");
+          date.className = "mod-date";
+          date.textContent = formatDate(item.createdAt);
+
+          const actions = document.createElement("div");
+          actions.className = "mod-actions";
+
+          if (item.status !== "approved") {
+            const approveBtn = document.createElement("button");
+            approveBtn.type = "button";
+            approveBtn.className = "btn btn-approve";
+            approveBtn.textContent = "Approve";
+            approveBtn.onclick = () => updateStatus(item.id, "approved");
+            actions.appendChild(approveBtn);
+          }
+
+          if (item.status !== "rejected") {
+            const rejectBtn = document.createElement("button");
+            rejectBtn.type = "button";
+            rejectBtn.className = "btn btn-delete";
+            rejectBtn.textContent = "Delete";
+            rejectBtn.onclick = () => updateStatus(item.id, "rejected");
+            actions.appendChild(rejectBtn);
+          } else {
+            const purgeBtn = document.createElement("button");
+            purgeBtn.type = "button";
+            purgeBtn.className = "btn btn-delete";
+            purgeBtn.textContent = "Purge";
+            purgeBtn.onclick = () => permanentDelete(item.id);
+            actions.appendChild(purgeBtn);
+          }
+
+          footer.append(date, actions);
+          card.append(top, comment, footer);
+          cardsGrid.appendChild(card);
+        });
+      }
+
+      async function loadAdminTestimonials() {
+        const res = await fetch("/api/admin/testimonials", {
+          credentials: "same-origin",
+        });
+        if (res.status === 401) {
+          showLogin();
+          return;
+        }
+        const data = await res.json();
+        allItems = Array.isArray(data.testimonials) ? data.testimonials : [];
+        showDashboard();
+        renderCards();
+      }
+
+      async function updateStatus(id, status) {
+        const res = await fetch(`/api/admin/testimonials/${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status }),
+        });
+        if (res.ok) {
+          await loadAdminTestimonials();
+        }
+      }
+
+      async function permanentDelete(id) {
+        if (!window.confirm("Permanently delete this comment from the database?")) {
+          return;
+        }
+        const res = await fetch(`/api/admin/testimonials/${encodeURIComponent(id)}`, {
+          method: "DELETE",
+          credentials: "same-origin",
+        });
+        if (res.ok) {
+          await loadAdminTestimonials();
+        }
+      }
+
+      function showLogin() {
+        loginView.classList.remove("hidden");
+        dashboardView.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+      }
+
+      function showDashboard() {
+        loginView.classList.add("hidden");
+        dashboardView.classList.remove("hidden");
+        logoutBtn.classList.remove("hidden");
+      }
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loginError.style.display = "none";
+        const password = document.getElementById("adminPassword").value;
+
+        const res = await fetch("/api/admin/login", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password }),
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          loginError.textContent = data.error || "Invalid admin password.";
+          loginError.style.display = "block";
+          return;
+        }
+
+        document.getElementById("adminPassword").value = "";
+        await loadAdminTestimonials();
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        await fetch("/api/admin/logout", {
+          method: "POST",
+          credentials: "same-origin",
+        });
+        showLogin();
+      });
+
+      refreshBtn.addEventListener("click", loadAdminTestimonials);
+
+      tabButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          tabButtons.forEach((b) => b.classList.remove("is-active"));
+          btn.classList.add("is-active");
+          currentTab = btn.dataset.tab;
+          renderCards();
+        });
+      });
+
+      void loadAdminTestimonials();
+    </script>
+  </body>
+</html>

@@ -708,4 +708,420 @@ document.addEventListener("DOMContentLoaded", () => {
       closeMenu(item.getAttribute("href"));
     });
   });
+
+  // ---------------------------------------------------------------
+  // 5. Interactive Horizontal Testimonial Section + Submission Modal
+  // ---------------------------------------------------------------
+  const testimonialsSection = document.getElementById("testimonials");
+  const testimonialsViewport = document.getElementById("testimonialsViewport");
+  const testimonialsTrack = document.getElementById("testimonialsTrack");
+  const openModalBtn = document.getElementById("openTestimonialModalBtn");
+  const testimonialModal = document.getElementById("testimonialModal");
+  const testimonialModalBackdrop = document.getElementById("testimonialModalBackdrop");
+  const closeModalBtn = document.getElementById("closeTestimonialModalBtn");
+  const cancelModalBtn = document.getElementById("cancelTestimonialBtn");
+  const testimonialForm = document.getElementById("testimonialForm");
+  const tfFullName = document.getElementById("tfFullName");
+  const tfProfession = document.getElementById("tfProfession");
+  const tfPhotoUrl = document.getElementById("tfPhotoUrl");
+  const tfComment = document.getElementById("tfComment");
+  const tfCharCounter = document.getElementById("tfCharCounter");
+  const testimonialFormFeedback = document.getElementById("testimonialFormFeedback");
+  const submitTestimonialBtn = document.getElementById("submitTestimonialBtn");
+
+  const cardThemes = ["card-lavender", "card-orange", "card-lilac"];
+
+  let maxHorizontalShift = 0;
+  let targetHorizontalX = 0;
+  let currentHorizontalX = 0;
+  let horizontalRafId = null;
+
+  function getInitials(name) {
+    return String(name || "V")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase() || "")
+      .join("") || "V";
+  }
+
+  function createTestimonialCardElement(item, index) {
+    const article = document.createElement("article");
+    const theme = cardThemes[index % cardThemes.length];
+    article.className = `testimonial-card ${theme}`;
+
+    const top = document.createElement("div");
+    top.className = "testimonial-card-top";
+
+    const author = document.createElement("div");
+    author.className = "testimonial-author";
+
+    const avatar = document.createElement("div");
+    avatar.className = "testimonial-avatar";
+    avatar.setAttribute("aria-hidden", "true");
+
+    if (item.photoUrl) {
+      const img = document.createElement("img");
+      img.src = item.photoUrl;
+      img.alt = "";
+      img.loading = "lazy";
+      img.addEventListener("error", () => {
+        avatar.textContent = getInitials(item.fullName);
+      });
+      avatar.appendChild(img);
+    } else {
+      avatar.textContent = getInitials(item.fullName);
+    }
+
+    const meta = document.createElement("div");
+    meta.className = "testimonial-meta";
+
+    const nameEl = document.createElement("h3");
+    nameEl.textContent = item.fullName;
+
+    const profEl = document.createElement("p");
+    profEl.textContent = item.profession;
+
+    meta.append(nameEl, profEl);
+    author.append(avatar, meta);
+
+    const idxEl = document.createElement("span");
+    idxEl.className = "testimonial-index";
+    idxEl.textContent = String(index + 1).padStart(2, "0");
+
+    top.append(author, idxEl);
+
+    const quote = document.createElement("blockquote");
+    quote.className = "testimonial-quote";
+    quote.textContent = `“${item.comment.replace(/^[“"]|[”"]$/g, "")}”`;
+
+    article.append(top, quote);
+    return article;
+  }
+
+  function recalcTestimonialsScroll() {
+    if (!testimonialsSection || !testimonialsTrack) return;
+
+    if (reducedMotion.matches) {
+      testimonialsSection.style.height = "";
+      maxHorizontalShift = 0;
+      targetHorizontalX = 0;
+      currentHorizontalX = 0;
+      testimonialsTrack.style.transform = "";
+      return;
+    }
+
+    const viewportW = window.innerWidth;
+    const viewportH = window.innerHeight;
+    const trackW = testimonialsTrack.scrollWidth;
+    maxHorizontalShift = Math.max(0, trackW - viewportW);
+
+    // Total vertical scroll height = 1 viewport height + horizontal travel distance
+    testimonialsSection.style.height = `${viewportH + maxHorizontalShift}px`;
+    scheduler.schedule();
+  }
+
+  function animateTestimonialsHorizontal() {
+    if (!testimonialsTrack || reducedMotion.matches) {
+      horizontalRafId = null;
+      return;
+    }
+
+    const diff = targetHorizontalX - currentHorizontalX;
+    currentHorizontalX += diff * 0.14;
+
+    if (Math.abs(diff) < 0.15) {
+      currentHorizontalX = targetHorizontalX;
+    }
+
+    testimonialsTrack.style.transform = `translate3d(-${currentHorizontalX.toFixed(2)}px, 0, 0)`;
+
+    if (Math.abs(targetHorizontalX - currentHorizontalX) >= 0.15) {
+      horizontalRafId = window.requestAnimationFrame(animateTestimonialsHorizontal);
+    } else {
+      horizontalRafId = null;
+    }
+  }
+
+  function startTestimonialsAnimation() {
+    if (horizontalRafId === null) {
+      horizontalRafId = window.requestAnimationFrame(animateTestimonialsHorizontal);
+    }
+  }
+
+  if (testimonialsSection && testimonialsTrack) {
+    scheduler.add({
+      read(viewportHeight) {
+        if (reducedMotion.matches || viewportHeight === 0 || maxHorizontalShift <= 0) {
+          return 0;
+        }
+        const rect = testimonialsSection.getBoundingClientRect();
+        const scrollDistance = rect.height - viewportHeight;
+        if (scrollDistance <= 0) return 0;
+
+        const progress = clamp01(-rect.top / scrollDistance);
+        return progress * maxHorizontalShift;
+      },
+      write(nextTargetX) {
+        if (reducedMotion.matches) return false;
+        if (Math.abs(nextTargetX - targetHorizontalX) < 0.1) return false;
+        targetHorizontalX = nextTargetX;
+        startTestimonialsAnimation();
+        return false;
+      },
+    });
+
+    // Support horizontal touch drag on mobile devices mapped cleanly to vertical scroll
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartScrollY = 0;
+    let isHorizontalGesture = null;
+
+    if (testimonialsViewport) {
+      testimonialsViewport.addEventListener(
+        "touchstart",
+        (event) => {
+          if (reducedMotion.matches || event.touches.length !== 1) return;
+          touchStartX = event.touches[0].clientX;
+          touchStartY = event.touches[0].clientY;
+          touchStartScrollY = window.scrollY;
+          isHorizontalGesture = null;
+        },
+        { passive: true },
+      );
+
+      testimonialsViewport.addEventListener(
+        "touchmove",
+        (event) => {
+          if (reducedMotion.matches || event.touches.length !== 1) return;
+          const dx = touchStartX - event.touches[0].clientX;
+          const dy = touchStartY - event.touches[0].clientY;
+
+          if (isHorizontalGesture === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+            isHorizontalGesture = Math.abs(dx) > Math.abs(dy);
+          }
+
+          if (isHorizontalGesture) {
+            event.preventDefault();
+            const sectionTop =
+              window.scrollY + testimonialsSection.getBoundingClientRect().top;
+            const minScroll = sectionTop;
+            const maxScroll = sectionTop + maxHorizontalShift;
+            const desiredScroll = Math.max(
+              minScroll,
+              Math.min(maxScroll, touchStartScrollY + dx * 1.15),
+            );
+            window.scrollTo({ top: desiredScroll, behavior: "auto" });
+          }
+        },
+        { passive: false },
+      );
+    }
+
+    window.addEventListener("resize", recalcTestimonialsScroll, { passive: true });
+    reducedMotion.addEventListener("change", recalcTestimonialsScroll);
+    recalcTestimonialsScroll();
+  }
+
+  // Load approved testimonials from backend API (falls back gracefully if offline)
+  async function loadApprovedTestimonials() {
+    if (!testimonialsTrack || !openModalBtn) return;
+    try {
+      const response = await fetch("/api/testimonials", {
+        headers: { Accept: "application/json" },
+      });
+      if (!response.ok) return;
+      const data = await response.json();
+      if (!Array.isArray(data.testimonials)) return;
+
+      const existingCards = testimonialsTrack.querySelectorAll(
+        ".testimonial-card:not(.testimonial-add-card)",
+      );
+      existingCards.forEach((card) => card.remove());
+
+      data.testimonials.forEach((item, idx) => {
+        const cardEl = createTestimonialCardElement(item, idx);
+        testimonialsTrack.insertBefore(cardEl, openModalBtn);
+      });
+
+      recalcTestimonialsScroll();
+    } catch (_) {
+      // Static mode fallback: keep initial seeded cards intact
+    }
+  }
+
+  void loadApprovedTestimonials();
+
+  // Modal controls & form validation
+  let lastFocusedBeforeModal = null;
+
+  function clearFormErrors() {
+    document
+      .querySelectorAll("#testimonialForm .form-field")
+      .forEach((field) => field.classList.remove("has-error"));
+    document
+      .querySelectorAll("#testimonialForm .field-error")
+      .forEach((el) => {
+        el.textContent = "";
+      });
+  }
+
+  function setFieldError(inputEl, errorElId, message) {
+    const field = inputEl?.closest(".form-field");
+    const errEl = document.getElementById(errorElId);
+    if (field) field.classList.add("has-error");
+    if (errEl) errEl.textContent = message;
+  }
+
+  function openTestimonialModal() {
+    if (!testimonialModal) return;
+    lastFocusedBeforeModal = document.activeElement;
+    clearFormErrors();
+    if (testimonialFormFeedback) {
+      testimonialFormFeedback.className = "form-feedback";
+      testimonialFormFeedback.textContent = "";
+    }
+    testimonialModal.classList.add("is-open");
+    testimonialModal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+    window.setTimeout(() => {
+      tfFullName?.focus();
+    }, 50);
+  }
+
+  function closeTestimonialModal() {
+    if (!testimonialModal || !testimonialModal.classList.contains("is-open")) {
+      return;
+    }
+    testimonialModal.classList.remove("is-open");
+    testimonialModal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+    if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === "function") {
+      lastFocusedBeforeModal.focus();
+    }
+  }
+
+  if (openModalBtn) {
+    openModalBtn.addEventListener("click", openTestimonialModal);
+  }
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", closeTestimonialModal);
+  }
+  if (cancelModalBtn) {
+    cancelModalBtn.addEventListener("click", closeTestimonialModal);
+  }
+  if (testimonialModalBackdrop) {
+    testimonialModalBackdrop.addEventListener("click", closeTestimonialModal);
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (
+      event.key === "Escape" &&
+      testimonialModal &&
+      testimonialModal.classList.contains("is-open")
+    ) {
+      closeTestimonialModal();
+    }
+  });
+
+  if (tfComment && tfCharCounter) {
+    tfComment.addEventListener("input", () => {
+      tfCharCounter.textContent = `${tfComment.value.length} / 420`;
+    });
+  }
+
+  if (testimonialForm) {
+    testimonialForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearFormErrors();
+      if (testimonialFormFeedback) {
+        testimonialFormFeedback.className = "form-feedback";
+        testimonialFormFeedback.textContent = "";
+      }
+
+      const fullName = (tfFullName?.value || "").trim();
+      const profession = (tfProfession?.value || "").trim();
+      const photoUrl = (tfPhotoUrl?.value || "").trim();
+      const comment = (tfComment?.value || "").trim();
+      const website = testimonialForm.querySelector('input[name="website"]')?.value || "";
+
+      let hasError = false;
+
+      if (fullName.length < 2) {
+        setFieldError(tfFullName, "errFullName", "Please enter your full name (at least 2 characters).");
+        hasError = true;
+      }
+      if (profession.length < 2) {
+        setFieldError(tfProfession, "errProfession", "Please enter your profession or role.");
+        hasError = true;
+      }
+      if (photoUrl) {
+        try {
+          const parsed = new URL(photoUrl);
+          if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+            throw new Error("Invalid protocol");
+          }
+        } catch (_) {
+          setFieldError(tfPhotoUrl, "errPhotoUrl", "Please enter a valid http:// or https:// image URL.");
+          hasError = true;
+        }
+      }
+      if (comment.length < 10) {
+        setFieldError(tfComment, "errComment", "Please write at least 10 characters of feedback.");
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      if (submitTestimonialBtn) {
+        submitTestimonialBtn.disabled = true;
+        submitTestimonialBtn.classList.add("is-loading");
+      }
+
+      try {
+        const res = await fetch("/api/testimonials", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            fullName,
+            profession,
+            photoUrl,
+            comment,
+            website,
+          }),
+        });
+
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(payload.error || "Unable to submit your review right now.");
+        }
+
+        testimonialForm.reset();
+        if (tfCharCounter) tfCharCounter.textContent = "0 / 420";
+        if (testimonialFormFeedback) {
+          testimonialFormFeedback.className = "form-feedback is-success";
+          testimonialFormFeedback.textContent =
+            payload.message ||
+            "Thank you! Your review has been submitted and is awaiting approval before appearing publicly.";
+        }
+      } catch (err) {
+        if (testimonialFormFeedback) {
+          testimonialFormFeedback.className = "form-feedback is-error";
+          testimonialFormFeedback.textContent =
+            err.message === "Failed to fetch"
+              ? "Backend server is not running yet. Start the Node.js server (npm start) to submit reviews."
+              : err.message;
+        }
+      } finally {
+        if (submitTestimonialBtn) {
+          submitTestimonialBtn.disabled = false;
+          submitTestimonialBtn.classList.remove("is-loading");
+        }
+      }
+    });
+  }
+
 });
