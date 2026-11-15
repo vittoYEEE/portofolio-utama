@@ -437,12 +437,6 @@ body.menu-open {
   user-select: none;
 }
 
-/*
- * Dulu halaman di belakang menu di-blur dan diperkecil (filter + scale pada
- * elemen setinggi 6 layar). Itu penyebab utama lag saat tombol hamburger
- * diklik. Sekarang diganti lapisan gelap tipis yang hanya mengubah opacity
- * (dikerjakan GPU, hampir tanpa biaya).
- */
 body.menu-open .page-panels,
 body.menu-open .projects-section {
   pointer-events: none;
@@ -746,7 +740,9 @@ body.menu-open::after {
   border-radius: 12px;
   color: #f0e5ff;
   background: transparent;
+  font-family: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition:
     color 0.48s cubic-bezier(0.22, 1, 0.36, 1),
@@ -807,16 +803,23 @@ body.menu-open::after {
   display: none;
 }
 
-/* --- Floating Preview Melayang & Smooth LERP di Desktop --- */
+/* --- Floating Preview Melayang & Bisa Diklik di Desktop --- */
 .project-floating-preview {
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1500;
+  display: block;
   width: min(340px, 36vw);
   aspect-ratio: 1.52;
+  text-decoration: none;
   pointer-events: none;
+  cursor: pointer;
   will-change: transform;
+}
+
+.project-floating-preview.is-visible {
+  pointer-events: auto;
 }
 
 .project-floating-inner {
@@ -888,7 +891,16 @@ body.menu-open::after {
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.03em;
+  text-decoration: none;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.project-floating-preview:hover .preview-go {
+  transform: scale(1.1);
+  background: #ff9a50;
 }
 
 .preview-go span {
@@ -1034,7 +1046,7 @@ body.menu-open::after {
 
 @media (max-width: 760px), (hover: none) {
   .project-floating-preview {
-    display: none;
+    display: none !important;
   }
 
   .project-preview {
@@ -1072,6 +1084,7 @@ body.menu-open::after {
     margin: 4px 10px 18px auto;
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
     transform: translateY(0) rotate(-4deg) scale(1);
     transition:
       max-height 0.42s cubic-bezier(0.22, 1, 0.36, 1),
@@ -1079,6 +1092,13 @@ body.menu-open::after {
       opacity 0.28s ease,
       transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
       visibility 0s;
+  }
+
+  .project-preview-link {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-decoration: none;
   }
 
   .project-preview img {

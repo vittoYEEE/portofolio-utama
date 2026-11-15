@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------------------------------------------------------------
   // 1. Efek hero mengecil + menggelap saat panel berikutnya naik
-  //    (didaftarkan ke scheduler: baca dulu, tulis kemudian)
   // ---------------------------------------------------------------
   const stackingPairs = panels
     .map((panel, index) => ({
@@ -72,9 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return null;
       }
 
-      // Cukup baca posisi section About (satu elemen). Selama section ini
-      // belum mencapai layar, semua kata pasti masih redup, jadi posisi tiap
-      // blok teks tidak perlu dibaca satu per satu.
       const aboutRect = aboutSection
         ? aboutSection.getBoundingClientRect()
         : null;
@@ -188,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
       textNodes.forEach(splitTextNode);
     });
 
-    // Daftar kata disimpan sekali di sini, tidak dicari ulang tiap frame.
     textBlocks = blocks.map((block) => {
       const words = Array.from(block.querySelectorAll(".word"));
       return {
@@ -206,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTextReveal();
 
   // ---------------------------------------------------------------
-  // 3. Preview gambar proyek melayang (Smooth LERP + Trigger)
+  // 3. Preview gambar proyek melayang (Smooth LERP + Klik Langsung ke Web)
   // ---------------------------------------------------------------
   const projectList = document.getElementById("project-list");
   const projectEntries = Array.from(
@@ -229,12 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentY = 0;
   let currentTilt = 0;
   let previewLoopId = null;
-  let previewSize = { width: 330, height: 217 };
+  let closePreviewTimer = null;
+  let previewSize = { width: 340, height: 224 };
 
   function measureFloatingPreview() {
     if (!floatingPreview) return;
-    const width = floatingPreview.offsetWidth || 330;
-    const height = floatingPreview.offsetHeight || 217;
+    const width = floatingPreview.offsetWidth || 340;
+    const height = floatingPreview.offsetHeight || 224;
     previewSize = { width, height };
   }
 
@@ -243,14 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const margin = 20;
     const { width, height } = previewSize;
 
-    // Muncul di sebelah kanan kursor secara default, geser ke kiri jika mentok layar kanan
     let x = clientX + gap;
     if (x + width > window.innerWidth - margin) {
       x = clientX - width - gap;
     }
     x = Math.max(margin, Math.min(window.innerWidth - width - margin, x));
 
-    // Posisi vertikal sejajar kursor dengan batas aman atas & bawah viewport
     const halfH = height / 2;
     const y = Math.min(
       window.innerHeight - halfH - margin,
@@ -258,6 +252,23 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     return { x, y };
+  }
+
+  function syncFloatingLink(index) {
+    if (!floatingPreview) return;
+    const entry = projectEntries[index];
+    const row = entry ? entry.querySelector(".project-row") : null;
+    const href = row ? row.getAttribute("href") : null;
+
+    if (href && href !== "#projects") {
+      floatingPreview.setAttribute("href", href);
+      floatingPreview.setAttribute("target", "_blank");
+      floatingPreview.setAttribute("rel", "noopener noreferrer");
+    } else {
+      floatingPreview.setAttribute("href", href || "#projects");
+      floatingPreview.removeAttribute("target");
+      floatingPreview.removeAttribute("rel");
+    }
   }
 
   function setActiveSlide(index) {
@@ -272,6 +283,8 @@ document.addEventListener("DOMContentLoaded", () => {
     floatingSlides.forEach((slide, slideIdx) => {
       slide.classList.toggle("is-current", slideIdx === safeIndex);
     });
+
+    syncFloatingLink(safeIndex);
   }
 
   function renderFloatingPreview() {
@@ -280,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // LERP: gambar mengejar posisi target secara bertahap agar terasa melayang lembut
     const ease = reducedMotion.matches ? 1 : 0.11;
     const dx = targetX - currentX;
     const dy = targetY - currentY;
@@ -288,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
     currentX += dx * ease;
     currentY += dy * ease;
 
-    // Kemiringan dinamis halus mengikuti arah & kecepatan geser mouse
     const targetTilt = reducedMotion.matches
       ? 0
       : Math.max(-7, Math.min(7, dx * 0.045));
@@ -315,15 +326,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function cancelCloseTimer() {
+    if (closePreviewTimer !== null) {
+      window.clearTimeout(closePreviewTimer);
+      closePreviewTimer = null;
+    }
+  }
+
+  function scheduleClosePreview() {
+    cancelCloseTimer();
+    closePreviewTimer = window.setTimeout(() => {
+      closeFloatingPreview();
+    }, 90);
+  }
+
   function openFloatingPreview(clientX, clientY, index) {
     if (!floatingPreview || !desktopHover.matches) return;
+    cancelCloseTimer();
 
     measureFloatingPreview();
     const pos = computeClampedTarget(clientX, clientY);
     targetX = pos.x;
     targetY = pos.y;
 
-    // Jika sebelumnya tidak aktif, mulai dari dekat titik kursor agar tidak terbang dari (0,0)
     if (!isPreviewActive) {
       currentX = pos.x;
       currentY = pos.y + 14;
@@ -338,6 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function closeFloatingPreview() {
+    cancelCloseTimer();
     if (!floatingPreview) return;
     isPreviewActive = false;
     floatingPreview.classList.remove("is-visible");
@@ -348,6 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (projectList && floatingPreview) {
     projectList.addEventListener("pointermove", (event) => {
       if (!desktopHover.matches) return;
+      cancelCloseTimer();
       const pos = computeClampedTarget(event.clientX, event.clientY);
       targetX = pos.x;
       targetY = pos.y;
@@ -361,7 +388,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     projectList.addEventListener("pointerleave", () => {
-      closeFloatingPreview();
+      scheduleClosePreview();
+    });
+
+    // Jika kursor pindah ke atas kotak preview / tombol GO, jangan ditutup agar bisa diklik
+    floatingPreview.addEventListener("pointerenter", () => {
+      cancelCloseTimer();
+      const activeEntry = projectEntries[activeProjectIndex];
+      if (activeEntry) activeEntry.classList.add("is-active");
+    });
+
+    floatingPreview.addEventListener("pointerleave", () => {
+      scheduleClosePreview();
     });
   }
 
@@ -379,17 +417,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const entryIndex = entry.getAttribute("data-index") ?? String(idx);
     if (!row) return;
 
-    // Trigger aktif saat kursor menyentuh baris / tulisan project
     row.addEventListener("pointerenter", (event) => {
       if (!desktopHover.matches) return;
+      cancelCloseTimer();
       projectEntries.forEach((other) => other.classList.remove("is-active"));
       entry.classList.add("is-active");
       openFloatingPreview(event.clientX, event.clientY, entryIndex);
-    });
-
-    row.addEventListener("pointerleave", () => {
-      if (!desktopHover.matches) return;
-      entry.classList.remove("is-active");
     });
 
     row.addEventListener("focus", () => {
@@ -411,11 +444,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Mode mobile / layar sentuh: tetap pakai accordion buka-tutup
-    row.addEventListener("click", () => {
+    // Mode mobile / layar sentuh:
+    // Tap pertama membuka preview gambar; tap kedua pada baris atau tap gambar/GO langsung buka webnya
+    row.addEventListener("click", (event) => {
       if (desktopHover.matches || !mobilePreview) return;
 
-      const shouldOpen = !entry.classList.contains("is-open");
+      const isAlreadyOpen = entry.classList.contains("is-open");
+      if (isAlreadyOpen) return;
+
+      event.preventDefault();
       projectEntries.forEach((otherEntry) => {
         otherEntry.classList.remove("is-open");
         otherEntry.querySelector(".project-row")?.setAttribute(
@@ -428,13 +465,22 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       });
 
-      if (shouldOpen) {
-        entry.classList.add("is-open");
-        row.setAttribute("aria-expanded", "true");
-        mobilePreview.setAttribute("aria-hidden", "false");
-      }
+      entry.classList.add("is-open");
+      row.setAttribute("aria-expanded", "true");
+      mobilePreview.setAttribute("aria-hidden", "false");
     });
   });
+
+  // Cegah lompatan scroll jika proyek belum memiliki link web (href="#projects")
+  document
+    .querySelectorAll(".project-row, .project-preview-link, #projectFloatingPreview")
+    .forEach((linkEl) => {
+      linkEl.addEventListener("click", (event) => {
+        if (linkEl.getAttribute("href") === "#projects") {
+          event.preventDefault();
+        }
+      });
+    });
 
   if (projectEntries.length) {
     if (reducedMotion.matches || !("IntersectionObserver" in window)) {
