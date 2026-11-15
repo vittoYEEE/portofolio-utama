@@ -206,115 +206,214 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTextReveal();
 
   // ---------------------------------------------------------------
-  // 3. Preview gambar proyek yang mengikuti kursor
+  // 3. Preview gambar proyek melayang (Smooth LERP + Trigger)
   // ---------------------------------------------------------------
+  const projectList = document.getElementById("project-list");
   const projectEntries = Array.from(
     document.querySelectorAll("[data-project-entry]"),
   );
+  const floatingPreview = document.getElementById("projectFloatingPreview");
+  const floatingTrack = document.getElementById("projectFloatingTrack");
+  const floatingSlides = floatingTrack
+    ? Array.from(floatingTrack.querySelectorAll(".project-floating-slide"))
+    : [];
   const desktopHover = window.matchMedia(
     "(hover: hover) and (pointer: fine)",
   );
 
-  // Ukuran preview disimpan sekali (saat kursor masuk), bukan dibaca ulang di
-  // setiap gerakan mouse. Bounding box dihitung untuk kondisi akhir animasi
-  // (rotasi -6deg, skala 1), sama seperti hasil getBoundingClientRect lama.
-  const previewTilt = (6 * Math.PI) / 180;
-  let previewSize = { width: 0, height: 0 };
-  let activePreview = null;
-  let pendingPoint = null;
-  let previewFrame = null;
+  let isPreviewActive = false;
+  let activeProjectIndex = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let currentTilt = 0;
+  let previewLoopId = null;
+  let previewSize = { width: 330, height: 217 };
 
-  function measurePreview(preview) {
-    const w = preview.offsetWidth;
-    const h = preview.offsetHeight;
-    previewSize = {
-      width: w * Math.cos(previewTilt) + h * Math.sin(previewTilt),
-      height: h * Math.cos(previewTilt) + w * Math.sin(previewTilt),
-    };
+  function measureFloatingPreview() {
+    if (!floatingPreview) return;
+    const width = floatingPreview.offsetWidth || 330;
+    const height = floatingPreview.offsetHeight || 217;
+    previewSize = { width, height };
   }
 
-  function applyPreviewPosition() {
-    previewFrame = null;
-    if (!activePreview || !pendingPoint) return;
+  function computeClampedTarget(clientX, clientY) {
+    const gap = 28;
+    const margin = 20;
+    const { width, height } = previewSize;
 
-    const { x, y } = pendingPoint;
-    const gap = 24;
-    let left = x + gap;
-    if (left + previewSize.width > window.innerWidth - 16) {
-      left = x - previewSize.width - gap;
+    // Muncul di sebelah kanan kursor secara default, geser ke kiri jika mentok layar kanan
+    let x = clientX + gap;
+    if (x + width > window.innerWidth - margin) {
+      x = clientX - width - gap;
     }
-    left = Math.max(
-      16,
-      Math.min(window.innerWidth - previewSize.width - 16, left),
+    x = Math.max(margin, Math.min(window.innerWidth - width - margin, x));
+
+    // Posisi vertikal sejajar kursor dengan batas aman atas & bawah viewport
+    const halfH = height / 2;
+    const y = Math.min(
+      window.innerHeight - halfH - margin,
+      Math.max(halfH + margin, clientY),
     );
 
-    const halfHeight = previewSize.height / 2;
-    const top = Math.min(
-      window.innerHeight - halfHeight - 16,
-      Math.max(halfHeight + 16, y),
-    );
-
-    // Pakai properti `translate` (tanpa layout ulang), bukan top/left.
-    activePreview.style.translate = `${left}px ${top}px`;
+    return { x, y };
   }
 
-  function updateProjectPreviewPosition(entry, event) {
-    const preview = entry.querySelector(".project-preview");
-    if (!preview) return;
+  function setActiveSlide(index) {
+    if (!floatingTrack) return;
+    const safeIndex = Math.max(
+      0,
+      Math.min(floatingSlides.length - 1, Number(index) || 0),
+    );
+    activeProjectIndex = safeIndex;
+    floatingTrack.style.transform = `translate3d(0, -${safeIndex * 100}%, 0)`;
 
-    activePreview = preview;
-    pendingPoint = { x: event.clientX, y: event.clientY };
-    if (previewFrame === null) {
-      previewFrame = window.requestAnimationFrame(applyPreviewPosition);
+    floatingSlides.forEach((slide, slideIdx) => {
+      slide.classList.toggle("is-current", slideIdx === safeIndex);
+    });
+  }
+
+  function renderFloatingPreview() {
+    if (!floatingPreview) {
+      previewLoopId = null;
+      return;
     }
+
+    // LERP: gambar mengejar posisi target secara bertahap agar terasa melayang lembut
+    const ease = reducedMotion.matches ? 1 : 0.11;
+    const dx = targetX - currentX;
+    const dy = targetY - currentY;
+
+    currentX += dx * ease;
+    currentY += dy * ease;
+
+    // Kemiringan dinamis halus mengikuti arah & kecepatan geser mouse
+    const targetTilt = reducedMotion.matches
+      ? 0
+      : Math.max(-7, Math.min(7, dx * 0.045));
+    currentTilt += (targetTilt - currentTilt) * 0.14;
+
+    floatingPreview.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) translateY(-50%) rotate(${currentTilt.toFixed(2)}deg)`;
+
+    const isSettled =
+      Math.abs(dx) < 0.15 &&
+      Math.abs(dy) < 0.15 &&
+      Math.abs(targetTilt - currentTilt) < 0.05;
+
+    if (!isPreviewActive && isSettled) {
+      previewLoopId = null;
+      return;
+    }
+
+    previewLoopId = window.requestAnimationFrame(renderFloatingPreview);
+  }
+
+  function startPreviewLoop() {
+    if (previewLoopId === null) {
+      previewLoopId = window.requestAnimationFrame(renderFloatingPreview);
+    }
+  }
+
+  function openFloatingPreview(clientX, clientY, index) {
+    if (!floatingPreview || !desktopHover.matches) return;
+
+    measureFloatingPreview();
+    const pos = computeClampedTarget(clientX, clientY);
+    targetX = pos.x;
+    targetY = pos.y;
+
+    // Jika sebelumnya tidak aktif, mulai dari dekat titik kursor agar tidak terbang dari (0,0)
+    if (!isPreviewActive) {
+      currentX = pos.x;
+      currentY = pos.y + 14;
+      currentTilt = 0;
+    }
+
+    setActiveSlide(index);
+    isPreviewActive = true;
+    floatingPreview.classList.add("is-visible");
+    floatingPreview.setAttribute("aria-hidden", "false");
+    startPreviewLoop();
+  }
+
+  function closeFloatingPreview() {
+    if (!floatingPreview) return;
+    isPreviewActive = false;
+    floatingPreview.classList.remove("is-visible");
+    floatingPreview.setAttribute("aria-hidden", "true");
+    projectEntries.forEach((entry) => entry.classList.remove("is-active"));
+  }
+
+  if (projectList && floatingPreview) {
+    projectList.addEventListener("pointermove", (event) => {
+      if (!desktopHover.matches) return;
+      const pos = computeClampedTarget(event.clientX, event.clientY);
+      targetX = pos.x;
+      targetY = pos.y;
+      if (!isPreviewActive) {
+        const hoveredEntry = event.target.closest("[data-project-entry]");
+        const idx = hoveredEntry ? hoveredEntry.getAttribute("data-index") : 0;
+        openFloatingPreview(event.clientX, event.clientY, idx);
+      } else {
+        startPreviewLoop();
+      }
+    });
+
+    projectList.addEventListener("pointerleave", () => {
+      closeFloatingPreview();
+    });
   }
 
   window.addEventListener(
     "resize",
     () => {
-      if (activePreview) measurePreview(activePreview);
+      measureFloatingPreview();
     },
     { passive: true },
   );
 
-  projectEntries.forEach((entry) => {
+  projectEntries.forEach((entry, idx) => {
     const row = entry.querySelector(".project-row");
-    const preview = entry.querySelector(".project-preview");
-    if (!row || !preview) return;
+    const mobilePreview = entry.querySelector(".project-preview");
+    const entryIndex = entry.getAttribute("data-index") ?? String(idx);
+    if (!row) return;
 
-    entry.addEventListener("pointerenter", (event) => {
+    // Trigger aktif saat kursor menyentuh baris / tulisan project
+    row.addEventListener("pointerenter", (event) => {
       if (!desktopHover.matches) return;
+      projectEntries.forEach((other) => other.classList.remove("is-active"));
       entry.classList.add("is-active");
-      preview.setAttribute("aria-hidden", "false");
-      measurePreview(preview);
-      updateProjectPreviewPosition(entry, event);
+      openFloatingPreview(event.clientX, event.clientY, entryIndex);
     });
 
-    entry.addEventListener("pointermove", (event) => {
-      if (desktopHover.matches) updateProjectPreviewPosition(entry, event);
-    });
-
-    entry.addEventListener("pointerleave", () => {
+    row.addEventListener("pointerleave", () => {
+      if (!desktopHover.matches) return;
       entry.classList.remove("is-active");
-      if (!entry.contains(document.activeElement)) {
-        preview.setAttribute("aria-hidden", "true");
+    });
+
+    row.addEventListener("focus", () => {
+      if (!desktopHover.matches || !floatingPreview) return;
+      projectEntries.forEach((other) => other.classList.remove("is-active"));
+      entry.classList.add("is-active");
+      const rect = row.getBoundingClientRect();
+      openFloatingPreview(
+        rect.left + rect.width * 0.55,
+        rect.top + rect.height / 2,
+        entryIndex,
+      );
+    });
+
+    row.addEventListener("blur", () => {
+      entry.classList.remove("is-active");
+      if (projectList && !projectList.contains(document.activeElement)) {
+        closeFloatingPreview();
       }
     });
 
-    entry.addEventListener("focusin", () => {
-      if (!desktopHover.matches) return;
-      entry.classList.add("is-active");
-      preview.setAttribute("aria-hidden", "false");
-    });
-
-    entry.addEventListener("focusout", (event) => {
-      if (entry.contains(event.relatedTarget)) return;
-      entry.classList.remove("is-active");
-      preview.setAttribute("aria-hidden", "true");
-    });
-
+    // Mode mobile / layar sentuh: tetap pakai accordion buka-tutup
     row.addEventListener("click", () => {
-      if (desktopHover.matches) return;
+      if (desktopHover.matches || !mobilePreview) return;
 
       const shouldOpen = !entry.classList.contains("is-open");
       projectEntries.forEach((otherEntry) => {
@@ -332,7 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (shouldOpen) {
         entry.classList.add("is-open");
         row.setAttribute("aria-expanded", "true");
-        preview.setAttribute("aria-hidden", "false");
+        mobilePreview.setAttribute("aria-hidden", "false");
       }
     });
   });

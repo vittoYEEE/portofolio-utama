@@ -86,18 +86,30 @@
   inset: -192px;
   background: radial-gradient(
     circle closest-side,
-    color-mix(in srgb, var(--ld-blob-color) 99%, transparent) calc(var(--ld-blob-size) / 2 - 160px),
-    color-mix(in srgb, var(--ld-blob-color) 98%, transparent) calc(var(--ld-blob-size) / 2 - 128px),
-    color-mix(in srgb, var(--ld-blob-color) 93%, transparent) calc(var(--ld-blob-size) / 2 - 96px),
-    color-mix(in srgb, var(--ld-blob-color) 84%, transparent) calc(var(--ld-blob-size) / 2 - 64px),
-    color-mix(in srgb, var(--ld-blob-color) 69%, transparent) calc(var(--ld-blob-size) / 2 - 32px),
-    color-mix(in srgb, var(--ld-blob-color) 50%, transparent) calc(var(--ld-blob-size) / 2 + 0px),
-    color-mix(in srgb, var(--ld-blob-color) 31%, transparent) calc(var(--ld-blob-size) / 2 + 32px),
-    color-mix(in srgb, var(--ld-blob-color) 16%, transparent) calc(var(--ld-blob-size) / 2 + 64px),
-    color-mix(in srgb, var(--ld-blob-color) 7%, transparent) calc(var(--ld-blob-size) / 2 + 96px),
-    color-mix(in srgb, var(--ld-blob-color) 2%, transparent) calc(var(--ld-blob-size) / 2 + 128px),
-    color-mix(in srgb, var(--ld-blob-color) 1%, transparent) calc(var(--ld-blob-size) / 2 + 160px),
-    color-mix(in srgb, var(--ld-blob-color) 0%, transparent) calc(var(--ld-blob-size) / 2 + 192px),
+    color-mix(in srgb, var(--ld-blob-color) 99%, transparent)
+      calc(var(--ld-blob-size) / 2 - 160px),
+    color-mix(in srgb, var(--ld-blob-color) 98%, transparent)
+      calc(var(--ld-blob-size) / 2 - 128px),
+    color-mix(in srgb, var(--ld-blob-color) 93%, transparent)
+      calc(var(--ld-blob-size) / 2 - 96px),
+    color-mix(in srgb, var(--ld-blob-color) 84%, transparent)
+      calc(var(--ld-blob-size) / 2 - 64px),
+    color-mix(in srgb, var(--ld-blob-color) 69%, transparent)
+      calc(var(--ld-blob-size) / 2 - 32px),
+    color-mix(in srgb, var(--ld-blob-color) 50%, transparent)
+      calc(var(--ld-blob-size) / 2 + 0px),
+    color-mix(in srgb, var(--ld-blob-color) 31%, transparent)
+      calc(var(--ld-blob-size) / 2 + 32px),
+    color-mix(in srgb, var(--ld-blob-color) 16%, transparent)
+      calc(var(--ld-blob-size) / 2 + 64px),
+    color-mix(in srgb, var(--ld-blob-color) 7%, transparent)
+      calc(var(--ld-blob-size) / 2 + 96px),
+    color-mix(in srgb, var(--ld-blob-color) 2%, transparent)
+      calc(var(--ld-blob-size) / 2 + 128px),
+    color-mix(in srgb, var(--ld-blob-color) 1%, transparent)
+      calc(var(--ld-blob-size) / 2 + 160px),
+    color-mix(in srgb, var(--ld-blob-color) 0%, transparent)
+      calc(var(--ld-blob-size) / 2 + 192px),
     transparent calc(var(--ld-blob-size) / 2 + 192px)
   );
 }
@@ -158,8 +170,7 @@
   width: 100%;
   display: grid;
   place-items: center;
-  padding:
-    calc(24px + env(safe-area-inset-top))
+  padding: calc(24px + env(safe-area-inset-top))
     calc(24px + env(safe-area-inset-right))
     calc(24px + env(safe-area-inset-bottom))
     calc(24px + env(safe-area-inset-left));
@@ -241,8 +252,7 @@
   font-weight: 600;
   letter-spacing: 0.24em;
   opacity: 0;
-  animation:
-    ld-number-in var(--ld-number-duration) ease
+  animation: ld-number-in var(--ld-number-duration) ease
     calc(var(--ld-wheel-delay) + var(--ld-word-reveal-duration)) both;
   animation-play-state: paused;
 }
@@ -261,8 +271,8 @@
   opacity: 0;
   transform: scaleX(0);
   transform-origin: left center;
-  animation:
-    ld-underline var(--ld-underline-duration) cubic-bezier(0.65, 0, 0.35, 1)
+  animation: ld-underline var(--ld-underline-duration)
+    cubic-bezier(0.65, 0, 0.35, 1)
     calc(var(--ld-wheel-delay) + var(--ld-word-reveal-duration)) both;
   animation-play-state: paused;
 }
@@ -288,8 +298,8 @@
 }
 
 #loader.ld-sweeping {
-  animation:
-    ld-sweep var(--ld-sweep-duration) cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  animation: ld-sweep var(--ld-sweep-duration) cubic-bezier(0.76, 0, 0.24, 1)
+    forwards;
 }
 
 #loader.ld-finished .ld-blob {

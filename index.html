@@ -262,7 +262,7 @@
         </div>
 
         <div class="project-list" id="project-list">
-          <article class="project-entry" data-project-entry>
+          <article class="project-entry" data-project-entry data-index="0">
             <button
               class="project-row"
               type="button"
@@ -291,7 +291,7 @@
             </div>
           </article>
 
-          <article class="project-entry" data-project-entry>
+          <article class="project-entry" data-project-entry data-index="1">
             <button
               class="project-row"
               type="button"
@@ -319,7 +319,7 @@
             </div>
           </article>
 
-          <article class="project-entry" data-project-entry>
+          <article class="project-entry" data-project-entry data-index="2">
             <button
               class="project-row"
               type="button"
@@ -351,7 +351,7 @@
             </div>
           </article>
 
-          <article class="project-entry" data-project-entry>
+          <article class="project-entry" data-project-entry data-index="3">
             <button
               class="project-row"
               type="button"
@@ -392,6 +392,43 @@
         </footer>
       </div>
     </section>
+
+    <!-- Floating Preview Melayang untuk Desktop Hover (Smooth LERP + Trigger) -->
+    <div
+      class="project-floating-preview"
+      id="projectFloatingPreview"
+      aria-hidden="true"
+    >
+      <div class="project-floating-inner" id="projectFloatingInner">
+        <div class="project-floating-track" id="projectFloatingTrack">
+          <div class="project-floating-slide is-current">
+            <img
+              src="asset/Screenshot 2026-11-13 210405 1.png"
+              alt="Preview website SevenSummit"
+              href="https://7summit.vercel.app/"
+              arget="_blank"
+              rel="noopener noreferrer"
+            />
+          </div>
+          <div class="project-floating-slide">
+            <img
+              src="./asset/SVARA 2.png"
+              alt="Preview website Svara Nusantara"
+            />
+          </div>
+          <div class="project-floating-slide">
+            <img
+              src="./asset/SEKOLAH 1.png"
+              alt="Preview website Sekolah Unggul"
+            />
+          </div>
+          <div class="project-floating-slide">
+            <img src="./asset/Ecommerce.png" alt="Preview website HAVZA" />
+          </div>
+        </div>
+        <span class="preview-go">GO <span aria-hidden="true">↗</span></span>
+      </div>
+    </div>
 
     <!-- Hubungkan ke file JavaScript terpisah -->
     <script src="loader.js" defer></script>
