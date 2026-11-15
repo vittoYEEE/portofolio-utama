@@ -1096,7 +1096,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const payload = await res.json().catch(() => ({}));
         if (!res.ok) {
-          throw new Error(payload.error || "Unable to submit your review right now.");
+          const errMsg =
+            typeof payload.error === "string"
+              ? payload.error
+              : payload.error?.message ||
+                (res.status === 404 || res.status === 405
+                  ? "API endpoint not found. Make sure the api/ folder is deployed to Vercel."
+                  : "Unable to submit your review right now.");
+          throw new Error(errMsg);
         }
 
         testimonialForm.reset();

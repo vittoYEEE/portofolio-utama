@@ -668,7 +668,7 @@
 
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
-          loginError.textContent = data.error || "Invalid admin password.";
+          loginError.textContent = (typeof data.error === "string" ? data.error : data.error?.message) || "Invalid admin password.";
           loginError.style.display = "block";
           return;
         }
