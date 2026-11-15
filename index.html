@@ -26,6 +26,7 @@
 
     <!-- Hubungkan ke file CSS -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="contact.css" />
   </head>
   <body>
     <div
@@ -440,7 +441,7 @@
           </article>
         </div>
 
-        <footer class="projects-outro" id="contact">
+        <footer class="projects-outro">
           <p class="projects-contact-note">
             Open for meaningful projects &amp; collaborations
           </p>
@@ -543,6 +544,161 @@
         <div class="testimonials-bottom-display" aria-hidden="true">
           <h2>What they say</h2>
         </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         SECTION: CONTACT (BENTO GRID + GIANT DISPLAY TITLE)
+         ===================================================================== -->
+    <section
+      class="contact-section"
+      id="contact"
+      aria-labelledby="contactHeading"
+    >
+      <div class="contact-inner">
+        <!-- Kartu Form Lavender (Kiri) -->
+        <div class="contact-form-card">
+          <h2 id="contactHeading">Ceritakan proyekmu</h2>
+          <form id="contactForm" class="contact-form" novalidate>
+            <!-- Honeypot anti-spam -->
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              class="hp-field"
+              aria-hidden="true"
+            />
+
+            <div class="contact-field">
+              <input
+                type="text"
+                id="cfName"
+                name="name"
+                placeholder="Nama kamu"
+                maxlength="80"
+                aria-label="Nama kamu"
+                required
+              />
+              <span
+                class="contact-field-error"
+                id="errCfName"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div class="contact-field">
+              <input
+                type="email"
+                id="cfEmail"
+                name="email"
+                placeholder="Email kamu"
+                maxlength="120"
+                aria-label="Email kamu"
+                required
+              />
+              <span
+                class="contact-field-error"
+                id="errCfEmail"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div class="contact-field">
+              <textarea
+                id="cfMessage"
+                name="message"
+                rows="4"
+                placeholder="Tulis detail proyek, kebutuhan, atau pesanmu..."
+                maxlength="1500"
+                aria-label="Pesan proyek"
+                required
+              ></textarea>
+              <span
+                class="contact-field-error"
+                id="errCfMessage"
+                aria-live="polite"
+              ></span>
+            </div>
+
+            <div
+              class="contact-feedback"
+              id="contactFormFeedback"
+              role="status"
+              aria-live="polite"
+            ></div>
+
+            <button
+              type="submit"
+              class="contact-submit-btn"
+              id="submitContactBtn"
+            >
+              <span class="btn-label">Kirim Pesan</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Kolom Kanan: Email Card + Social Card -->
+        <div class="contact-side-stack">
+          <a
+            class="contact-email-card"
+            href="mailto:vvitto878@gmail.com"
+            aria-label="Kirim email ke vvitto878@gmail.com"
+          >
+            <span class="contact-email-label"
+              >Atau hubungi langsung melalui email</span
+            >
+            <span class="contact-email-value">vvitto878@gmail.com</span>
+          </a>
+
+          <div class="contact-social-card">
+            <div class="contact-social-list" id="contactSocialList">
+              <a
+                class="contact-social-row"
+                href="https://instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>Instagram</span>
+                <span class="social-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="contact-social-row"
+                href="https://github.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>GitHub</span>
+                <span class="social-arrow" aria-hidden="true">↗</span>
+              </a>
+              <a
+                class="contact-social-row"
+                href="https://linkedin.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span>LinkedIn</span>
+                <span class="social-arrow" aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                class="contact-social-go"
+                id="contactSocialGo"
+                href="https://github.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Kunjungi profil media sosial"
+              >
+                Go
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-bottom-display" aria-hidden="true">
+        <h2>Contact</h2>
       </div>
     </section>
 

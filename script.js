@@ -393,7 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scheduleClosePreview();
     });
 
-    // Jika kursor pindah ke atas kotak preview / tombol GO, jangan ditutup agar bisa diklik
     floatingPreview.addEventListener("pointerenter", () => {
       cancelCloseTimer();
       const activeEntry = projectEntries[activeProjectIndex];
@@ -446,8 +445,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Mode mobile / layar sentuh:
-    // Tap pertama membuka preview gambar; tap kedua pada baris atau tap gambar/GO langsung buka webnya
     row.addEventListener("click", (event) => {
       if (desktopHover.matches || !mobilePreview) return;
 
@@ -473,7 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Cegah lompatan scroll jika proyek belum memiliki link web (href="#projects")
   document
     .querySelectorAll(".project-row, .project-preview-link, #projectFloatingPreview")
     .forEach((linkEl) => {
@@ -816,7 +812,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const trackW = testimonialsTrack.scrollWidth;
     maxHorizontalShift = Math.max(0, trackW - viewportW);
 
-    // Total vertical scroll height = 1 viewport height + horizontal travel distance
     testimonialsSection.style.height = `${viewportH + maxHorizontalShift}px`;
     scheduler.schedule();
   }
@@ -871,7 +866,6 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     });
 
-    // Support horizontal touch drag on mobile devices mapped cleanly to vertical scroll
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartScrollY = 0;
@@ -923,7 +917,6 @@ document.addEventListener("DOMContentLoaded", () => {
     recalcTestimonialsScroll();
   }
 
-  // Load approved testimonials from backend API (falls back gracefully if offline)
   async function loadApprovedTestimonials() {
     if (!testimonialsTrack || !openModalBtn) return;
     try {
@@ -952,7 +945,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   void loadApprovedTestimonials();
 
-  // Modal controls & form validation
   let lastFocusedBeforeModal = null;
 
   function clearFormErrors() {
@@ -1131,4 +1123,163 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ---------------------------------------------------------------
+  // 6. Contact Section (Interactive "Go" Social Button + Form Submit)
+  // ---------------------------------------------------------------
+  const contactSocialList = document.getElementById("contactSocialList");
+  const contactSocialGo = document.getElementById("contactSocialGo");
+  const contactSocialRows = contactSocialList
+    ? Array.from(contactSocialList.querySelectorAll(".contact-social-row"))
+    : [];
+
+  function moveSocialGoToRow(row) {
+    if (!contactSocialGo || !row) return;
+    const centerY = row.offsetTop + row.offsetHeight / 2;
+    contactSocialGo.style.top = `${centerY}px`;
+    const href = row.getAttribute("href");
+    if (href) {
+      contactSocialGo.setAttribute("href", href);
+    }
+  }
+
+  if (contactSocialList && contactSocialGo && contactSocialRows.length) {
+    const defaultRow = contactSocialRows[1] || contactSocialRows[0];
+    moveSocialGoToRow(defaultRow);
+
+    contactSocialRows.forEach((row) => {
+      row.addEventListener("pointerenter", () => moveSocialGoToRow(row));
+      row.addEventListener("focus", () => moveSocialGoToRow(row));
+    });
+
+    window.addEventListener(
+      "resize",
+      () => {
+        const activeRow =
+          contactSocialRows.find((r) => r.matches(":hover, :focus")) ||
+          defaultRow;
+        moveSocialGoToRow(activeRow);
+      },
+      { passive: true },
+    );
+  }
+
+  const contactForm = document.getElementById("contactForm");
+  const cfName = document.getElementById("cfName");
+  const cfEmail = document.getElementById("cfEmail");
+  const cfMessage = document.getElementById("cfMessage");
+  const contactFormFeedback = document.getElementById("contactFormFeedback");
+  const submitContactBtn = document.getElementById("submitContactBtn");
+
+  function clearContactErrors() {
+    document
+      .querySelectorAll("#contactForm .contact-field")
+      .forEach((field) => field.classList.remove("has-error"));
+    document
+      .querySelectorAll("#contactForm .contact-field-error")
+      .forEach((el) => {
+        el.textContent = "";
+      });
+  }
+
+  function setContactFieldError(inputEl, errorElId, message) {
+    const field = inputEl?.closest(".contact-field");
+    const errEl = document.getElementById(errorElId);
+    if (field) field.classList.add("has-error");
+    if (errEl) errEl.textContent = message;
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearContactErrors();
+      if (contactFormFeedback) {
+        contactFormFeedback.className = "contact-feedback";
+        contactFormFeedback.textContent = "";
+      }
+
+      const name = (cfName?.value || "").trim();
+      const email = (cfEmail?.value || "").trim();
+      const message = (cfMessage?.value || "").trim();
+      const website =
+        contactForm.querySelector('input[name="website"]')?.value || "";
+
+      let hasError = false;
+
+      if (name.length < 2) {
+        setContactFieldError(
+          cfName,
+          "errCfName",
+          "Masukkan nama kamu minimal 2 karakter.",
+        );
+        hasError = true;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setContactFieldError(
+          cfEmail,
+          "errCfEmail",
+          "Masukkan alamat email yang valid.",
+        );
+        hasError = true;
+      }
+
+      if (message.length < 10) {
+        setContactFieldError(
+          cfMessage,
+          "errCfMessage",
+          "Ceritakan detail proyekmu minimal 10 karakter.",
+        );
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      if (submitContactBtn) {
+        submitContactBtn.disabled = true;
+        submitContactBtn.classList.add("is-loading");
+      }
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ name, email, message, website }),
+        });
+
+        const payload = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const errMsg =
+            typeof payload.error === "string"
+              ? payload.error
+              : payload.error?.message ||
+                "Gagal mengirim pesan. Coba lagi beberapa saat.";
+          throw new Error(errMsg);
+        }
+
+        contactForm.reset();
+        if (contactFormFeedback) {
+          contactFormFeedback.className = "contact-feedback is-success";
+          contactFormFeedback.textContent =
+            payload.message ||
+            "Terima kasih! Pesanmu sudah terkirim ke Vittorio.";
+        }
+      } catch (err) {
+        if (contactFormFeedback) {
+          contactFormFeedback.className = "contact-feedback is-error";
+          contactFormFeedback.textContent =
+            err.message === "Failed to fetch"
+              ? "Server backend belum aktif. Jalankan server atau hubungi langsung via vvitto878@gmail.com."
+              : err.message;
+        }
+      } finally {
+        if (submitContactBtn) {
+          submitContactBtn.disabled = false;
+          submitContactBtn.classList.remove("is-loading");
+        }
+      }
+    });
+  }
 });

@@ -1,0 +1,354 @@
+/* =========================================================================
+   CONTACT SECTION (BENTO GRID + GIANT DISPLAY TITLE)
+   ========================================================================= */
+.contact-section {
+  position: relative;
+  width: 100%;
+  padding-top: clamp(72px, 10vw, 130px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(36px, 5vw, 68px);
+}
+
+.contact-inner {
+  width: min(1140px, calc(100% - 48px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: clamp(20px, 2.6vw, 30px);
+  align-items: stretch;
+}
+
+/* Kartu Form Lavender (Kiri) */
+.contact-form-card {
+  background: #ebe3ff;
+  color: #210447;
+  border-radius: 26px;
+  padding: clamp(26px, 3.4vw, 40px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form-card h2 {
+  font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: #210447;
+  margin-bottom: 18px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(33, 4, 71, 0.34);
+  background: #c5b9e3;
+  color: #1c033d;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition:
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.contact-field textarea {
+  resize: vertical;
+  min-height: 112px;
+}
+
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: rgba(33, 4, 71, 0.56);
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: none;
+  border-color: #210447;
+  background: #cfc4eb;
+  box-shadow: 0 0 0 3px rgba(33, 4, 71, 0.14);
+}
+
+.contact-field.has-error input,
+.contact-field.has-error textarea {
+  border-color: #c81e51;
+}
+
+.contact-field-error {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #b91c48;
+  min-height: 0;
+}
+
+.contact-feedback {
+  display: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.contact-feedback.is-success {
+  display: block;
+  background: rgba(16, 122, 72, 0.14);
+  border: 1px solid rgba(16, 122, 72, 0.36);
+  color: #0e5f38;
+}
+
+.contact-feedback.is-error {
+  display: block;
+  background: rgba(185, 28, 72, 0.12);
+  border: 1px solid rgba(185, 28, 72, 0.34);
+  color: #9f1239;
+}
+
+.contact-submit-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 999px;
+  background: #23054a;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.contact-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #35096e;
+  box-shadow: 0 10px 24px rgba(35, 5, 74, 0.28);
+}
+
+.contact-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.contact-submit-btn .btn-spinner {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+}
+
+.contact-submit-btn.is-loading .btn-spinner {
+  display: inline-block;
+}
+
+/* Kolom Kanan */
+.contact-side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(18px, 2.2vw, 24px);
+}
+
+/* Kartu Email Oranye (Kanan Atas) */
+.contact-email-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 158px;
+  padding: clamp(24px, 3vw, 34px);
+  border-radius: 26px;
+  background: #ff9f45;
+  color: #1f0342;
+  text-decoration: none;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease;
+}
+
+.contact-email-card:hover,
+.contact-email-card:focus-visible {
+  transform: translateY(-3px);
+  background: #ffaa59;
+  outline: none;
+}
+
+.contact-email-label {
+  font-size: clamp(0.76rem, 1.05vw, 0.88rem);
+  font-weight: 600;
+  color: rgba(31, 3, 66, 0.85);
+}
+
+.contact-email-value {
+  font-size: clamp(1.3rem, 2.35vw, 2.05rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #1b023b;
+  word-break: break-word;
+}
+
+/* Kartu Social Media (Kanan Bawah) */
+.contact-social-card {
+  flex: 1;
+  padding: clamp(18px, 2.4vw, 26px) clamp(24px, 3vw, 34px);
+  border-radius: 26px;
+  background: rgba(39, 8, 82, 0.72);
+  border: 1.5px solid rgba(235, 227, 255, 0.26);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+}
+
+.contact-social-list {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-social-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 86px 15px 2px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  border-bottom: 1.5px solid rgba(235, 227, 255, 0.55);
+  transition:
+    color 0.22s ease,
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-social-row:last-of-type {
+  border-bottom: none;
+}
+
+.contact-social-row .social-arrow {
+  color: #ff9f45;
+  font-weight: 600;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.contact-social-row:hover,
+.contact-social-row:focus-visible {
+  color: #ff9f45;
+  transform: translateX(6px);
+  outline: none;
+}
+
+.contact-social-row:hover .social-arrow,
+.contact-social-row:focus-visible .social-arrow {
+  transform: translateX(4px);
+}
+
+/* Tombol Lingkaran "Go" Oranye */
+.contact-social-go {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: #ff9f45;
+  color: #1f0342;
+  text-decoration: none;
+  font-size: 1.22rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+  transition:
+    top 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.22s ease;
+}
+
+.contact-social-go:hover {
+  background: #ffb066;
+  transform: translateY(-50%) scale(1.06);
+}
+
+/* Tipografi Raksasa "Contact" di Bagian Bawah */
+.contact-bottom-display {
+  width: 100%;
+  padding: 0 3vw;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.contact-bottom-display h2 {
+  margin: 0 0 -0.18em;
+  font-size: clamp(5rem, 21.5vw, 21rem);
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: -0.075em;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    #f3eaff 6%,
+    #c5a6f5 56%,
+    rgba(113, 53, 189, 0.35) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+@media (max-width: 860px) {
+  .contact-inner {
+    width: calc(100% - 32px);
+    grid-template-columns: 1fr;
+  }
+
+  .contact-email-card {
+    min-height: 128px;
+  }
+
+  .contact-social-go {
+    width: 56px;
+    height: 56px;
+    font-size: 1.05rem;
+  }
+
+  .contact-bottom-display h2 {
+    font-size: clamp(4.2rem, 22vw, 8.5rem);
+    margin-bottom: -0.13em;
+  }
+}
