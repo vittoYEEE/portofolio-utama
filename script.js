@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbar = document.getElementById("navbar") || document.querySelector(".navbar");
   const openMenuBtn = document.getElementById("openMenuBtn") || document.querySelector(".menu-btn");
   const menuOverlay = document.getElementById("menuOverlay") || document.querySelector(".menu-overlay");
+  const menuNav = document.getElementById("menuNav") || document.querySelector(".menu-nav");
+  const menuCursor = document.getElementById("menuCursor") || document.querySelector(".menu-cursor");
   const menuItems = document.querySelectorAll(".menu-item");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const panels = Array.from(document.querySelectorAll(".page-panel"));
@@ -506,6 +508,89 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // ---------------------------------------------------------------
+  // 4. Custom Cursor Bulat "GO" saat hover item di Menu Navigasi
+  // ---------------------------------------------------------------
+  let menuCursorActive = false;
+  let menuCursorTargetX = 0;
+  let menuCursorTargetY = 0;
+  let menuCursorCurrentX = 0;
+  let menuCursorCurrentY = 0;
+  let menuCursorLoopId = null;
+
+  function renderMenuCursor() {
+    if (!menuCursor) {
+      menuCursorLoopId = null;
+      return;
+    }
+
+    const ease = reducedMotion.matches ? 1 : 0.24;
+    const dx = menuCursorTargetX - menuCursorCurrentX;
+    const dy = menuCursorTargetY - menuCursorCurrentY;
+
+    menuCursorCurrentX += dx * ease;
+    menuCursorCurrentY += dy * ease;
+
+    menuCursor.style.transform = `translate3d(${menuCursorCurrentX.toFixed(2)}px, ${menuCursorCurrentY.toFixed(2)}px, 0)`;
+
+    if (!menuCursorActive && Math.abs(dx) < 0.2 && Math.abs(dy) < 0.2) {
+      menuCursorLoopId = null;
+      return;
+    }
+
+    menuCursorLoopId = window.requestAnimationFrame(renderMenuCursor);
+  }
+
+  function startMenuCursorLoop() {
+    if (menuCursorLoopId === null) {
+      menuCursorLoopId = window.requestAnimationFrame(renderMenuCursor);
+    }
+  }
+
+  function showMenuCursor(clientX, clientY) {
+    if (!menuCursor || !desktopHover.matches) return;
+    menuCursorTargetX = clientX;
+    menuCursorTargetY = clientY;
+
+    if (!menuCursorActive) {
+      menuCursorCurrentX = clientX;
+      menuCursorCurrentY = clientY;
+      menuCursor.style.transform = `translate3d(${clientX}px, ${clientY}px, 0)`;
+    }
+
+    menuCursorActive = true;
+    menuCursor.classList.add("is-visible");
+    startMenuCursorLoop();
+  }
+
+  function hideMenuCursor() {
+    if (!menuCursor) return;
+    menuCursorActive = false;
+    menuCursor.classList.remove("is-visible");
+  }
+
+  if (menuNav && menuCursor) {
+    menuNav.addEventListener("pointerenter", (event) => {
+      if (!desktopHover.matches || menuClosing) return;
+      showMenuCursor(event.clientX, event.clientY);
+    });
+
+    menuNav.addEventListener("pointermove", (event) => {
+      if (!desktopHover.matches || menuClosing) return;
+      if (!menuCursorActive) {
+        showMenuCursor(event.clientX, event.clientY);
+      } else {
+        menuCursorTargetX = event.clientX;
+        menuCursorTargetY = event.clientY;
+        startMenuCursorLoop();
+      }
+    });
+
+    menuNav.addEventListener("pointerleave", () => {
+      hideMenuCursor();
+    });
+  }
+
   let menuClosing = false;
 
   function openMenu() {
@@ -570,6 +655,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    hideMenuCursor();
     menuClosing = true;
     menuOverlay.classList.add("closing");
     menuOverlay.setAttribute("aria-hidden", "true");

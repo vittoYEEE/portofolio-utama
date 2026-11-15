@@ -555,6 +555,55 @@ body.menu-open::after {
     padding-left 0.42s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Custom Cursor Bulat "GO" saat hover item menu di desktop */
+.menu-cursor {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .menu-nav,
+  .menu-nav .menu-item,
+  .menu-nav .menu-item * {
+    cursor: none !important;
+  }
+
+  .menu-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2050;
+    display: block;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .menu-cursor span {
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #f0e5ff;
+    color: #16052b;
+    border: 2px solid rgba(22, 5, 43, 0.28);
+    font-family: "Poppins", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+    transition:
+      opacity 0.2s ease,
+      transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .menu-cursor.is-visible span {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
 .menu-mask {
   display: block;
   overflow: hidden;
@@ -1219,7 +1268,8 @@ body.menu-open::after {
   .panel-content,
   .project-floating-preview,
   .project-floating-inner,
-  .project-floating-track {
+  .project-floating-track,
+  .menu-cursor {
     will-change: auto;
   }
 
@@ -1228,6 +1278,7 @@ body.menu-open::after {
   .menu-btn span,
   .menu-item,
   .menu-label,
+  .menu-cursor span,
   .page-panels,
   .projects-section,
   .project-entry,
