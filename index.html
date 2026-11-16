@@ -33,6 +33,7 @@
     />
     <link rel="stylesheet" href="display-motion.css" />
     <link rel="stylesheet" href="footer.css" />
+    <link rel="stylesheet" href="about-certificate.css" />
   </head>
   <body>
     <div
@@ -165,17 +166,18 @@
             <div class="tools-portal-layer tools-portal-base">
               <div class="tools-portal-base-content">
                 <div class="tools-portal-about-content">
-                  <div class="about-showcase">
-                    <article class="quote-card">
+                  <!-- BARIS ATAS: BENTO 3 KOLOM -->
+                  <div class="about-bento-top">
+                    <article class="about-bento-quote">
                       <p>
                         “Web developer and designer based in Indonesia. I bridge
                         design and code to shape intuitive, memorable digital
                         experiences.”
                       </p>
-                      <span class="quote-signature">Vittorio Veneto, S</span>
+                      <span class="quote-signature">Vittorio Veneto. S</span>
                     </article>
 
-                    <div class="portrait-card">
+                    <div class="about-bento-portrait">
                       <img
                         src="./asset/apkek 2.png"
                         alt="Vittorio Veneto portrait"
@@ -185,14 +187,14 @@
                       />
                     </div>
 
-                    <div class="mini-stack">
-                      <article class="mini-card">
+                    <div class="about-bento-stack">
+                      <article class="about-mini-card is-white">
                         <p>
                           Terbuka untuk proyek freelance &amp; kolaborasi baru.
                           Mari berdiskusi!
                         </p>
                       </article>
-                      <article class="mini-card">
+                      <article class="about-mini-card is-purple">
                         <p>
                           Menjangkau klien di mana saja dengan sistem kerja
                           remote yang fleksibel.
@@ -201,7 +203,134 @@
                     </div>
                   </div>
 
-                  <h1 class="about-title">About</h1>
+                  <!-- BARIS BAWAH: KARTU BESAR CERTIFICATE + 5 KARTU NAIK & MEMANJANG -->
+                  <div
+                    class="cert-bento"
+                    aria-label="Sertifikat dan pencapaian"
+                  >
+                    <div class="cert-bento-header">
+                      <span class="cert-bento-kicker">SERTIFIKAT • [05]</span>
+                      <a
+                        href="certificates.html"
+                        class="cert-bento-expand-btn"
+                        aria-label="Lihat semua sertifikat di halaman khusus"
+                      >
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    </div>
+
+                    <div class="cert-display-wrap" aria-hidden="true">
+                      <h2 class="cert-display-title">CERTIFICATE</h2>
+                    </div>
+
+                    <div class="cert-cards-fan">
+                      <!-- Kartu 01 -->
+                      <button
+                        type="button"
+                        class="cert-card theme-deep"
+                        data-cert-num="01"
+                        data-cert-title="Frontend Web Development"
+                        data-cert-issuer="Dicoding Indonesia"
+                        data-cert-year="2026"
+                        data-cert-desc="Sertifikasi kelulusan pengembangan antarmuka web modern menggunakan HTML5, CSS3, dan JavaScript interaktif."
+                      >
+                        <div class="cert-card-head">
+                          <span class="cert-num">01</span>
+                          <h3 class="cert-title">Frontend Web Development</h3>
+                        </div>
+                        <div class="cert-card-extra">
+                          <span class="cert-issuer">Dicoding • 2026</span>
+                          <span class="cert-action-pill">Detail ↗</span>
+                        </div>
+                      </button>
+
+                      <!-- Kartu 02 -->
+                      <button
+                        type="button"
+                        class="cert-card theme-royal"
+                        data-cert-num="02"
+                        data-cert-title="UI/UX Design Mastery"
+                        data-cert-issuer="Google UX Design"
+                        data-cert-year="2026"
+                        data-cert-desc="Perancangan sistem desain, wireframing, prototyping interaktif di Figma, serta pengujian kegunaan pengguna."
+                      >
+                        <div class="cert-card-head">
+                          <span class="cert-num">02</span>
+                          <h3 class="cert-title">UI/UX Design Mastery</h3>
+                        </div>
+                        <div class="cert-card-extra">
+                          <span class="cert-issuer">Google UX • 2026</span>
+                          <span class="cert-action-pill">Detail ↗</span>
+                        </div>
+                      </button>
+
+                      <!-- Kartu 03 -->
+                      <button
+                        type="button"
+                        class="cert-card theme-orange"
+                        data-cert-num="03"
+                        data-cert-title="JavaScript & Motion Web"
+                        data-cert-issuer="Veneto Academy"
+                        data-cert-year="2026"
+                        data-cert-desc="Implementasi animasi berbasis scroll, optimasi performa GPU 60fps, dan arsitektur aplikasi web."
+                      >
+                        <div class="cert-card-head">
+                          <span class="cert-num">03</span>
+                          <h3 class="cert-title">
+                            JavaScript &amp; Motion Web
+                          </h3>
+                        </div>
+                        <div class="cert-card-extra">
+                          <span class="cert-issuer">Web Specialist • 2026</span>
+                          <span class="cert-action-pill">Detail ↗</span>
+                        </div>
+                      </button>
+
+                      <!-- Kartu 04 -->
+                      <button
+                        type="button"
+                        class="cert-card theme-lavender"
+                        data-cert-num="04"
+                        data-cert-title="Responsive Web Architecture"
+                        data-cert-issuer="freeCodeCamp"
+                        data-cert-year="2026"
+                        data-cert-desc="Pembangunan tata letak CSS Grid dan Flexbox adaptif lintas perangkat desktop, tablet, dan mobile."
+                      >
+                        <div class="cert-card-head">
+                          <span class="cert-num">04</span>
+                          <h3 class="cert-title">
+                            Responsive Web Architecture
+                          </h3>
+                        </div>
+                        <div class="cert-card-extra">
+                          <span class="cert-issuer">freeCodeCamp • 2026</span>
+                          <span class="cert-action-pill">Detail ↗</span>
+                        </div>
+                      </button>
+
+                      <!-- Kartu 05 -->
+                      <button
+                        type="button"
+                        class="cert-card theme-royal"
+                        data-cert-num="05"
+                        data-cert-title="Creative Visual & Branding"
+                        data-cert-issuer="Adobe Certified"
+                        data-cert-year="2026"
+                        data-cert-desc="Eksplorasi tipografi editorial, sistem identitas visual, dan komposisi warna antarmuka digital."
+                      >
+                        <div class="cert-card-head">
+                          <span class="cert-num">05</span>
+                          <h3 class="cert-title">
+                            Creative Visual &amp; Branding
+                          </h3>
+                        </div>
+                        <div class="cert-card-extra">
+                          <span class="cert-issuer">Design Studio • 2026</span>
+                          <span class="cert-action-pill">Detail ↗</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -452,7 +581,7 @@
             Open for meaningful projects &amp; collaborations
           </p>
           <h2>Project</h2>
-          <a class="more-button" href="#project-list">
+          <a class="more-button" href="projects.html">
             <span>More</span>
             <span aria-hidden="true">↗</span>
           </a>
@@ -1022,6 +1151,42 @@
     <script src="locomotive-motion.js" defer></script>
     <script src="script.js" defer></script>
     <script src="tools-scroll.js" defer></script>
+    <!-- =====================================================================
+         MODAL: PRATINJAU SERTIFIKAT
+         ===================================================================== -->
+    <div
+      class="cert-modal"
+      id="certModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="certModalTitle"
+      aria-hidden="true"
+    >
+      <div class="cert-modal-backdrop" id="certModalBackdrop"></div>
+      <div class="cert-modal-dialog" role="document">
+        <div class="cert-modal-top">
+          <div>
+            <span class="cert-modal-badge" id="certModalBadge"
+              >SERTIFIKAT • 01</span
+            >
+            <h3 id="certModalTitle">Judul Sertifikat</h3>
+          </div>
+          <button
+            type="button"
+            class="cert-modal-close"
+            id="closeCertModalBtn"
+            aria-label="Tutup pratinjau sertifikat"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="cert-modal-meta" id="certModalMeta"></div>
+        <p class="cert-modal-desc" id="certModalDesc"></p>
+        <div class="cert-modal-list" id="certModalList"></div>
+      </div>
+    </div>
+
     <script src="footer.js" defer></script>
+    <script src="about-certificate.js" defer></script>
   </body>
 </html>

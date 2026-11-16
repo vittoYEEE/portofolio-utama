@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroFolio = document.querySelector(".hero-title .line-folio");
 
   const aboutSection = document.getElementById("about");
-  const aboutTitle = document.querySelector(".about-title");
+  const aboutTitle = document.querySelector(".cert-display-title, .about-title");
 
   const toolsSection = document.getElementById("tools");
   const toolsTitle = document.querySelector(".tools-title");

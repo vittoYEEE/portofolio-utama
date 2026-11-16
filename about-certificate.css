@@ -1,0 +1,565 @@
+/* =========================================================================
+   ABOUT-CERTIFICATE.CSS
+   Layout Bento About + Kartu Besar CERTIFICATE dengan Hover Naik & Memanjang
+   ========================================================================= */
+
+.tools-portal-base {
+  background: #ede6ff !important;
+}
+
+.tools-portal-about-content {
+  width: min(1240px, calc(100% - 48px)) !important;
+  max-width: 1240px !important;
+  height: 100%;
+  margin: 0 auto !important;
+  padding-top: clamp(82px, 9.5vh, 112px) !important;
+  padding-bottom: clamp(18px, 2.4vh, 30px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: clamp(14px, 1.8vh, 22px) !important;
+}
+
+/* Pastikan teks di dalam kartu sertifikat selalu penuh opacity-nya */
+.cert-bento .word {
+  opacity: 1 !important;
+}
+
+/* -------------------------------------------------------------------------
+   BARIS ATAS: BENTO GRID 3 KOLOM
+   ------------------------------------------------------------------------- */
+.about-bento-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.82fr) minmax(0, 1fr) minmax(0, 0.92fr);
+  gap: clamp(14px, 1.5vw, 20px);
+  align-items: stretch;
+}
+
+/* 1. Kartu Kutipan Ungu Gelap (Kiri) */
+.about-bento-quote {
+  background: #1e0342;
+  color: #ffffff;
+  border-radius: 24px;
+  padding: clamp(22px, 2.8vh, 36px) clamp(24px, 2.8vw, 38px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: clamp(18px, 2.4vh, 32px);
+  box-shadow: 0 18px 44px rgba(30, 3, 66, 0.14);
+}
+
+.about-bento-quote p {
+  margin: 0;
+  font-size: clamp(1.12rem, 1.85vw, 1.72rem);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.about-bento-quote .quote-signature {
+  display: block;
+  font-size: clamp(0.84rem, 1.02vw, 0.98rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* 2. Kartu Foto Oranye (Tengah) */
+.about-bento-portrait {
+  position: relative;
+  background: #ff9f45;
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: clamp(210px, 27vh, 290px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  box-shadow: 0 18px 44px rgba(30, 3, 66, 0.12);
+}
+
+.about-bento-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* 3. Kolom Kanan: 2 Kartu Bertumpuk */
+.about-bento-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.4vh, 18px);
+}
+
+.about-mini-card {
+  flex: 1;
+  border-radius: 22px;
+  padding: clamp(16px, 2.1vh, 24px) clamp(18px, 1.9vw, 24px);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 14px 36px rgba(30, 3, 66, 0.1);
+}
+
+.about-mini-card p {
+  margin: 0;
+  font-size: clamp(0.84rem, 1.02vw, 0.98rem);
+  font-weight: 800;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+}
+
+.about-mini-card.is-white {
+  background: #ffffff;
+  color: #1e0342;
+}
+
+.about-mini-card.is-purple {
+  background: #1e0342;
+  color: #ffffff;
+}
+
+/* -------------------------------------------------------------------------
+   BARIS BAWAH: KARTU BESAR CERTIFICATE + 5 KARTU SERTIFIKAT
+   ------------------------------------------------------------------------- */
+.cert-bento {
+  position: relative;
+  width: 100%;
+  height: clamp(285px, 37vh, 385px);
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(74, 24, 145, 0.55) 0%,
+      rgba(30, 3, 66, 0) 68%
+    ),
+    #1e0342;
+  padding: clamp(20px, 2.4vh, 30px) clamp(22px, 2.8vw, 36px) 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 22px 54px rgba(30, 3, 66, 0.22);
+}
+
+/* Header atas kartu Certificate */
+.cert-bento-header {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cert-bento-kicker {
+  font-size: clamp(0.68rem, 0.82vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(244, 238, 255, 0.9);
+}
+
+.cert-bento-expand-btn {
+  width: clamp(38px, 3.4vw, 46px);
+  height: clamp(38px, 3.4vw, 46px);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.cert-bento-expand-btn:hover,
+.cert-bento-expand-btn:focus-visible {
+  background: #ff9f45;
+  border-color: #ff9f45;
+  color: #1e0342;
+  transform: scale(1.07);
+  outline: none;
+}
+
+/* Teks Display Raksasa "CERTIFICATE" */
+.cert-display-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding-bottom: clamp(22px, 3vh, 42px);
+  pointer-events: none;
+  user-select: none;
+}
+
+.cert-display-title {
+  margin: 0;
+  font-size: clamp(3.3rem, 11.4vw, 9.6rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(218, 204, 245, 0.88) 12%,
+    rgba(167, 143, 217, 0.56) 58%,
+    rgba(95, 64, 156, 0.16) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  will-change: transform;
+}
+
+/* -------------------------------------------------------------------------
+   DERETAN 5 KARTU SERTIFIKAT (NAIK & MEMANJANG SAAT DI-HOVER)
+   ------------------------------------------------------------------------- */
+.cert-cards-fan {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
+  gap: clamp(10px, 1.4vw, 20px);
+  padding-inline: clamp(4px, 0.8vw, 12px);
+}
+
+.cert-card {
+  --tilt: 0deg;
+  position: relative;
+  width: 100%;
+  height: clamp(128px, 16.5vh, 165px);
+  border-radius: 18px 18px 0 0;
+  padding: clamp(14px, 1.8vh, 20px) clamp(14px, 1.4vw, 20px) 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transform-origin: bottom center;
+  transform: translate3d(0, 26px, 0) rotate(var(--tilt));
+  box-shadow: 0 12px 30px rgba(7, 1, 20, 0.42);
+  will-change: height, transform;
+  transition:
+    height 0.46s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.46s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    border-color 0.3s ease;
+}
+
+/* Kemiringan kipas awal tiap kartu */
+.cert-card:nth-child(1) {
+  --tilt: -5.5deg;
+}
+.cert-card:nth-child(2) {
+  --tilt: -3deg;
+}
+.cert-card:nth-child(3) {
+  --tilt: 0deg;
+}
+.cert-card:nth-child(4) {
+  --tilt: 3.5deg;
+}
+.cert-card:nth-child(5) {
+  --tilt: 6deg;
+}
+
+/* Efek Hover: Kartu Naik ke Atas & Memanjang secara vertikal */
+.cert-card:hover,
+.cert-card:focus-visible {
+  height: clamp(232px, 30.5vh, 300px);
+  transform: translate3d(0, 0, 0) rotate(0deg);
+  z-index: 10;
+  border-color: rgba(255, 255, 255, 0.44);
+  box-shadow: 0 -10px 42px rgba(6, 1, 18, 0.68);
+  outline: none;
+}
+
+/* Variasi Warna 5 Kartu sesuai referensi gambar */
+.cert-card.theme-deep {
+  background: #14022d;
+  color: #ffffff;
+}
+.cert-card.theme-deep .cert-num {
+  color: #ff9f45;
+}
+
+.cert-card.theme-royal {
+  background: #3d127a;
+  color: #ffffff;
+}
+.cert-card.theme-royal .cert-num {
+  color: #ff9f45;
+}
+
+.cert-card.theme-orange {
+  background: #ff9f45;
+  color: #1e0342;
+}
+.cert-card.theme-orange .cert-num {
+  color: #1e0342;
+}
+
+.cert-card.theme-lavender {
+  background: #efe9ff;
+  color: #1e0342;
+}
+.cert-card.theme-lavender .cert-num {
+  color: #ff9f45;
+}
+
+/* Isi di dalam kartu sertifikat */
+.cert-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cert-num {
+  font-size: clamp(0.68rem, 0.8vw, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.cert-title {
+  margin: 0;
+  font-size: clamp(0.84rem, 1.04vw, 1.02rem);
+  font-weight: 800;
+  line-height: 1.24;
+  letter-spacing: -0.02em;
+}
+
+/* Detail tambahan yang muncul jelas saat kartu memanjang di-hover */
+.cert-card-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition:
+    opacity 0.32s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cert-card:hover .cert-card-extra,
+.cert-card:focus-visible .cert-card-extra {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0.08s;
+}
+
+.cert-issuer {
+  font-size: 0.76rem;
+  font-weight: 600;
+  opacity: 0.82;
+  line-height: 1.35;
+}
+
+.cert-action-pill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.cert-card.theme-orange .cert-action-pill,
+.cert-card.theme-lavender .cert-action-pill {
+  background: rgba(30, 3, 66, 0.12);
+}
+
+/* -------------------------------------------------------------------------
+   MODAL PRATINJAU SERTIFIKAT SAAT DIKLIK
+   ------------------------------------------------------------------------- */
+.cert-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: none;
+  place-items: center;
+  padding: 20px;
+}
+
+.cert-modal.is-open {
+  display: grid;
+}
+
+.cert-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 2, 22, 0.78);
+  backdrop-filter: blur(10px);
+}
+
+.cert-modal-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 100%);
+  border-radius: 26px;
+  background: #1e0342;
+  color: #ffffff;
+  border: 1px solid rgba(235, 227, 255, 0.24);
+  padding: 28px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.65);
+}
+
+.cert-modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.cert-modal-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #ff9f45;
+  margin-bottom: 6px;
+}
+
+.cert-modal-dialog h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.cert-modal-close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.cert-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 0.85rem;
+  color: rgba(240, 229, 255, 0.84);
+  margin-bottom: 16px;
+}
+
+.cert-modal-desc {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 20px;
+}
+
+.cert-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cert-modal-list-item {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(235, 227, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cert-modal-list-item:hover {
+  background: rgba(255, 159, 69, 0.18);
+  border-color: #ff9f45;
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE MOBILE & TABLET
+   ------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .tools-portal-about-content {
+    width: calc(100% - 32px) !important;
+    padding-top: 86px !important;
+    justify-content: flex-start !important;
+  }
+
+  .about-bento-top {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about-bento-quote {
+    grid-column: 1 / -1;
+  }
+
+  .cert-bento {
+    height: auto;
+    min-height: 310px;
+  }
+
+  .cert-cards-fan {
+    display: flex;
+    overflow-x: auto;
+    padding-top: 72px;
+    padding-bottom: 0;
+    scrollbar-width: none;
+  }
+
+  .cert-cards-fan::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cert-card {
+    flex: 0 0 175px;
+    height: 155px;
+    transform: translate3d(0, 14px, 0) rotate(0deg);
+  }
+
+  .cert-card:hover,
+  .cert-card:focus-visible {
+    height: 235px;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .about-bento-top {
+    grid-template-columns: 1fr;
+  }
+
+  .about-bento-portrait {
+    min-height: 230px;
+  }
+}

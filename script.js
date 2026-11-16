@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const aboutSection = document.querySelector("#about");
   const scheduler = window.ScrollScheduler;
   const textRevealSelector =
-    ".tools-portal-about-content :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature)";
+    ".tools-portal-about-content :is(h1,h2,h3,h4,h5,h6,p,li,blockquote,.quote-signature):not(.cert-bento *)";
   const originalAriaLabels = new Map();
   let textBlocks = [];
 
