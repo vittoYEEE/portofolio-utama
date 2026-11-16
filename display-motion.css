@@ -1,0 +1,124 @@
+/* =========================================================================
+   DISPLAY-MOTION.CSS
+   1. Menjaga seluruh tulisan raksasa agar tidak terpotong (ascender/descender)
+   2. Menyiapkan layer GPU untuk gerakan parallax halus saat scroll
+   ========================================================================= */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Mencegah scrollbar horizontal akibat gerakan teks tanpa memotong bagian bawah huruf */
+.hero,
+.tools-portal-base-content,
+.tools-portal-reveal-content,
+.projects-section,
+.testimonials-sticky,
+.contact-section {
+  overflow-x: clip !important;
+}
+
+/* Ruang vertikal aman agar ekor huruf (j, y, g, p) & gradien tidak terpotong */
+.projects-outro,
+.testimonials-bottom-display,
+.contact-bottom-display {
+  overflow: visible !important;
+  padding-bottom: clamp(18px, 2.8vw, 42px) !important;
+}
+
+/* Pastikan sticky container testimonials memberi ruang cukup di bagian bawah */
+.testimonials-sticky {
+  padding-bottom: clamp(16px, 2.6vh, 30px) !important;
+}
+
+/* Semua tulisan display raksasa */
+.hero-title,
+.hero-title .line-port,
+.hero-title .line-folio,
+.about-title,
+.tools-title,
+.projects-outro h2,
+.testimonials-bottom-display h2,
+.contact-bottom-display h2 {
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.hero-title {
+  line-height: 0.98 !important;
+  padding-top: 0.04em;
+  padding-bottom: 0.12em;
+}
+
+.hero-title .line-port,
+.hero-title .line-folio {
+  display: block;
+}
+
+.about-title,
+.tools-title {
+  line-height: 1.04 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0.05em !important;
+  padding-bottom: 0.16em !important;
+}
+
+.projects-outro h2 {
+  line-height: 1.05 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0.06em !important;
+  padding-bottom: 0.22em !important;
+}
+
+.testimonials-bottom-display h2 {
+  font-size: clamp(2.9rem, 12.6vw, 14rem) !important;
+  line-height: 1.06 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0.05em !important;
+  padding-bottom: 0.22em !important;
+}
+
+.contact-bottom-display h2 {
+  line-height: 1.04 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0.05em !important;
+  padding-bottom: 0.18em !important;
+}
+
+@media (max-width: 768px) {
+  .testimonials-bottom-display h2 {
+    font-size: clamp(2.5rem, 12.8vw, 5.8rem) !important;
+    padding-bottom: 0.24em !important;
+  }
+
+  .projects-outro h2,
+  .contact-bottom-display h2 {
+    padding-bottom: 0.2em !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title .line-port,
+  .hero-title .line-folio,
+  .about-title,
+  .tools-title,
+  .projects-outro h2,
+  .testimonials-bottom-display h2,
+  .contact-bottom-display h2 {
+    transform: none !important;
+    will-change: auto;
+  }
+}

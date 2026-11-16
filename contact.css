@@ -4,7 +4,9 @@
 .contact-section {
   position: relative;
   width: 100%;
-  padding-top: clamp(72px, 10vw, 130px);
+  height: 70rem;
+  padding-top: 200px;
+  padding-bottom: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -307,18 +309,20 @@
 /* Tipografi Raksasa "Contact" di Bagian Bawah */
 .contact-bottom-display {
   width: 100%;
-  padding: 0 3vw;
-  overflow: hidden;
+  padding: 0 3vw clamp(18px, 2.8vw, 40px);
+  overflow: visible;
   pointer-events: none;
   user-select: none;
 }
 
 .contact-bottom-display h2 {
-  margin: 0 0 -0.18em;
-  font-size: clamp(5rem, 21.5vw, 21rem);
+  margin: 0;
+  padding-top: 0.05em;
+  padding-bottom: 0.16em;
+  font-size: clamp(4.6rem, 20vw, 19.5rem);
   font-weight: 900;
-  line-height: 0.82;
-  letter-spacing: -0.075em;
+  line-height: 1.04;
+  letter-spacing: -0.07em;
   white-space: nowrap;
   color: transparent;
   background: linear-gradient(
@@ -348,7 +352,6 @@
   }
 
   .contact-bottom-display h2 {
-    font-size: clamp(4.2rem, 22vw, 8.5rem);
-    margin-bottom: -0.13em;
+    font-size: clamp(3.9rem, 20.5vw, 8rem);
   }
 }

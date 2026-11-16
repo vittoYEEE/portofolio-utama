@@ -623,10 +623,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    window.scrollTo({
-      top: targetScroll,
-      behavior: reducedMotion.matches ? "auto" : "smooth",
-    });
+    if (window.VenetoLocoScroll) {
+      window.VenetoLocoScroll.scrollTo(targetScroll);
+    } else {
+      window.scrollTo({
+        top: targetScroll,
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+    }
   }
 
   window.addEventListener("popstate", () => {
@@ -636,10 +640,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    window.scrollTo({
-      top: 0,
-      behavior: reducedMotion.matches ? "auto" : "smooth",
-    });
+    if (window.VenetoLocoScroll) {
+      window.VenetoLocoScroll.scrollTo(0);
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: reducedMotion.matches ? "auto" : "smooth",
+      });
+    }
   });
 
   function closeMenu(href) {
@@ -804,6 +812,7 @@ document.addEventListener("DOMContentLoaded", () => {
       targetHorizontalX = 0;
       currentHorizontalX = 0;
       testimonialsTrack.style.transform = "";
+      window.VenetoLocoScroll?.resize();
       return;
     }
 
@@ -814,6 +823,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     testimonialsSection.style.height = `${viewportH + maxHorizontalShift}px`;
     scheduler.schedule();
+    window.VenetoLocoScroll?.resize();
   }
 
   function animateTestimonialsHorizontal() {
