@@ -32,6 +32,7 @@
       href="https://cdn.jsdelivr.net/npm/locomotive-scroll@5.0.0-beta.21/dist/locomotive-scroll.min.css"
     />
     <link rel="stylesheet" href="display-motion.css" />
+    <link rel="stylesheet" href="footer.css" />
   </head>
   <body>
     <div
@@ -708,6 +709,120 @@
     </section>
 
     <!-- =====================================================================
+         SECTION: FOOTER (CURTAIN REVEAL + GIANT WORDMARK)
+         ===================================================================== -->
+    <footer class="site-footer" id="siteFooter" aria-label="Footer portofolio">
+      <div class="footer-bottom-glow" id="footerGlow" aria-hidden="true"></div>
+
+      <div class="footer-parallax-layer" id="footerParallax">
+        <div class="footer-container">
+          <!-- Logo raksasa "ve." -->
+          <div class="footer-top-brand footer-reveal-mask">
+            <div class="footer-logo-giant footer-reveal-item">ve.</div>
+          </div>
+
+          <!-- Navigasi & Social Media -->
+          <div class="footer-links-row footer-reveal-mask">
+            <nav class="footer-reveal-item" aria-label="Navigasi footer">
+              <span class="footer-col-label">NAVIGASI</span>
+              <ul class="footer-nav-list">
+                <li><a class="footer-link" href="#home">Home</a></li>
+                <li><a class="footer-link" href="#about">About</a></li>
+                <li><a class="footer-link" href="#tools">Tools</a></li>
+                <li><a class="footer-link" href="#projects">Project</a></li>
+                <li><a class="footer-link" href="#testimonials">Reviews</a></li>
+                <li><a class="footer-link" href="#contact">Contact</a></li>
+              </ul>
+            </nav>
+
+            <div class="footer-reveal-item">
+              <span class="footer-col-label">SOCIAL MEDIA</span>
+              <ul class="footer-social-list">
+                <li>
+                  <a
+                    class="footer-link"
+                    href="https://instagram.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>Instagram</span>
+                    <span class="footer-link-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="footer-link"
+                    href="https://github.com/vittoYEEE/HTML"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>GitHub</span>
+                    <span class="footer-link-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="footer-link"
+                    href="https://www.linkedin.com/feed/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>LinkedIn</span>
+                    <span class="footer-link-arrow" aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Pil Email -->
+          <div class="footer-email-wrap footer-reveal-mask">
+            <div class="footer-reveal-item">
+              <a
+                class="footer-email-pill"
+                href="mailto:vvitto878@gmail.com"
+                aria-label="Kirim email ke vvitto878@gmail.com"
+              >
+                vvitto878@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <!-- Garis Pemisah & Copyright -->
+          <div class="footer-divider" aria-hidden="true"></div>
+
+          <div class="footer-meta-row footer-reveal-mask">
+            <p class="footer-copyright footer-reveal-item">
+              2026 Vittorio Veneto Setiyantara. semua hak di lindungi
+            </p>
+
+            <button
+              type="button"
+              class="footer-top-btn footer-reveal-item"
+              id="backToTopBtn"
+              aria-label="Kembali ke bagian paling atas halaman"
+            >
+              <span>Kembali ke atas</span>
+              <span aria-hidden="true">↑</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Wordmark Raksasa "veneto" -->
+        <div class="footer-wordmark-wrap">
+          <div class="footer-wordmark" id="footerWordmark" aria-label="veneto">
+            <span class="wordmark-char is-solid" aria-hidden="true">v</span>
+            <span class="wordmark-char is-outline" aria-hidden="true">e</span>
+            <span class="wordmark-char is-solid" aria-hidden="true">n</span>
+            <span class="wordmark-char is-outline" aria-hidden="true">e</span>
+            <span class="wordmark-char is-solid" aria-hidden="true">t</span>
+            <span class="wordmark-char is-accent" aria-hidden="true">o</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- =====================================================================
          MODAL: COMMENT SUBMISSION FORM
          ===================================================================== -->
     <div
@@ -907,5 +1022,6 @@
     <script src="locomotive-motion.js" defer></script>
     <script src="script.js" defer></script>
     <script src="tools-scroll.js" defer></script>
+    <script src="footer.js" defer></script>
   </body>
 </html>

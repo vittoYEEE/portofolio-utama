@@ -1,25 +1,26 @@
 /* =========================================================================
-   CONTACT SECTION (BENTO GRID + GIANT DISPLAY TITLE)
+   CONTACT SECTION (BENTO GRID + GIANT DISPLAY TITLE — FULL 1 LAYAR)
    ========================================================================= */
 .contact-section {
   position: relative;
   width: 100%;
-  height: 70rem;
-  padding-top: 200px;
-  padding-bottom: 10px;
+  height: 100vh;
+  height: 100svh;
+  min-height: 620px;
+  padding-top: clamp(74px, 8.5vh, 108px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: clamp(36px, 5vw, 68px);
+  gap: clamp(14px, 2.2vh, 32px);
 }
 
 .contact-inner {
   width: min(1140px, calc(100% - 48px));
-  margin: 0 auto;
+  margin: auto;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: clamp(20px, 2.6vw, 30px);
+  gap: clamp(18px, 2.4vw, 28px);
   align-items: stretch;
 }
 
@@ -28,25 +29,25 @@
   background: #ebe3ff;
   color: #210447;
   border-radius: 26px;
-  padding: clamp(26px, 3.4vw, 40px);
+  padding: clamp(20px, 2.6vh, 36px) clamp(24px, 3vw, 38px);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
   display: flex;
   flex-direction: column;
 }
 
 .contact-form-card h2 {
-  font-size: clamp(1.45rem, 2.3vw, 1.95rem);
+  font-size: clamp(1.35rem, 2.1vw, 1.85rem);
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.15;
   color: #210447;
-  margin-bottom: 18px;
+  margin-bottom: clamp(10px, 1.5vh, 16px);
 }
 
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: clamp(8px, 1.1vh, 12px);
   flex: 1;
 }
 
@@ -59,13 +60,13 @@
 .contact-field input,
 .contact-field textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: clamp(9px, 1.15vh, 12px) 15px;
   border-radius: 12px;
   border: 1.5px solid rgba(33, 4, 71, 0.34);
   background: #c5b9e3;
   color: #1c033d;
   font-family: inherit;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 500;
   transition:
     border-color 0.22s ease,
@@ -75,7 +76,7 @@
 
 .contact-field textarea {
   resize: vertical;
-  min-height: 112px;
+  min-height: clamp(74px, 10.5vh, 108px);
 }
 
 .contact-field input::placeholder,
@@ -105,9 +106,9 @@
 
 .contact-feedback {
   display: none;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 12px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.4;
 }
@@ -128,14 +129,14 @@
 
 .contact-submit-btn {
   align-self: flex-start;
-  margin-top: 4px;
-  padding: 12px 26px;
+  margin-top: 2px;
+  padding: 11px 24px;
   border: none;
   border-radius: 999px;
   background: #23054a;
   color: #ffffff;
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   cursor: pointer;
@@ -172,7 +173,7 @@
 .contact-side-stack {
   display: flex;
   flex-direction: column;
-  gap: clamp(18px, 2.2vw, 24px);
+  gap: clamp(14px, 2vh, 22px);
 }
 
 /* Kartu Email Oranye (Kanan Atas) */
@@ -180,9 +181,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 14px;
-  min-height: 158px;
-  padding: clamp(24px, 3vw, 34px);
+  gap: 10px;
+  min-height: clamp(112px, 15vh, 150px);
+  padding: clamp(18px, 2.4vh, 30px) clamp(22px, 2.8vw, 32px);
   border-radius: 26px;
   background: #ff9f45;
   color: #1f0342;
@@ -201,13 +202,13 @@
 }
 
 .contact-email-label {
-  font-size: clamp(0.76rem, 1.05vw, 0.88rem);
+  font-size: clamp(0.74rem, 1vw, 0.86rem);
   font-weight: 600;
   color: rgba(31, 3, 66, 0.85);
 }
 
 .contact-email-value {
-  font-size: clamp(1.3rem, 2.35vw, 2.05rem);
+  font-size: clamp(1.25rem, 2.2vw, 1.95rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1.15;
@@ -218,7 +219,7 @@
 /* Kartu Social Media (Kanan Bawah) */
 .contact-social-card {
   flex: 1;
-  padding: clamp(18px, 2.4vw, 26px) clamp(24px, 3vw, 34px);
+  padding: clamp(14px, 1.8vh, 22px) clamp(22px, 2.8vw, 32px);
   border-radius: 26px;
   background: rgba(39, 8, 82, 0.72);
   border: 1.5px solid rgba(235, 227, 255, 0.26);
@@ -241,10 +242,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 15px 86px 15px 2px;
+  padding: clamp(10px, 1.35vh, 14px) 82px clamp(10px, 1.35vh, 14px) 2px;
   color: #ffffff;
   text-decoration: none;
-  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  font-size: clamp(1.12rem, 1.85vw, 1.55rem);
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.2;
@@ -283,13 +284,13 @@
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  width: 66px;
-  height: 66px;
+  width: clamp(54px, 5vw, 64px);
+  height: clamp(54px, 5vw, 64px);
   border-radius: 50%;
   background: #ff9f45;
   color: #1f0342;
   text-decoration: none;
-  font-size: 1.22rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   display: grid;
@@ -309,7 +310,7 @@
 /* Tipografi Raksasa "Contact" di Bagian Bawah */
 .contact-bottom-display {
   width: 100%;
-  padding: 0 3vw clamp(18px, 2.8vw, 40px);
+  padding: 0 3vw clamp(10px, 1.8vh, 28px);
   overflow: visible;
   pointer-events: none;
   user-select: none;
@@ -317,11 +318,11 @@
 
 .contact-bottom-display h2 {
   margin: 0;
-  padding-top: 0.05em;
-  padding-bottom: 0.16em;
-  font-size: clamp(4.6rem, 20vw, 19.5rem);
+  padding-top: 0.04em;
+  padding-bottom: 0.14em;
+  font-size: clamp(4.2rem, min(18.5vw, 24vh), 17.5rem);
   font-weight: 900;
-  line-height: 1.04;
+  line-height: 1.02;
   letter-spacing: -0.07em;
   white-space: nowrap;
   color: transparent;
@@ -336,18 +337,25 @@
 }
 
 @media (max-width: 860px) {
+  .contact-section {
+    height: auto;
+    min-height: 100svh;
+    padding-top: 88px;
+    gap: 28px;
+  }
+
   .contact-inner {
     width: calc(100% - 32px);
     grid-template-columns: 1fr;
   }
 
   .contact-email-card {
-    min-height: 128px;
+    min-height: 120px;
   }
 
   .contact-social-go {
-    width: 56px;
-    height: 56px;
+    width: 54px;
+    height: 54px;
     font-size: 1.05rem;
   }
 

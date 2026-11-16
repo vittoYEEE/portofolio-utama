@@ -33,10 +33,14 @@ html.lenis body {
 
 /* Ruang vertikal aman agar ekor huruf (j, y, g, p) & gradien tidak terpotong */
 .projects-outro,
-.testimonials-bottom-display,
-.contact-bottom-display {
+.testimonials-bottom-display {
   overflow: visible !important;
   padding-bottom: clamp(18px, 2.8vw, 42px) !important;
+}
+
+.contact-bottom-display {
+  overflow: visible !important;
+  padding-bottom: clamp(10px, 1.8vh, 28px) !important;
 }
 
 /* Pastikan sticky container testimonials memberi ruang cukup di bagian bawah */
@@ -92,10 +96,10 @@ html.lenis body {
 }
 
 .contact-bottom-display h2 {
-  line-height: 1.04 !important;
+  line-height: 1.02 !important;
   margin-bottom: 0 !important;
-  padding-top: 0.05em !important;
-  padding-bottom: 0.18em !important;
+  padding-top: 0.04em !important;
+  padding-bottom: 0.14em !important;
 }
 
 @media (max-width: 768px) {

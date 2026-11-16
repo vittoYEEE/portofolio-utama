@@ -1,0 +1,344 @@
+/* =========================================================================
+   FOOTER.CSS — CURTAIN REVEAL FOOTER + GIANT "veneto" WORDMARK
+   ========================================================================= */
+
+/* Pastikan seluruh section utama berada di atas footer (z-index: 1) */
+.page-panels,
+.projects-section,
+.testimonials-section,
+.contact-section {
+  position: relative;
+  z-index: 2;
+  background-color: #140826;
+}
+
+/* Efek sudut bawah membulat & bayangan pada section Contact sebelum tirai terangkat */
+.contact-section {
+  border-bottom-left-radius: clamp(24px, 3.2vw, 44px);
+  border-bottom-right-radius: clamp(24px, 3.2vw, 44px);
+  box-shadow: 0 28px 70px rgba(5, 2, 14, 0.85);
+}
+
+.site-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+  color: #f4f0ea;
+  background:
+    radial-gradient(
+      circle at 92% 28%,
+      rgba(98, 26, 198, 0.65) 0%,
+      rgba(42, 23, 80, 0) 48%
+    ),
+    radial-gradient(
+      circle at 6% 45%,
+      rgba(74, 20, 158, 0.52) 0%,
+      rgba(26, 16, 48, 0) 45%
+    ),
+    linear-gradient(
+      132deg,
+      #2a1750 0%,
+      #110620 44%,
+      #1a1030 74%,
+      #2f1263 100%
+    );
+}
+
+/* Glow oranye radial di bagian bawah */
+.footer-bottom-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -28%;
+  width: min(1100px, 120vw);
+  height: clamp(260px, 38vw, 480px);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 106, 31, 0.34) 0%,
+    rgba(255, 106, 31, 0.12) 42%,
+    rgba(42, 23, 80, 0) 72%
+  );
+  opacity: 0.15;
+  transform: translate3d(-50%, 0, 0) scale(0.72);
+  will-change: transform, opacity;
+}
+
+.footer-parallax-layer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: clamp(32px, 5vw, 68px);
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.footer-container {
+  width: 100%;
+  padding-inline: clamp(22px, 4.4vw, 64px);
+}
+
+.footer-reveal-mask {
+  overflow: hidden;
+}
+
+.footer-reveal-item {
+  will-change: transform, opacity;
+}
+
+/* Logo raksasa "ve." di kanan atas */
+.footer-top-brand {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer-logo-giant {
+  font-size: clamp(5.5rem, 18.5vw, 16.5rem);
+  font-weight: 800;
+  line-height: 0.82;
+  letter-spacing: -0.068em;
+  color: #f4f0ea;
+  user-select: none;
+}
+
+/* Baris Navigasi & Social Media */
+.footer-links-row {
+  margin-top: clamp(24px, 4vw, 50px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 26px 40px;
+}
+
+.footer-col-label {
+  display: block;
+  font-size: clamp(0.64rem, 0.76vw, 0.74rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ff8c3b;
+  margin-bottom: clamp(10px, 1.3vw, 16px);
+}
+
+.footer-nav-list,
+.footer-social-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px clamp(18px, 2.5vw, 36px);
+}
+
+.footer-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  color: #f4f0ea;
+  font-size: clamp(0.9rem, 1.1vw, 1.05rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  padding-bottom: 4px;
+}
+
+.footer-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ff6a1f;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-link:hover::after,
+.footer-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.footer-link:focus-visible {
+  outline: none;
+}
+
+.footer-link-arrow {
+  font-size: 0.9em;
+  color: #c5a6f5;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.28s ease;
+}
+
+.footer-link:hover .footer-link-arrow {
+  color: #ff6a1f;
+  transform: translate3d(2px, -2px, 0);
+}
+
+/* Tombol Pil Email */
+.footer-email-wrap {
+  margin-top: clamp(20px, 2.6vw, 32px);
+}
+
+.footer-email-pill {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  background-color: #ebe3ff;
+  color: #1a1030;
+  font-size: clamp(0.92rem, 1.25vw, 1.14rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  padding: clamp(11px, 1.2vw, 15px) clamp(22px, 2.2vw, 30px);
+  border-radius: 999px;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.footer-email-pill:hover,
+.footer-email-pill:focus-visible {
+  background-color: #ff6a1f;
+  color: #f4f0ea;
+  transform: translate3d(0, -2px, 0);
+  outline: none;
+}
+
+/* Garis Pemisah & Copyright */
+.footer-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(244, 240, 234, 0.24);
+  margin-top: clamp(24px, 3.2vw, 42px);
+}
+
+.footer-meta-row {
+  margin-top: clamp(14px, 1.8vw, 22px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+}
+
+.footer-copyright {
+  font-size: clamp(0.72rem, 0.84vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(244, 240, 234, 0.85);
+}
+
+.footer-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 240, 234, 0.34);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f4f0ea;
+  font-family: inherit;
+  font-size: clamp(0.72rem, 0.84vw, 0.82rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.footer-top-btn:hover,
+.footer-top-btn:focus-visible {
+  border-color: #ff6a1f;
+  background: rgba(255, 106, 31, 0.16);
+  transform: translate3d(0, -2px, 0);
+  outline: none;
+}
+
+/* Wordmark Raksasa "veneto" Full Width */
+.footer-wordmark-wrap {
+  width: 100%;
+  margin-top: clamp(12px, 2vw, 24px);
+  overflow: hidden;
+  user-select: none;
+}
+
+.footer-wordmark {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  padding-inline: clamp(4px, 1vw, 14px);
+  font-size: clamp(4.6rem, 26vw, 25rem);
+  font-weight: 800;
+  line-height: 0.74;
+  letter-spacing: -0.058em;
+}
+
+.wordmark-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.wordmark-char.is-solid {
+  color: rgba(244, 240, 234, 0.84);
+}
+
+.wordmark-char.is-outline {
+  color: transparent;
+  -webkit-text-stroke: clamp(1px, 0.14vw, 2px) rgba(244, 240, 234, 0.62);
+}
+
+.wordmark-char.is-accent {
+  color: #ff6a1f;
+}
+
+@media (max-width: 680px) {
+  .footer-logo-giant {
+    font-size: clamp(4.8rem, 24vw, 7.8rem);
+  }
+
+  .footer-links-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .footer-meta-row {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .footer-wordmark {
+    font-size: clamp(3.9rem, 25vw, 7.4rem);
+    line-height: 0.76;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-footer {
+    position: relative;
+  }
+
+  .contact-section {
+    margin-bottom: 0 !important;
+    border-radius: 0;
+  }
+
+  .footer-parallax-layer,
+  .footer-reveal-item,
+  .wordmark-char,
+  .footer-bottom-glow {
+    transform: none !important;
+    opacity: 1 !important;
+    will-change: auto;
+  }
+}
