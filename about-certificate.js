@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn = document.getElementById("closeCertModalBtn");
   const modalBadge = document.getElementById("certModalBadge");
   const modalTitle = document.getElementById("certModalTitle");
+  const modalImg = document.getElementById("certModalImg");
   const modalMeta = document.getElementById("certModalMeta");
   const modalDesc = document.getElementById("certModalDesc");
   const modalList = document.getElementById("certModalList");
@@ -17,12 +18,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = card.dataset.certTitle || "Sertifikat Kompetensi";
     const issuer = card.dataset.certIssuer || "Veneto Studio";
     const year = card.dataset.certYear || "2026";
+    const imgSrc = card.dataset.certImg || "";
     const desc =
       card.dataset.certDesc ||
       "Sertifikasi resmi pengembangan antarmuka web modern, desain responsif, dan arsitektur frontend.";
 
     modalBadge.textContent = `SERTIFIKAT • ${num}`;
     modalTitle.textContent = title;
+    if (modalImg) {
+      if (imgSrc) {
+        modalImg.src = imgSrc;
+        modalImg.alt = `Sertifikat ${title}`;
+        modalImg.style.display = "block";
+      } else {
+        modalImg.removeAttribute("src");
+        modalImg.style.display = "none";
+      }
+    }
     modalMeta.innerHTML = `<span>Penerbit: <strong>${issuer}</strong></span><span>Tahun: <strong>${year}</strong></span>`;
     modalDesc.textContent = desc;
     modalList.innerHTML = "";
@@ -34,6 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function openAllCertificates() {
     modalBadge.textContent = `DAFTAR SERTIFIKAT • [0${certCards.length}]`;
     modalTitle.textContent = "Semua Sertifikat & Pencapaian";
+    if (modalImg) {
+      modalImg.removeAttribute("src");
+      modalImg.style.display = "none";
+    }
     modalMeta.innerHTML = "<span>Pilih salah satu sertifikat di bawah untuk melihat detailnya.</span>";
     modalDesc.textContent = "";
     modalList.innerHTML = "";

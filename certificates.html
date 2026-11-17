@@ -81,9 +81,7 @@
                 data-title="HTML"
                 data-issuer="Skilvul.com"
                 data-year="2026"
-                data-desc=" Sertifikasi kelulusan penyusunan kerangka halaman web menggunakan
-              struktur HTML5 semantik, pengelolaan elemen media, formulir
-              interaktif, dan standar penulisan kode yang bersih."
+                data-desc="Sertifikasi kelulusan penyusunan kerangka halaman web menggunakan struktur HTML5 semantik, pengelolaan elemen media, formulir interaktif, dan standar penulisan kode yang bersih."
               >
                 Lihat Detail ↗
               </button>
@@ -118,12 +116,10 @@
                 type="button"
                 class="subpage-btn open-cert-detail"
                 data-num="02"
-                data-title="CSS Mastery"
+                data-title="CSS"
                 data-issuer="Skilvul.com"
                 data-year="2026"
-                data-desc="Sertifikasi kelulusan perancangan tata letak dan visual website
-              modern menggunakan CSS3, Flexbox, CSS Grid, variabel gaya, serta
-              animasi transisi yang halus."
+                data-desc="Sertifikasi kelulusan perancangan tata letak dan visual website modern menggunakan CSS3, Flexbox, CSS Grid, variabel gaya, serta animasi transisi yang halus."
               >
                 Lihat Detail ↗
               </button>
@@ -157,11 +153,10 @@
                 type="button"
                 class="subpage-btn open-cert-detail"
                 data-num="03"
-                data-title="JavaScript & Motion Web"
-                data-issuer="Veneto Academy"
+                data-title="JavaScript"
+                data-issuer="Skilvul.com"
                 data-year="2026"
-                data-desc=" Implementasi animasi berbasis scroll, optimasi performa GPU 60fps,
-              dan arsitektur aplikasi web interaktif."
+                data-desc="Implementasi animasi berbasis scroll, optimasi performa GPU 60fps, dan arsitektur aplikasi web interaktif."
               >
                 Lihat Detail ↗
               </button>
@@ -265,6 +260,21 @@
             &times;
           </button>
         </div>
+        <img
+          id="mCertImg"
+          src=""
+          alt="Preview Sertifikat"
+          style="
+            display: none;
+            width: 100%;
+            max-height: 290px;
+            object-fit: contain;
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 8px;
+            margin-bottom: 16px;
+          "
+        />
         <p
           id="mCertMeta"
           style="font-size: 0.85rem; color: #ff9f45; margin-bottom: 12px"
@@ -276,49 +286,6 @@
       </div>
     </div>
 
-    <script>
-      const filterBtns = document.querySelectorAll(".filter-pill");
-      const cards = document.querySelectorAll(".cert-page-card");
-
-      filterBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          filterBtns.forEach((b) => b.classList.remove("is-active"));
-          btn.classList.add("is-active");
-          const filter = btn.dataset.filter;
-          cards.forEach((card) => {
-            const match = filter === "all" || card.dataset.category === filter;
-            card.classList.toggle("is-hidden", !match);
-          });
-        });
-      });
-
-      const modal = document.getElementById("certPageModal");
-      const backdrop = document.getElementById("certPageBackdrop");
-      const closeBtn = document.getElementById("mCertClose");
-
-      document.querySelectorAll(".open-cert-detail").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.getElementById("mCertBadge").textContent =
-            `SERTIFIKAT • ${btn.dataset.num}`;
-          document.getElementById("mCertTitle").textContent = btn.dataset.title;
-          document.getElementById("mCertMeta").textContent =
-            `Penerbit: ${btn.dataset.issuer} • Tahun ${btn.dataset.year}`;
-          document.getElementById("mCertDesc").textContent = btn.dataset.desc;
-          modal.classList.add("is-open");
-          modal.setAttribute("aria-hidden", "false");
-        });
-      });
-
-      function closeModal() {
-        modal.classList.remove("is-open");
-        modal.setAttribute("aria-hidden", "true");
-      }
-
-      closeBtn.addEventListener("click", closeModal);
-      backdrop.addEventListener("click", closeModal);
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
-      });
-    </script>
+    <script src="certificates.js" defer></script>
   </body>
 </html>
