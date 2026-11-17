@@ -233,21 +233,12 @@ body {
   overflow: hidden;
 }
 
-.cert-thumb.theme-deep {
-  background: linear-gradient(135deg, #14022d 0%, #2f0b63 100%);
-  color: #ffffff;
-}
-.cert-thumb.theme-royal {
-  background: linear-gradient(135deg, #3d127a 0%, #6322bd 100%);
-  color: #ffffff;
-}
-.cert-thumb.theme-orange {
-  background: linear-gradient(135deg, #ff9f45 0%, #ff7b29 100%);
-  color: #1e0342;
-}
+.cert-thumb.theme-deep,
+.cert-thumb.theme-royal,
+.cert-thumb.theme-orange,
 .cert-thumb.theme-lavender {
-  background: linear-gradient(135deg, #efe9ff 0%, #d7c7ff 100%);
-  color: #1e0342;
+  background: linear-gradient(135deg, #ff9f45 0%, #ff7b29 100%);
+  color: white;
 }
 
 .cert-thumb img {
@@ -275,19 +266,26 @@ body {
   color: inherit;
 }
 
-.cert-thumb-year {
-  font-size: 0.76rem;
-  font-weight: 700;
-  opacity: 0.88;
+.cert-thumb-num {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  background: rgba(30, 3, 66, 0.9);
+  color: white;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-.cert-thumb-watermark {
-  position: relative;
-  z-index: 2;
-  font-size: 1.5rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  opacity: 0.9;
+.cert-thumb-year {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  background: rgba(30, 3, 66, 0.9);
+  color: #ffffff;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .cert-page-body {
