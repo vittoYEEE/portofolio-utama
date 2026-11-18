@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroFolio = document.querySelector(".hero-title .line-folio");
 
   const aboutSection = document.getElementById("about");
-  const aboutTitle = document.querySelector(".cert-display-title, .about-title");
+
 
   const toolsSection = document.getElementById("tools");
   const toolsTitle = document.querySelector(".tools-title");
@@ -156,21 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
       curX: 0,
       curY: 0,
     },
-    {
-      el: aboutTitle,
-      getTarget(vh, vw) {
-        if (!aboutSection || vh === 0) return { x: 0, y: 0 };
-        const rect = aboutSection.getBoundingClientRect();
-        const progress = clamp((vh - rect.top) / (vh * 1.4), -1, 1);
-        const shiftX = Math.min(vw * 0.065, 95);
-        return {
-          x: (0.5 - progress) * shiftX,
-          y: (0.5 - progress) * 18,
-        };
-      },
-      curX: 0,
-      curY: 0,
-    },
+  
     {
       el: toolsTitle,
       getTarget(vh, vw) {
