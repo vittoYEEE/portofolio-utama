@@ -44,41 +44,67 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: "Pesan harus 10–1500 karakter." });
   }
 
+  const resendApiKey = process.env.RESEND_API_KEY;
   const gmailUser = process.env.GMAIL_USER || "vvitto878@gmail.com";
   const gmailPass = process.env.GMAIL_APP_PASSWORD;
   const notifyEmail = process.env.NOTIFY_EMAIL || "vvitto878@gmail.com";
 
-  if (!gmailPass) {
-    return res.status(500).json({
-      error: "Konfigurasi email server (GMAIL_APP_PASSWORD) belum diatur.",
-    });
-  }
+  const subject = `Pesan Proyek Baru dari ${name}`;
+  const textContent = `Nama: ${name}\nEmail: ${email}\n\nPesan:\n${message}`;
+  const htmlContent = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1c033d;">
+      <h2 style="margin-bottom:8px;">Pesan Proyek Baru — Veneto Portfolio</h2>
+      <p><strong>Nama:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+      <hr style="border:none;border-top:1px solid #e5dcff;margin:16px 0;" />
+      <p style="white-space:pre-line;">${escapeHtml(message)}</p>
+    </div>
+  `;
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: gmailUser,
-        pass: gmailPass,
-      },
-    });
+    if (resendApiKey) {
+      const resendRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "Veneto Portfolio Contact <onboarding@resend.dev>",
+          to: [notifyEmail],
+          reply_to: email,
+          subject,
+          text: textContent,
+          html: htmlContent,
+        }),
+      });
 
-    await transporter.sendMail({
-      from: `"Veneto Portfolio Contact" <${gmailUser}>`,
-      to: notifyEmail,
-      replyTo: email,
-      subject: `Pesan Proyek Baru dari ${name}`,
-      text: `Nama: ${name}\nEmail: ${email}\n\nPesan:\n${message}`,
-      html: `
-        <div style="font-family:Arial,sans-serif;line-height:1.6;color:#1c033d;">
-          <h2 style="margin-bottom:8px;">Pesan Proyek Baru — Veneto Portfolio</h2>
-          <p><strong>Nama:</strong> ${escapeHtml(name)}</p>
-          <p><strong>Email:</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
-          <hr style="border:none;border-top:1px solid #e5dcff;margin:16px 0;" />
-          <p style="white-space:pre-line;">${escapeHtml(message)}</p>
-        </div>
-      `,
-    });
+      if (!resendRes.ok) {
+        const errDetail = await resendRes.text();
+        throw new Error(`Resend API error (${resendRes.status}): ${errDetail}`);
+      }
+    } else if (gmailPass) {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: gmailUser,
+          pass: gmailPass,
+        },
+      });
+
+      await transporter.sendMail({
+        from: `"Veneto Portfolio Contact" <${gmailUser}>`,
+        to: notifyEmail,
+        replyTo: email,
+        subject,
+        text: textContent,
+        html: htmlContent,
+      });
+    } else {
+      return res.status(500).json({
+        error: "Konfigurasi email server (RESEND_API_KEY) belum diatur.",
+      });
+    }
 
     return res.status(200).json({
       ok: true,
