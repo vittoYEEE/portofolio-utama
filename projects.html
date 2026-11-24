@@ -273,20 +273,108 @@
     </div>
 
     <script>
-      const filterBtns = document.querySelectorAll(".filter-pill");
-      const projectCards = document.querySelectorAll(".project-page-card");
+  const filterBtns = document.querySelectorAll(".filter-pill");
+  const projectsGrid = document.getElementById("projectsGrid");
+  let currentFilter = "all";
 
-      filterBtns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          filterBtns.forEach((b) => b.classList.remove("is-active"));
-          btn.classList.add("is-active");
-          const filter = btn.dataset.filter;
-          projectCards.forEach((card) => {
-            const match = filter === "all" || card.dataset.category === filter;
-            card.classList.toggle("is-hidden", !match);
-          });
+  function applyProjectFilter() {
+    document.querySelectorAll(".project-page-card").forEach((card) => {
+      const match =
+        currentFilter === "all" || card.dataset.category === currentFilter;
+      card.classList.toggle("is-hidden", !match);
+    });
+  }
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      currentFilter = btn.dataset.filter;
+      applyProjectFilter();
+    });
+  });
+
+  async function loadProjectsPage() {
+    try {
+      const res = await fetch("/api/projects");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data.projects)) return;
+
+      const allPill = document.querySelector('.filter-pill[data-filter="all"]');
+      if (allPill) {
+        allPill.textContent = `Semua Project (${String(data.projects.length).padStart(2, "0")})`;
+      }
+
+      projectsGrid.innerHTML = "";
+      data.projects.forEach((proj, idx) => {
+        const num = String(idx + 1).padStart(2, "0");
+        const article = document.createElement("article");
+        article.className = "project-page-card";
+        article.dataset.category = proj.category || "live";
+
+        const media = document.createElement("div");
+        media.className = "project-card-media";
+        media.innerHTML = `
+          <span class="project-card-num">${num}</span>
+          <span class="project-card-year">${proj.year || "2026"}</span>
+        `;
+        const img = document.createElement("img");
+        img.src = proj.imageUrl;
+        img.alt = `Preview website ${proj.title}`;
+        img.loading = "lazy";
+        media.appendChild(img);
+
+        const body = document.createElement("div");
+        body.className = "project-card-body";
+        const h2 = document.createElement("h2");
+        h2.textContent = proj.title;
+        const p = document.createElement("p");
+        p.textContent = proj.description || "";
+
+        const stackList = document.createElement("div");
+        stackList.className = "project-stack-list";
+        (proj.tags || []).forEach((t) => {
+          const pill = document.createElement("span");
+          pill.className = "project-stack-pill";
+          pill.textContent = t;
+          stackList.appendChild(pill);
         });
+
+        const actions = document.createElement("div");
+        actions.className = "project-card-actions";
+        const label = document.createElement("span");
+        label.style.cssText =
+          "font-size: 0.78rem; font-weight: 700; opacity: 0.7";
+        label.textContent =
+          proj.category === "live" ? "Live Deployment" : "UI Concept";
+
+        if (proj.url) {
+          const visitBtn = document.createElement("a");
+          visitBtn.className = "project-visit-btn";
+          visitBtn.href = proj.url;
+          visitBtn.target = "_blank";
+          visitBtn.rel = "noopener noreferrer";
+          visitBtn.innerHTML =
+            '<span>Kunjungi Website</span><span aria-hidden="true">↗</span>';
+          actions.append(label, visitBtn);
+        } else {
+          const conceptBadge = document.createElement("span");
+          conceptBadge.className = "project-visit-btn is-disabled";
+          conceptBadge.innerHTML = "<span>Preview Konsep</span>";
+          actions.append(label, conceptBadge);
+        }
+
+        body.append(h2, p, stackList, actions);
+        article.append(media, body);
+        projectsGrid.appendChild(article);
       });
-    </script>
+
+      applyProjectFilter();
+    } catch (_) {}
+  }
+
+  void loadProjectsPage();
+</script>
   </body>
 </html>

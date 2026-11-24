@@ -202,16 +202,16 @@ document.addEventListener("DOMContentLoaded", () => {
   reducedMotion.addEventListener("change", initializeTextReveal);
   initializeTextReveal();
 
-  // ---------------------------------------------------------------
-  // 3. Preview gambar proyek melayang (Smooth LERP + Klik Langsung ke Web)
+ // ---------------------------------------------------------------
+  // 3. Preview gambar proyek melayang (Smooth LERP + Dynamic API Sync)
   // ---------------------------------------------------------------
   const projectList = document.getElementById("project-list");
-  const projectEntries = Array.from(
+  let projectEntries = Array.from(
     document.querySelectorAll("[data-project-entry]"),
   );
   const floatingPreview = document.getElementById("projectFloatingPreview");
   const floatingTrack = document.getElementById("projectFloatingTrack");
-  const floatingSlides = floatingTrack
+  let floatingSlides = floatingTrack
     ? Array.from(floatingTrack.querySelectorAll(".project-floating-slide"))
     : [];
   const desktopHover = window.matchMedia(
@@ -412,98 +412,194 @@ document.addEventListener("DOMContentLoaded", () => {
     { passive: true },
   );
 
-  projectEntries.forEach((entry, idx) => {
-    const row = entry.querySelector(".project-row");
-    const mobilePreview = entry.querySelector(".project-preview");
-    const entryIndex = entry.getAttribute("data-index") ?? String(idx);
-    if (!row) return;
+  function bindProjectEntryEvents() {
+    projectEntries = Array.from(
+      document.querySelectorAll("[data-project-entry]"),
+    );
+    floatingSlides = floatingTrack
+      ? Array.from(floatingTrack.querySelectorAll(".project-floating-slide"))
+      : [];
 
-    row.addEventListener("pointerenter", (event) => {
-      if (!desktopHover.matches) return;
-      cancelCloseTimer();
-      projectEntries.forEach((other) => other.classList.remove("is-active"));
-      entry.classList.add("is-active");
-      openFloatingPreview(event.clientX, event.clientY, entryIndex);
-    });
+    projectEntries.forEach((entry, idx) => {
+      const row = entry.querySelector(".project-row");
+      const mobilePreview = entry.querySelector(".project-preview");
+      const entryIndex = entry.getAttribute("data-index") ?? String(idx);
+      if (!row) return;
 
-    row.addEventListener("focus", () => {
-      if (!desktopHover.matches || !floatingPreview) return;
-      projectEntries.forEach((other) => other.classList.remove("is-active"));
-      entry.classList.add("is-active");
-      const rect = row.getBoundingClientRect();
-      openFloatingPreview(
-        rect.left + rect.width * 0.55,
-        rect.top + rect.height / 2,
-        entryIndex,
-      );
-    });
+      row.addEventListener("pointerenter", (event) => {
+        if (!desktopHover.matches) return;
+        cancelCloseTimer();
+        projectEntries.forEach((other) => other.classList.remove("is-active"));
+        entry.classList.add("is-active");
+        openFloatingPreview(event.clientX, event.clientY, entryIndex);
+      });
 
-    row.addEventListener("blur", () => {
-      entry.classList.remove("is-active");
-      if (projectList && !projectList.contains(document.activeElement)) {
-        closeFloatingPreview();
-      }
-    });
-
-    row.addEventListener("click", (event) => {
-      if (desktopHover.matches || !mobilePreview) return;
-
-      const isAlreadyOpen = entry.classList.contains("is-open");
-      if (isAlreadyOpen) return;
-
-      event.preventDefault();
-      projectEntries.forEach((otherEntry) => {
-        otherEntry.classList.remove("is-open");
-        otherEntry.querySelector(".project-row")?.setAttribute(
-          "aria-expanded",
-          "false",
-        );
-        otherEntry.querySelector(".project-preview")?.setAttribute(
-          "aria-hidden",
-          "true",
+      row.addEventListener("focus", () => {
+        if (!desktopHover.matches || !floatingPreview) return;
+        projectEntries.forEach((other) => other.classList.remove("is-active"));
+        entry.classList.add("is-active");
+        const rect = row.getBoundingClientRect();
+        openFloatingPreview(
+          rect.left + rect.width * 0.55,
+          rect.top + rect.height / 2,
+          entryIndex,
         );
       });
 
-      entry.classList.add("is-open");
-      row.setAttribute("aria-expanded", "true");
-      mobilePreview.setAttribute("aria-hidden", "false");
-    });
-  });
-
-  document
-    .querySelectorAll(".project-row, .project-preview-link, #projectFloatingPreview")
-    .forEach((linkEl) => {
-      linkEl.addEventListener("click", (event) => {
-        if (linkEl.getAttribute("href") === "#projects") {
-          event.preventDefault();
+      row.addEventListener("blur", () => {
+        entry.classList.remove("is-active");
+        if (projectList && !projectList.contains(document.activeElement)) {
+          closeFloatingPreview();
         }
       });
+
+      row.addEventListener("click", (event) => {
+        if (desktopHover.matches || !mobilePreview) return;
+
+        const isAlreadyOpen = entry.classList.contains("is-open");
+        if (isAlreadyOpen) return;
+
+        event.preventDefault();
+        projectEntries.forEach((otherEntry) => {
+          otherEntry.classList.remove("is-open");
+          otherEntry
+            .querySelector(".project-row")
+            ?.setAttribute("aria-expanded", "false");
+          otherEntry
+            .querySelector(".project-preview")
+            ?.setAttribute("aria-hidden", "true");
+        });
+
+        entry.classList.add("is-open");
+        row.setAttribute("aria-expanded", "true");
+        mobilePreview.setAttribute("aria-hidden", "false");
+      });
     });
 
-  if (projectEntries.length) {
-    if (reducedMotion.matches || !("IntersectionObserver" in window)) {
-      projectEntries.forEach((entry) => entry.classList.add("is-visible"));
-    } else {
-      const projectObserver = new IntersectionObserver(
-        (entries, observer) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          });
-        },
-        { threshold: 0.16 },
-      );
-
-      projectEntries.forEach((entry) => projectObserver.observe(entry));
-      reducedMotion.addEventListener("change", (event) => {
-        if (!event.matches) return;
-        projectObserver.disconnect();
-        projectEntries.forEach((entry) => entry.classList.add("is-visible"));
+    document
+      .querySelectorAll(
+        ".project-row, .project-preview-link, #projectFloatingPreview",
+      )
+      .forEach((linkEl) => {
+        linkEl.addEventListener("click", (event) => {
+          if (linkEl.getAttribute("href") === "#projects") {
+            event.preventDefault();
+          }
+        });
       });
+
+    if (projectEntries.length) {
+      if (reducedMotion.matches || !("IntersectionObserver" in window)) {
+        projectEntries.forEach((entry) => entry.classList.add("is-visible"));
+      } else {
+        const projectObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.16 },
+        );
+        projectEntries.forEach((entry) => projectObserver.observe(entry));
+      }
     }
   }
 
+  async function hydrateHomeProjects() {
+    if (!projectList || !floatingTrack) return;
+    try {
+      const res = await fetch("/api/projects", {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data.projects)) return;
+
+      const featured = data.projects.filter((p) => p.featuredOnHome !== false);
+      const listToShow = featured.length ? featured : data.projects;
+
+      projectList.innerHTML = "";
+      floatingTrack.innerHTML = "";
+
+      listToShow.forEach((proj, idx) => {
+        const num = String(idx + 1).padStart(2, "0");
+        const hasUrl = Boolean(proj.url && proj.url !== "#projects");
+        const href = hasUrl ? proj.url : "#projects";
+        const previewId = `preview-dyn-${idx}`;
+
+        const article = document.createElement("article");
+        article.className = "project-entry is-visible";
+        article.setAttribute("data-project-entry", "");
+        article.setAttribute("data-index", String(idx));
+
+        const rowLink = document.createElement("a");
+        rowLink.className = "project-row";
+        rowLink.href = href;
+        if (hasUrl) {
+          rowLink.target = "_blank";
+          rowLink.rel = "noopener noreferrer";
+        }
+        rowLink.setAttribute("aria-expanded", "false");
+        rowLink.setAttribute("aria-controls", previewId);
+        rowLink.innerHTML = `
+          <span class="project-row-main">
+            <span class="project-number">${num}</span>
+            <span class="project-name"></span>
+          </span>
+          <span class="project-year"></span>
+        `;
+        rowLink.querySelector(".project-name").textContent = proj.title;
+        rowLink.querySelector(".project-year").textContent = proj.year || "2026";
+
+        const previewDiv = document.createElement("div");
+        previewDiv.className = "project-preview";
+        previewDiv.id = previewId;
+        previewDiv.setAttribute("aria-hidden", "true");
+
+        const prevLink = document.createElement("a");
+        prevLink.className = "project-preview-link";
+        prevLink.href = href;
+        if (hasUrl) {
+          prevLink.target = "_blank";
+          prevLink.rel = "noopener noreferrer";
+        }
+        prevLink.setAttribute("aria-label", `Buka website ${proj.title}`);
+
+        const prevImg = document.createElement("img");
+        prevImg.src = proj.imageUrl;
+        prevImg.alt = `Preview website ${proj.title}`;
+        prevImg.loading = "lazy";
+
+        const goBadge = document.createElement("span");
+        goBadge.className = "preview-go";
+        goBadge.innerHTML = 'GO <span aria-hidden="true">↗</span>';
+
+        prevLink.append(prevImg, goBadge);
+        previewDiv.appendChild(prevLink);
+        article.append(rowLink, previewDiv);
+        projectList.appendChild(article);
+
+        // Floating slide
+        const slide = document.createElement("div");
+        slide.className = `project-floating-slide${idx === 0 ? " is-current" : ""}`;
+        const slideImg = document.createElement("img");
+        slideImg.src = proj.imageUrl;
+        slideImg.alt = `Preview website ${proj.title}`;
+        slide.appendChild(slideImg);
+        floatingTrack.appendChild(slide);
+      });
+
+      bindProjectEntryEvents();
+      window.VenetoLocoScroll?.resize();
+    } catch (_) {
+      // Fallback ke HTML statis
+    }
+  }
+
+  bindProjectEntryEvents();
+  void hydrateHomeProjects();
   // ---------------------------------------------------------------
   // 4. Custom Cursor Bulat "GO" saat hover item di Menu Navigasi
   // ---------------------------------------------------------------

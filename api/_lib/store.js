@@ -11,6 +11,8 @@ const SESSION_SECRET =
 
 const COOKIE_NAME = "veneto_admin_session";
 const REDIS_KEY = "veneto:testimonials:v1";
+const REDIS_CERTS_KEY = "veneto:certificates:v1";
+const REDIS_PROJECTS_KEY = "veneto:projects:v1";
 
 const SEED_TESTIMONIALS = [
   {
@@ -45,6 +47,155 @@ const SEED_TESTIMONIALS = [
     status: "approved",
     createdAt: "2026-11-12T15:15:00.000Z",
     updatedAt: "2026-11-12T15:15:00.000Z",
+  },
+];
+
+const SEED_CERTIFICATES = [
+  {
+    id: "cert-1",
+    title: "HTML",
+    issuer: "Skilvul.com",
+    year: "2026",
+    category: "web",
+    tag: "HTML CERTIFICATE",
+    theme: "theme-deep",
+    imageUrl: "./asset/html.png",
+    description:
+      "Sertifikasi kelulusan penyusunan kerangka halaman web menggunakan struktur HTML5 semantik, pengelolaan elemen media, formulir interaktif, dan standar penulisan kode yang bersih.",
+    createdAt: "2026-11-01T08:00:00.000Z",
+  },
+  {
+    id: "cert-2",
+    title: "CSS",
+    issuer: "Skilvul.com",
+    year: "2026",
+    category: "design",
+    tag: "CSS CERTIFICATE",
+    theme: "theme-royal",
+    imageUrl: "./asset/css.png",
+    description:
+      "Sertifikasi kelulusan perancangan tata letak dan visual website modern menggunakan CSS3, Flexbox, CSS Grid, variabel gaya, serta animasi transisi yang halus.",
+    createdAt: "2026-11-02T08:00:00.000Z",
+  },
+  {
+    id: "cert-3",
+    title: "JavaScript",
+    issuer: "Skilvul.com",
+    year: "2026",
+    category: "web",
+    tag: "JavaScript CERTIFICATE",
+    theme: "theme-orange",
+    imageUrl: "./asset/javascript.png",
+    description:
+      "Implementasi animasi berbasis scroll, optimasi performa GPU 60fps, dan arsitektur aplikasi web interaktif.",
+    createdAt: "2026-11-03T08:00:00.000Z",
+  },
+  {
+    id: "cert-4",
+    title: "HTML",
+    issuer: "Sololearn",
+    year: "2026",
+    category: "web",
+    tag: "HTML CERTIFICATE",
+    theme: "theme-lavender",
+    imageUrl: "./asset/html.sololearn.jpg",
+    description:
+      "Sertifikasi kelulusan penyusunan kerangka halaman web menggunakan struktur HTML5 semantik, pengelolaan elemen media, formulir interaktif, dan standar penulisan kode yang bersih.",
+    createdAt: "2026-11-04T08:00:00.000Z",
+  },
+  {
+    id: "cert-5",
+    title: "Creative Visual & Branding",
+    issuer: "Adobe Certified",
+    year: "2026",
+    category: "design",
+    tag: "Creative Design",
+    theme: "theme-royal",
+    imageUrl: "./asset/Sertifikat Penghargaan Juara Merah Putih Biru.png",
+    description:
+      "Eksplorasi tipografi editorial, sistem identitas visual, dan komposisi warna antarmuka digital.",
+    createdAt: "2026-11-05T08:00:00.000Z",
+  },
+];
+
+const SEED_PROJECTS = [
+  {
+    id: "proj-1",
+    title: "SevenSummit",
+    year: "2026",
+    category: "live",
+    url: "https://7summit.vercel.app/",
+    imageUrl: "asset/Screenshot 2026-11-13 210405 1.png",
+    description:
+      "Website eksplorasi ekspedisi dan informasi tujuh puncak tertinggi dengan visual sinematik, tata letak editorial, dan navigasi responsif.",
+    tags: ["HTML5", "CSS3", "JavaScript", "Responsive UI"],
+    featuredOnHome: true,
+    createdAt: "2026-11-01T08:00:00.000Z",
+  },
+  {
+    id: "proj-2",
+    title: "Svara Nusantara",
+    year: "2026",
+    category: "live",
+    url: "https://svara-nusantara.vercel.app",
+    imageUrl: "./asset/SVARA 2.png",
+    description:
+      "Platform digital bertema kekayaan budaya dan seni Nusantara yang menggabungkan tipografi ekspresif dengan interaksi modern.",
+    tags: ["Web Design", "HTML & CSS", "Responsive UI"],
+    featuredOnHome: true,
+    createdAt: "2026-11-02T08:00:00.000Z",
+  },
+  {
+    id: "proj-3",
+    title: "Sekolah Unggul",
+    year: "2026",
+    category: "live",
+    url: "https://sekolah-unggul.vercel.app",
+    imageUrl: "./asset/SEKOLAH 1.png",
+    description:
+      "Sistem antarmuka portal informasi pendidikan dan profil institusi sekolah dengan struktur konten yang bersih dan ramah pengguna.",
+    tags: ["Web Design", "HTML & CSS", "Responsive UI"],
+    featuredOnHome: true,
+    createdAt: "2026-11-03T08:00:00.000Z",
+  },
+  {
+    id: "proj-4",
+    title: "HAVZA",
+    year: "2026",
+    category: "concept",
+    url: "",
+    imageUrl: "./asset/Ecommerce.png",
+    description:
+      "Konsep desain toko online dan katalog produk modern dengan fokus pada visual produk yang kuat serta alur belanja yang ringkas.",
+    tags: ["E-Commerce UI", "Figma", "Frontend Prototype"],
+    featuredOnHome: true,
+    createdAt: "2026-11-04T08:00:00.000Z",
+  },
+  {
+    id: "proj-5",
+    title: "COVO",
+    year: "2026",
+    category: "concept",
+    url: "",
+    imageUrl: "./asset/COVO.png",
+    description:
+      "Aplikasi belajar bahasa dan pencocokan partner percakapan berbasis minat dengan fitur persiapan frasa interaktif, pelacakan progres, dan antarmuka bersih berilustrasi ramah.",
+    tags: ["App Design", "Figma", "Frontend Prototype"],
+    featuredOnHome: false,
+    createdAt: "2026-11-05T08:00:00.000Z",
+  },
+  {
+    id: "proj-6",
+    title: "INVICTUS",
+    year: "2026",
+    category: "live",
+    url: "https://invictus3.vercel.app/",
+    imageUrl: "./asset/Invictus.web.png",
+    description:
+      "Website resmi angkatan dengan tampilan modern, galeri momen kebersamaan, dan informasi profil anggota.",
+    tags: ["Website", "HTML & CSS", "Responsive UI"],
+    featuredOnHome: false,
+    createdAt: "2026-11-06T08:00:00.000Z",
   },
 ];
 
@@ -84,32 +235,52 @@ async function redisCommand(commandArray) {
   return data.result;
 }
 
-async function getAllTestimonials() {
+async function getCollection(key, seedData) {
   const { url, token } = getRedisConfig();
   if (!url || !token) {
-    return SEED_TESTIMONIALS;
+    return [...seedData];
   }
 
-  const raw = await redisCommand(["GET", REDIS_KEY]);
+  const raw = await redisCommand(["GET", key]);
   if (!raw) {
-    await redisCommand(["SET", REDIS_KEY, JSON.stringify(SEED_TESTIMONIALS)]);
-    return [...SEED_TESTIMONIALS];
+    await redisCommand(["SET", key, JSON.stringify(seedData)]);
+    return [...seedData];
   }
 
   try {
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [...SEED_TESTIMONIALS];
+    return Array.isArray(parsed) ? parsed : [...seedData];
   } catch (_) {
-    return [...SEED_TESTIMONIALS];
+    return [...seedData];
   }
+}
+
+async function getAllTestimonials() {
+  return getCollection(REDIS_KEY, SEED_TESTIMONIALS);
 }
 
 async function saveAllTestimonials(items) {
   await redisCommand(["SET", REDIS_KEY, JSON.stringify(items)]);
 }
 
+async function getAllCertificates() {
+  return getCollection(REDIS_CERTS_KEY, SEED_CERTIFICATES);
+}
+
+async function saveAllCertificates(items) {
+  await redisCommand(["SET", REDIS_CERTS_KEY, JSON.stringify(items)]);
+}
+
+async function getAllProjects() {
+  return getCollection(REDIS_PROJECTS_KEY, SEED_PROJECTS);
+}
+
+async function saveAllProjects(items) {
+  await redisCommand(["SET", REDIS_PROJECTS_KEY, JSON.stringify(items)]);
+}
+
 function escapeHtml(str) {
-  return String(str)
+  return String(str || "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -227,6 +398,10 @@ module.exports = {
   COOKIE_NAME,
   getAllTestimonials,
   saveAllTestimonials,
+  getAllCertificates,
+  saveAllCertificates,
+  getAllProjects,
+  saveAllProjects,
   sendNewReviewEmail,
   signSessionToken,
   isAdminAuthenticated,

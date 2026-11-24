@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const certCards = Array.from(document.querySelectorAll(".cert-card"));
+  const fanContainer = document.querySelector(".cert-cards-fan");
+  const kickerEl = document.querySelector(".cert-bento-kicker");
   const expandBtn = document.getElementById("openAllCertificatesBtn");
   const modal = document.getElementById("certModal");
   const backdrop = document.getElementById("certModalBackdrop");
@@ -11,7 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalDesc = document.getElementById("certModalDesc");
   const modalList = document.getElementById("certModalList");
 
-  if (!modal || !certCards.length) return;
+  if (!modal) return;
+
+  function getCertCards() {
+    return Array.from(document.querySelectorAll(".cert-card"));
+  }
 
   function openSingleCertificate(card) {
     const num = card.dataset.certNum || "01";
@@ -44,13 +49,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function openAllCertificates() {
-    modalBadge.textContent = `DAFTAR SERTIFIKAT • [0${certCards.length}]`;
+    const certCards = getCertCards();
+    modalBadge.textContent = `DAFTAR SERTIFIKAT • [${String(certCards.length).padStart(2, "0")}]`;
     modalTitle.textContent = "Semua Sertifikat & Pencapaian";
     if (modalImg) {
       modalImg.removeAttribute("src");
       modalImg.style.display = "none";
     }
-    modalMeta.innerHTML = "<span>Pilih salah satu sertifikat di bawah untuk melihat detailnya.</span>";
+    modalMeta.innerHTML =
+      "<span>Pilih salah satu sertifikat di bawah untuk melihat detailnya.</span>";
     modalDesc.textContent = "";
     modalList.innerHTML = "";
     modalList.style.display = "flex";
@@ -82,9 +89,83 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("modal-open");
   }
 
-  certCards.forEach((card) => {
-    card.addEventListener("click", () => openSingleCertificate(card));
-  });
+  function bindCardListeners() {
+    getCertCards().forEach((card) => {
+      card.onclick = () => openSingleCertificate(card);
+    });
+  }
+
+  async function hydrateCertificates() {
+    if (!fanContainer) return;
+    try {
+      const res = await fetch("/api/certificates", {
+        headers: { Accept: "application/json" },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!Array.isArray(data.certificates)) return;
+
+      const total = data.certificates.length;
+      if (kickerEl) {
+        kickerEl.textContent = `SERTIFIKAT • [${String(total).padStart(2, "0")}]`;
+      }
+
+      // Tampilkan hingga 5 sertifikat di kipas bento home (sisanya tetap bisa dilihat di certificates.html)
+      const visibleCerts = data.certificates.slice(0, 5);
+      fanContainer.innerHTML = "";
+
+      visibleCerts.forEach((cert, idx) => {
+        const num = String(idx + 1).padStart(2, "0");
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `cert-card ${cert.theme || "theme-deep"}${cert.imageUrl ? " has-full-img" : ""}`;
+        btn.dataset.certNum = num;
+        btn.dataset.certTitle = cert.title;
+        btn.dataset.certIssuer = cert.issuer;
+        btn.dataset.certYear = cert.year || "2026";
+        btn.dataset.certImg = cert.imageUrl || "";
+        btn.dataset.certDesc = cert.description || "";
+
+        if (cert.imageUrl) {
+          const img = document.createElement("img");
+          img.className = "cert-card-img";
+          img.src = cert.imageUrl;
+          img.alt = `Sertifikat ${cert.title}`;
+          btn.appendChild(img);
+        }
+
+        const head = document.createElement("div");
+        head.className = "cert-card-head";
+        const numSpan = document.createElement("span");
+        numSpan.className = "cert-num";
+        numSpan.textContent = num;
+        const h3 = document.createElement("h3");
+        h3.className = "cert-title";
+        h3.textContent = cert.title;
+        head.append(numSpan, h3);
+
+        const extra = document.createElement("div");
+        extra.className = "cert-card-extra";
+        const issuerSpan = document.createElement("span");
+        issuerSpan.className = "cert-issuer";
+        issuerSpan.textContent = `${cert.issuer} • ${cert.year || "2026"}`;
+        const pillSpan = document.createElement("span");
+        pillSpan.className = "cert-action-pill";
+        pillSpan.textContent = "Detail ↗";
+        extra.append(issuerSpan, pillSpan);
+
+        btn.append(head, extra);
+        fanContainer.appendChild(btn);
+      });
+
+      bindCardListeners();
+    } catch (_) {
+      // Fallback ke HTML statis jika offline
+    }
+  }
+
+  bindCardListeners();
+  void hydrateCertificates();
 
   if (expandBtn) {
     expandBtn.addEventListener("click", openAllCertificates);

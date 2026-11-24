@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Veneto Studio — Testimonial Moderation</title>
+    <title>Veneto Studio — Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -38,6 +38,7 @@
 
       .topbar {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
         gap: 16px;
@@ -46,7 +47,7 @@
         background: rgba(57, 34, 79, 0.72);
         border: 1px solid rgba(255, 255, 255, 0.18);
         backdrop-filter: blur(16px);
-        margin-bottom: 36px;
+        margin-bottom: 28px;
       }
 
       .brand {
@@ -94,6 +95,11 @@
         background: rgba(255, 255, 255, 0.16);
       }
 
+      .btn:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+
       .btn-orange {
         background: #ff9a50;
         color: #1c0b36;
@@ -137,33 +143,43 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
       }
 
       .field label {
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 600;
+        color: rgba(240, 229, 255, 0.88);
       }
 
-      .field input {
+      .field input,
+      .field select,
+      .field textarea {
         width: 100%;
-        padding: 12px 14px;
+        padding: 11px 14px;
         border-radius: 14px;
         border: 1px solid rgba(236, 226, 255, 0.22);
         background: rgba(255, 255, 255, 0.06);
         color: #ffffff;
         font-family: inherit;
-        font-size: 0.92rem;
+        font-size: 0.88rem;
       }
 
-      .field input:focus {
+      .field select option {
+        background: #1a0730;
+        color: #f0e5ff;
+      }
+
+      .field input:focus,
+      .field select:focus,
+      .field textarea:focus {
         outline: none;
         border-color: #ff9a50;
       }
 
       .error-msg {
         display: none;
-        padding: 10px 12px;
+        padding: 10px 14px;
         border-radius: 12px;
         background: rgba(255, 107, 139, 0.16);
         border: 1px solid rgba(255, 107, 139, 0.4);
@@ -172,9 +188,63 @@
         margin-bottom: 14px;
       }
 
-      /* Dashboard */
+      .success-msg {
+        display: none;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(110, 231, 183, 0.16);
+        border: 1px solid rgba(110, 231, 183, 0.4);
+        color: #a7f3d0;
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+      }
+
       .hidden {
         display: none !important;
+      }
+
+      /* Main Section Switcher */
+      .main-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 28px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid rgba(236, 226, 255, 0.14);
+      }
+
+      .main-nav-btn {
+        padding: 11px 22px;
+        border-radius: 999px;
+        border: 1px solid rgba(236, 226, 255, 0.22);
+        background: rgba(255, 255, 255, 0.06);
+        color: #f0e5ff;
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.22s ease;
+      }
+
+      .main-nav-btn .badge-num {
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.14);
+        font-size: 0.74rem;
+      }
+
+      .main-nav-btn.is-active {
+        background: #ece2ff;
+        color: #1c0b36;
+        border-color: #ece2ff;
+      }
+
+      .main-nav-btn.is-active .badge-num {
+        background: rgba(28, 11, 54, 0.15);
+        color: #1c0b36;
       }
 
       .dash-header {
@@ -187,7 +257,7 @@
       }
 
       .dash-header h1 {
-        font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+        font-size: clamp(1.7rem, 3vw, 2.35rem);
         font-weight: 900;
         letter-spacing: -0.05em;
       }
@@ -197,6 +267,95 @@
         color: rgba(240, 229, 255, 0.68);
       }
 
+      /* Form Panel for Certs & Projects */
+      .creator-card {
+        padding: 24px;
+        border-radius: 24px;
+        background: rgba(236, 226, 255, 0.07);
+        border: 1px solid rgba(236, 226, 255, 0.18);
+        margin-bottom: 28px;
+      }
+
+      .creator-card h2 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin-bottom: 16px;
+        color: #ff9a50;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 14px;
+      }
+
+      .form-grid .span-full {
+        grid-column: 1 / -1;
+      }
+
+      .img-upload-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .img-upload-row input[type="text"] {
+        flex: 1 1 240px;
+      }
+
+      .file-pick-label {
+        padding: 11px 16px;
+        border-radius: 14px;
+        background: rgba(255, 154, 80, 0.18);
+        border: 1px dashed rgba(255, 154, 80, 0.6);
+        color: #ff9a50;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .file-pick-label:hover {
+        background: rgba(255, 154, 80, 0.28);
+      }
+
+      .preview-thumb-box {
+        margin-top: 8px;
+        display: none;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .preview-thumb-box.has-img {
+        display: flex;
+      }
+
+      .preview-thumb-box img {
+        width: 110px;
+        height: 68px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: #140424;
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.84rem;
+        cursor: pointer;
+        margin-top: 4px;
+      }
+
+      .checkbox-row input {
+        width: 17px;
+        height: 17px;
+        accent-color: #ff9a50;
+      }
+
+      /* Tabs & Cards */
       .tabs {
         display: flex;
         flex-wrap: wrap;
@@ -240,19 +399,28 @@
 
       .cards-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
         gap: 18px;
       }
 
       .mod-card {
-        padding: 22px;
+        padding: 20px;
         border-radius: 22px;
         background: rgba(236, 226, 255, 0.07);
         border: 1px solid rgba(236, 226, 255, 0.16);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 16px;
+        gap: 14px;
+      }
+
+      .media-banner {
+        width: 100%;
+        height: 155px;
+        border-radius: 14px;
+        object-fit: cover;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.14);
       }
 
       .mod-top {
@@ -288,13 +456,15 @@
         object-fit: cover;
       }
 
-      .mod-author h3 {
-        font-size: 1rem;
+      .mod-author h3,
+      .item-title {
+        font-size: 1.02rem;
         font-weight: 800;
         letter-spacing: -0.02em;
       }
 
-      .mod-author span {
+      .mod-author span,
+      .item-sub {
         display: block;
         font-size: 0.78rem;
         color: rgba(240, 229, 255, 0.68);
@@ -307,6 +477,7 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.06em;
+        white-space: nowrap;
       }
 
       .status-pending {
@@ -325,9 +496,24 @@
       }
 
       .mod-comment {
-        font-size: 0.9rem;
+        font-size: 0.86rem;
         line-height: 1.5;
         color: #f5eeff;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .mini-tag {
+        padding: 3px 9px;
+        border-radius: 999px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.09);
+        color: #e4d4ff;
       }
 
       .mod-footer {
@@ -399,8 +585,8 @@
       <!-- Login View -->
       <section id="loginView" class="login-wrap">
         <div class="login-card">
-          <h1>Admin Moderation</h1>
-          <p>Sign in to approve or remove submitted portfolio testimonials.</p>
+          <h1>Admin Studio</h1>
+          <p>Sign in to manage testimonials, certificates, and projects.</p>
           <div id="loginError" class="error-msg" role="alert"></div>
           <form id="loginForm">
             <div class="field">
@@ -426,35 +612,321 @@
 
       <!-- Dashboard View -->
       <main id="dashboardView" class="hidden">
-        <div class="dash-header">
-          <div>
-            <h1>Testimonial Reviews</h1>
-            <p>
-              Notifications are sent to <strong>vvitto878@gmail.com</strong>.
-              Only approved comments appear publicly.
-            </p>
-          </div>
-          <button type="button" id="refreshBtn" class="btn">Refresh</button>
-        </div>
-
-        <div class="tabs" role="tablist">
+        <!-- Main Section Navigation -->
+        <nav class="main-nav" aria-label="Admin sections">
           <button
             type="button"
-            class="tab-btn is-active"
-            data-tab="pending"
-            role="tab"
+            class="main-nav-btn is-active"
+            data-section="testimonials"
           >
-            Pending <span class="count" id="countPending">0</span>
+            Testimonials <span class="badge-num" id="navCountTesti">0</span>
           </button>
-          <button type="button" class="tab-btn" data-tab="approved" role="tab">
-            Approved <span class="count" id="countApproved">0</span>
+          <button
+            type="button"
+            class="main-nav-btn"
+            data-section="certificates"
+          >
+            Certificates <span class="badge-num" id="navCountCerts">0</span>
           </button>
-          <button type="button" class="tab-btn" data-tab="rejected" role="tab">
-            Deleted / Rejected <span class="count" id="countRejected">0</span>
+          <button type="button" class="main-nav-btn" data-section="projects">
+            Projects <span class="badge-num" id="navCountProjects">0</span>
           </button>
-        </div>
+        </nav>
 
-        <div id="cardsGrid" class="cards-grid"></div>
+        <!-- ===============================================================
+             SECTION 1: TESTIMONIALS
+             =============================================================== -->
+        <section id="sectionTestimonials">
+          <div class="dash-header">
+            <div>
+              <h1>Testimonial Reviews</h1>
+              <p>Only approved comments appear publicly on your portfolio.</p>
+            </div>
+            <button type="button" id="refreshBtn" class="btn">Refresh</button>
+          </div>
+
+          <div class="tabs" role="tablist">
+            <button
+              type="button"
+              class="tab-btn is-active"
+              data-tab="pending"
+              role="tab"
+            >
+              Pending <span class="count" id="countPending">0</span>
+            </button>
+            <button
+              type="button"
+              class="tab-btn"
+              data-tab="approved"
+              role="tab"
+            >
+              Approved <span class="count" id="countApproved">0</span>
+            </button>
+            <button
+              type="button"
+              class="tab-btn"
+              data-tab="rejected"
+              role="tab"
+            >
+              Deleted / Rejected <span class="count" id="countRejected">0</span>
+            </button>
+          </div>
+
+          <div id="cardsGrid" class="cards-grid"></div>
+        </section>
+
+        <!-- ===============================================================
+             SECTION 2: CERTIFICATES
+             =============================================================== -->
+        <section id="sectionCertificates" class="hidden">
+          <div class="dash-header">
+            <div>
+              <h1>Manage Certificates</h1>
+              <p>
+                Tambah atau hapus sertifikat. Perubahan otomatis muncul di
+                section About dan halaman Certificates.
+              </p>
+            </div>
+          </div>
+
+          <div class="creator-card">
+            <h2>+ Tambah Sertifikat Baru</h2>
+            <div id="certFeedback" class="error-msg"></div>
+            <div id="certSuccess" class="success-msg"></div>
+
+            <form id="addCertForm">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="certTitle">Judul Sertifikat *</label>
+                  <input
+                    type="text"
+                    id="certTitle"
+                    placeholder="Contoh: React Frontend Developer"
+                    required
+                  />
+                </div>
+
+                <div class="field">
+                  <label for="certIssuer">Penerbit / Lembaga *</label>
+                  <input
+                    type="text"
+                    id="certIssuer"
+                    placeholder="Contoh: Dicoding / Skilvul.com"
+                    required
+                  />
+                </div>
+
+                <div class="field">
+                  <label for="certYear">Tahun</label>
+                  <input type="text" id="certYear" value="2026" />
+                </div>
+
+                <div class="field">
+                  <label for="certCategory">Kategori Filter</label>
+                  <select id="certCategory">
+                    <option value="web">Web Development</option>
+                    <option value="design">UI/UX &amp; Creative</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="certTheme">Warna Tema Kartu</label>
+                  <select id="certTheme">
+                    <option value="theme-deep">Deep Purple</option>
+                    <option value="theme-royal">Royal Violet</option>
+                    <option value="theme-orange">Warm Orange</option>
+                    <option value="theme-lavender">Soft Lavender</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="certTag">Label Badge (Opsional)</label>
+                  <input
+                    type="text"
+                    id="certTag"
+                    placeholder="Contoh: REACT CERTIFICATE"
+                  />
+                </div>
+
+                <div class="field span-full">
+                  <label for="certImageUrl"
+                    >Gambar Sertifikat (Upload File atau Tempel URL /
+                    Path)</label
+                  >
+                  <div class="img-upload-row">
+                    <input
+                      type="text"
+                      id="certImageUrl"
+                      placeholder="./asset/nama-sertifikat.png atau https://..."
+                    />
+                    <label class="file-pick-label" for="certImageFile">
+                      Pilih Foto dari Laptop
+                    </label>
+                    <input
+                      type="file"
+                      id="certImageFile"
+                      accept="image/*"
+                      class="hidden"
+                    />
+                  </div>
+                  <div class="preview-thumb-box" id="certPreviewBox">
+                    <img id="certPreviewImg" src="" alt="Preview sertifikat" />
+                    <span style="font-size: 0.76rem; opacity: 0.75"
+                      >Siap disimpan</span
+                    >
+                  </div>
+                </div>
+
+                <div class="field span-full">
+                  <label for="certDesc">Deskripsi Singkat</label>
+                  <textarea
+                    id="certDesc"
+                    rows="2"
+                    placeholder="Jelaskan materi atau kompetensi yang dikuasai..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                id="saveCertBtn"
+                class="btn btn-orange"
+                style="margin-top: 8px"
+              >
+                Simpan Sertifikat
+              </button>
+            </form>
+          </div>
+
+          <div id="certsGrid" class="cards-grid"></div>
+        </section>
+
+        <!-- ===============================================================
+             SECTION 3: PROJECTS
+             =============================================================== -->
+        <section id="sectionProjects" class="hidden">
+          <div class="dash-header">
+            <div>
+              <h1>Manage Projects</h1>
+              <p>
+                Tambah atau hapus project. Otomatis tampil di Selected Work
+                (Home) dan halaman Projects.
+              </p>
+            </div>
+          </div>
+
+          <div class="creator-card">
+            <h2>+ Tambah Project Baru</h2>
+            <div id="projFeedback" class="error-msg"></div>
+            <div id="projSuccess" class="success-msg"></div>
+
+            <form id="addProjectForm">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="projTitle">Nama Project *</label>
+                  <input
+                    type="text"
+                    id="projTitle"
+                    placeholder="Contoh: Veneto Store"
+                    required
+                  />
+                </div>
+
+                <div class="field">
+                  <label for="projYear">Tahun</label>
+                  <input type="text" id="projYear" value="2026" />
+                </div>
+
+                <div class="field">
+                  <label for="projCategory">Tipe Project</label>
+                  <select id="projCategory">
+                    <option value="live">Live Website</option>
+                    <option value="concept">UI Concept</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="projUrl"
+                    >Link Website (Kosongkan jika konsep)</label
+                  >
+                  <input
+                    type="url"
+                    id="projUrl"
+                    placeholder="https://nama-project.vercel.app"
+                  />
+                </div>
+
+                <div class="field span-full">
+                  <label for="projTags"
+                    >Tech Stack / Label (pisahkan dengan koma)</label
+                  >
+                  <input
+                    type="text"
+                    id="projTags"
+                    placeholder="HTML5, CSS3, JavaScript, Responsive UI"
+                  />
+                </div>
+
+                <div class="field span-full">
+                  <label for="projImageUrl"
+                    >Screenshot / Cover Project * (Upload File atau Tempel
+                    URL)</label
+                  >
+                  <div class="img-upload-row">
+                    <input
+                      type="text"
+                      id="projImageUrl"
+                      placeholder="./asset/preview.png atau https://..."
+                      required
+                    />
+                    <label class="file-pick-label" for="projImageFile">
+                      Pilih Screenshot dari Laptop
+                    </label>
+                    <input
+                      type="file"
+                      id="projImageFile"
+                      accept="image/*"
+                      class="hidden"
+                    />
+                  </div>
+                  <div class="preview-thumb-box" id="projPreviewBox">
+                    <img id="projPreviewImg" src="" alt="Preview project" />
+                    <span style="font-size: 0.76rem; opacity: 0.75"
+                      >Siap disimpan</span
+                    >
+                  </div>
+                </div>
+
+                <div class="field span-full">
+                  <label for="projDesc">Deskripsi Project</label>
+                  <textarea
+                    id="projDesc"
+                    rows="2"
+                    placeholder="Ceritakan singkat tentang website atau aplikasi ini..."
+                  ></textarea>
+                </div>
+
+                <div class="field span-full">
+                  <label class="checkbox-row">
+                    <input type="checkbox" id="projFeatured" checked />
+                    <span>Tampilkan juga di halaman utama (Selected Work)</span>
+                  </label>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                id="saveProjBtn"
+                class="btn btn-orange"
+                style="margin-top: 8px"
+              >
+                Simpan Project
+              </button>
+            </form>
+          </div>
+
+          <div id="projectsAdminGrid" class="cards-grid"></div>
+        </section>
       </main>
     </div>
 
@@ -467,17 +939,30 @@
       const refreshBtn = document.getElementById("refreshBtn");
       const cardsGrid = document.getElementById("cardsGrid");
       const tabButtons = document.querySelectorAll(".tab-btn");
+      const mainNavButtons = document.querySelectorAll(".main-nav-btn");
+
+      const sectionTestimonials = document.getElementById(
+        "sectionTestimonials",
+      );
+      const sectionCertificates = document.getElementById(
+        "sectionCertificates",
+      );
+      const sectionProjects = document.getElementById("sectionProjects");
 
       let allItems = [];
+      let allCertificates = [];
+      let allProjects = [];
       let currentTab = "pending";
 
       function initials(name) {
-        return String(name || "V")
-          .trim()
-          .split(/\s+/)
-          .slice(0, 2)
-          .map((p) => p[0]?.toUpperCase() || "")
-          .join("") || "V";
+        return (
+          String(name || "V")
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map((p) => p[0]?.toUpperCase() || "")
+            .join("") || "V"
+        );
       }
 
       function formatDate(iso) {
@@ -494,11 +979,99 @@
         }
       }
 
+      // Compress uploaded local image so it fits cleanly in Redis
+      function compressImageFile(file, maxWidth = 960, quality = 0.82) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+              const scale = Math.min(1, maxWidth / img.width);
+              const canvas = document.createElement("canvas");
+              canvas.width = Math.round(img.width * scale);
+              canvas.height = Math.round(img.height * scale);
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", quality));
+            };
+            img.onerror = () => reject(new Error("Gagal membaca gambar."));
+            img.src = reader.result;
+          };
+          reader.onerror = () => reject(new Error("Gagal membuka file."));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function bindImageUploader(fileInputId, textInputId, boxId, imgId) {
+        const fileEl = document.getElementById(fileInputId);
+        const textEl = document.getElementById(textInputId);
+        const boxEl = document.getElementById(boxId);
+        const imgEl = document.getElementById(imgId);
+
+        fileEl?.addEventListener("change", async () => {
+          const file = fileEl.files?.[0];
+          if (!file) return;
+          try {
+            const dataUrl = await compressImageFile(file);
+            textEl.value = dataUrl;
+            imgEl.src = dataUrl;
+            boxEl.classList.add("has-img");
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+
+        textEl?.addEventListener("input", () => {
+          const val = textEl.value.trim();
+          if (val) {
+            imgEl.src = val;
+            boxEl.classList.add("has-img");
+          } else {
+            boxEl.classList.remove("has-img");
+          }
+        });
+      }
+
+      bindImageUploader(
+        "certImageFile",
+        "certImageUrl",
+        "certPreviewBox",
+        "certPreviewImg",
+      );
+      bindImageUploader(
+        "projImageFile",
+        "projImageUrl",
+        "projPreviewBox",
+        "projPreviewImg",
+      );
+
+      // Section switcher
+      mainNavButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          mainNavButtons.forEach((b) => b.classList.remove("is-active"));
+          btn.classList.add("is-active");
+          const target = btn.dataset.section;
+          sectionTestimonials.classList.toggle(
+            "hidden",
+            target !== "testimonials",
+          );
+          sectionCertificates.classList.toggle(
+            "hidden",
+            target !== "certificates",
+          );
+          sectionProjects.classList.toggle("hidden", target !== "projects");
+        });
+      });
+
+      // -------------------------------------------------------------
+      // Testimonials
+      // -------------------------------------------------------------
       function renderCards() {
         const pending = allItems.filter((i) => i.status === "pending");
         const approved = allItems.filter((i) => i.status === "approved");
         const rejected = allItems.filter((i) => i.status === "rejected");
 
+        document.getElementById("navCountTesti").textContent = allItems.length;
         document.getElementById("countPending").textContent = pending.length;
         document.getElementById("countApproved").textContent = approved.length;
         document.getElementById("countRejected").textContent = rejected.length;
@@ -603,7 +1176,303 @@
         });
       }
 
-      async function loadAdminTestimonials() {
+      // -------------------------------------------------------------
+      // Certificates Render & CRUD
+      // -------------------------------------------------------------
+      function renderCertificates() {
+        const grid = document.getElementById("certsGrid");
+        document.getElementById("navCountCerts").textContent =
+          allCertificates.length;
+        grid.innerHTML = "";
+
+        if (!allCertificates.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-state";
+          empty.textContent = "Belum ada sertifikat tersimpan.";
+          grid.appendChild(empty);
+          return;
+        }
+
+        allCertificates.forEach((cert, idx) => {
+          const card = document.createElement("article");
+          card.className = "mod-card";
+
+          if (cert.imageUrl) {
+            const img = document.createElement("img");
+            img.className = "media-banner";
+            img.src = cert.imageUrl;
+            img.alt = cert.title;
+            card.appendChild(img);
+          }
+
+          const top = document.createElement("div");
+          top.className = "mod-top";
+
+          const left = document.createElement("div");
+          const h3 = document.createElement("h3");
+          h3.className = "item-title";
+          h3.textContent = `${String(idx + 1).padStart(2, "0")}. ${cert.title}`;
+          const sub = document.createElement("span");
+          sub.className = "item-sub";
+          sub.textContent = `${cert.issuer} • ${cert.year || "2026"}`;
+          left.append(h3, sub);
+
+          const badge = document.createElement("span");
+          badge.className = "status-pill status-approved";
+          badge.textContent =
+            cert.category === "design" ? "UI/UX & Creative" : "Web Dev";
+
+          top.append(left, badge);
+
+          const desc = document.createElement("p");
+          desc.className = "mod-comment";
+          desc.textContent = cert.description || "";
+
+          const footer = document.createElement("div");
+          footer.className = "mod-footer";
+
+          const tagSpan = document.createElement("span");
+          tagSpan.className = "mod-date";
+          tagSpan.textContent = cert.tag || "";
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn btn-delete";
+          delBtn.textContent = "Hapus";
+          delBtn.onclick = () => deleteCertificate(cert.id, cert.title);
+
+          footer.append(tagSpan, delBtn);
+          card.append(top, desc, footer);
+          grid.appendChild(card);
+        });
+      }
+
+      async function loadAdminCertificates() {
+        const res = await fetch("/api/certificates");
+        if (!res.ok) return;
+        const data = await res.json();
+        allCertificates = Array.isArray(data.certificates)
+          ? data.certificates
+          : [];
+        renderCertificates();
+      }
+
+      async function deleteCertificate(id, title) {
+        if (!window.confirm(`Hapus sertifikat "${title}"?`)) return;
+        const res = await fetch(
+          `/api/certificates?id=${encodeURIComponent(id)}`,
+          {
+            method: "DELETE",
+            credentials: "same-origin",
+          },
+        );
+        if (res.ok) {
+          await loadAdminCertificates();
+        } else {
+          alert("Gagal menghapus sertifikat.");
+        }
+      }
+
+      document
+        .getElementById("addCertForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const errBox = document.getElementById("certFeedback");
+          const okBox = document.getElementById("certSuccess");
+          const btn = document.getElementById("saveCertBtn");
+          errBox.style.display = "none";
+          okBox.style.display = "none";
+          btn.disabled = true;
+
+          try {
+            const res = await fetch("/api/certificates", {
+              method: "POST",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                title: document.getElementById("certTitle").value,
+                issuer: document.getElementById("certIssuer").value,
+                year: document.getElementById("certYear").value,
+                category: document.getElementById("certCategory").value,
+                theme: document.getElementById("certTheme").value,
+                tag: document.getElementById("certTag").value,
+                imageUrl: document.getElementById("certImageUrl").value,
+                description: document.getElementById("certDesc").value,
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              throw new Error(data.error || "Gagal menyimpan sertifikat.");
+            }
+            e.target.reset();
+            document.getElementById("certYear").value = "2026";
+            document
+              .getElementById("certPreviewBox")
+              .classList.remove("has-img");
+            okBox.textContent = "Sertifikat berhasil ditambahkan!";
+            okBox.style.display = "block";
+            await loadAdminCertificates();
+          } catch (err) {
+            errBox.textContent = err.message;
+            errBox.style.display = "block";
+          } finally {
+            btn.disabled = false;
+          }
+        });
+
+      // -------------------------------------------------------------
+      // Projects Render & CRUD
+      // -------------------------------------------------------------
+      function renderProjects() {
+        const grid = document.getElementById("projectsAdminGrid");
+        document.getElementById("navCountProjects").textContent =
+          allProjects.length;
+        grid.innerHTML = "";
+
+        if (!allProjects.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-state";
+          empty.textContent = "Belum ada project tersimpan.";
+          grid.appendChild(empty);
+          return;
+        }
+
+        allProjects.forEach((proj, idx) => {
+          const card = document.createElement("article");
+          card.className = "mod-card";
+
+          if (proj.imageUrl) {
+            const img = document.createElement("img");
+            img.className = "media-banner";
+            img.src = proj.imageUrl;
+            img.alt = proj.title;
+            card.appendChild(img);
+          }
+
+          const top = document.createElement("div");
+          top.className = "mod-top";
+
+          const left = document.createElement("div");
+          const h3 = document.createElement("h3");
+          h3.className = "item-title";
+          h3.textContent = `${String(idx + 1).padStart(2, "0")}. ${proj.title}`;
+          const sub = document.createElement("span");
+          sub.className = "item-sub";
+          sub.textContent = `${proj.year || "2026"}${proj.featuredOnHome !== false ? " • Tampil di Home" : ""}`;
+          left.append(h3, sub);
+
+          const badge = document.createElement("span");
+          badge.className = `status-pill ${proj.category === "live" ? "status-approved" : "status-pending"}`;
+          badge.textContent =
+            proj.category === "live" ? "Live Web" : "UI Concept";
+
+          top.append(left, badge);
+
+          const desc = document.createElement("p");
+          desc.className = "mod-comment";
+          desc.textContent = proj.description || "";
+
+          const tagRow = document.createElement("div");
+          tagRow.className = "tag-row";
+          (proj.tags || []).forEach((t) => {
+            const span = document.createElement("span");
+            span.className = "mini-tag";
+            span.textContent = t;
+            tagRow.appendChild(span);
+          });
+
+          const footer = document.createElement("div");
+          footer.className = "mod-footer";
+
+          const linkSpan = document.createElement("span");
+          linkSpan.className = "mod-date";
+          linkSpan.textContent = proj.url ? proj.url : "Tanpa link eksternal";
+
+          const delBtn = document.createElement("button");
+          delBtn.type = "button";
+          delBtn.className = "btn btn-delete";
+          delBtn.textContent = "Hapus";
+          delBtn.onclick = () => deleteProject(proj.id, proj.title);
+
+          footer.append(linkSpan, delBtn);
+          card.append(top, desc, tagRow, footer);
+          grid.appendChild(card);
+        });
+      }
+
+      async function loadAdminProjects() {
+        const res = await fetch("/api/projects");
+        if (!res.ok) return;
+        const data = await res.json();
+        allProjects = Array.isArray(data.projects) ? data.projects : [];
+        renderProjects();
+      }
+
+      async function deleteProject(id, title) {
+        if (!window.confirm(`Hapus project "${title}"?`)) return;
+        const res = await fetch(`/api/projects?id=${encodeURIComponent(id)}`, {
+          method: "DELETE",
+          credentials: "same-origin",
+        });
+        if (res.ok) {
+          await loadAdminProjects();
+        } else {
+          alert("Gagal menghapus project.");
+        }
+      }
+
+      document
+        .getElementById("addProjectForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const errBox = document.getElementById("projFeedback");
+          const okBox = document.getElementById("projSuccess");
+          const btn = document.getElementById("saveProjBtn");
+          errBox.style.display = "none";
+          okBox.style.display = "none";
+          btn.disabled = true;
+
+          try {
+            const res = await fetch("/api/projects", {
+              method: "POST",
+              credentials: "same-origin",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                title: document.getElementById("projTitle").value,
+                year: document.getElementById("projYear").value,
+                category: document.getElementById("projCategory").value,
+                url: document.getElementById("projUrl").value,
+                tags: document.getElementById("projTags").value,
+                imageUrl: document.getElementById("projImageUrl").value,
+                description: document.getElementById("projDesc").value,
+                featuredOnHome: document.getElementById("projFeatured").checked,
+              }),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+              throw new Error(data.error || "Gagal menyimpan project.");
+            }
+            e.target.reset();
+            document.getElementById("projYear").value = "2026";
+            document.getElementById("projFeatured").checked = true;
+            document
+              .getElementById("projPreviewBox")
+              .classList.remove("has-img");
+            okBox.textContent = "Project berhasil ditambahkan!";
+            okBox.style.display = "block";
+            await loadAdminProjects();
+          } catch (err) {
+            errBox.textContent = err.message;
+            errBox.style.display = "block";
+          } finally {
+            btn.disabled = false;
+          }
+        });
+
+      // -------------------------------------------------------------
+      // Auth & Bootstrap
+      // -------------------------------------------------------------
+      async function loadAllAdminData() {
         const res = await fetch("/api/admin/testimonials", {
           credentials: "same-origin",
         });
@@ -615,30 +1484,39 @@
         allItems = Array.isArray(data.testimonials) ? data.testimonials : [];
         showDashboard();
         renderCards();
+        await Promise.all([loadAdminCertificates(), loadAdminProjects()]);
       }
 
       async function updateStatus(id, status) {
-        const res = await fetch(`/api/admin/testimonials/${encodeURIComponent(id)}`, {
-          method: "PATCH",
-          credentials: "same-origin",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status }),
-        });
+        const res = await fetch(
+          `/api/admin/testimonials/${encodeURIComponent(id)}`,
+          {
+            method: "PATCH",
+            credentials: "same-origin",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          },
+        );
         if (res.ok) {
-          await loadAdminTestimonials();
+          await loadAllAdminData();
         }
       }
 
       async function permanentDelete(id) {
-        if (!window.confirm("Permanently delete this comment from the database?")) {
+        if (
+          !window.confirm("Permanently delete this comment from the database?")
+        ) {
           return;
         }
-        const res = await fetch(`/api/admin/testimonials/${encodeURIComponent(id)}`, {
-          method: "DELETE",
-          credentials: "same-origin",
-        });
+        const res = await fetch(
+          `/api/admin/testimonials/${encodeURIComponent(id)}`,
+          {
+            method: "DELETE",
+            credentials: "same-origin",
+          },
+        );
         if (res.ok) {
-          await loadAdminTestimonials();
+          await loadAllAdminData();
         }
       }
 
@@ -668,13 +1546,16 @@
 
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {
-          loginError.textContent = (typeof data.error === "string" ? data.error : data.error?.message) || "Invalid admin password.";
+          loginError.textContent =
+            (typeof data.error === "string"
+              ? data.error
+              : data.error?.message) || "Invalid admin password.";
           loginError.style.display = "block";
           return;
         }
 
         document.getElementById("adminPassword").value = "";
-        await loadAdminTestimonials();
+        await loadAllAdminData();
       });
 
       logoutBtn.addEventListener("click", async () => {
@@ -685,7 +1566,7 @@
         showLogin();
       });
 
-      refreshBtn.addEventListener("click", loadAdminTestimonials);
+      refreshBtn.addEventListener("click", loadAllAdminData);
 
       tabButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -696,7 +1577,7 @@
         });
       });
 
-      void loadAdminTestimonials();
+      void loadAllAdminData();
     </script>
   </body>
 </html>
