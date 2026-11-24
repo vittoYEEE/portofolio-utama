@@ -603,7 +603,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function navigateToMenuItem(href, updateHistory = false) {
+ function navigateToMenuItem(href, updateHistory = false) {
+    if (href === "#home") {
+      if (updateHistory && window.location.hash !== href) {
+        window.history.pushState(null, "", href);
+      }
+
+      if (window.VenetoLocoScroll) {
+        window.VenetoLocoScroll.scrollTo(0);
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: reducedMotion.matches ? "auto" : "smooth",
+        });
+      }
+      return;
+    }
+
     const target = document.querySelector(href);
     if (!target) return;
 
@@ -712,6 +728,16 @@ document.addEventListener("DOMContentLoaded", () => {
       closeMenu(item.getAttribute("href"));
     });
   });
+
+  document.querySelectorAll('a[href="#home"]:not(.menu-item)').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      navigateToMenuItem("#home", true);
+    });
+  });
+
+  // ---------------------------------------------------------------
+  // 5. Interactive Horizontal Testimonial Section + Submission Modal
 
   // ---------------------------------------------------------------
   // 5. Interactive Horizontal Testimonial Section + Submission Modal

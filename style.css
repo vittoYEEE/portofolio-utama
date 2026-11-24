@@ -2135,3 +2135,34 @@ body.modal-open {
     transition-duration: 0.01ms !important;
   }
 }
+/* Penyesuaian proporsi khusus layar laptop Windows Scale 125% (1536x700px) */
+@media (min-width: 1024px) and (max-width: 1650px) and (max-height: 820px) {
+  html {
+    /* Mengecilkan basis rem agar proporsinya setara tampilan 100% */
+    font-size: clamp(13px, 0.85vw, 14.5px);
+  }
+
+  /* Nama class asli sesuai index.html kamu */
+  .page-wrapper,
+  .hero,
+  .tools-portal-sticky,
+  .projects-section,
+  .testimonials-sticky {
+    min-height: 100dvh;
+  }
+
+  /* Agar Bento About + Kartu Certificate tidak terlalu penuh di tinggi 700px */
+  .tools-portal-about-content {
+    padding-top: 76px !important;
+    padding-bottom: 16px !important;
+    gap: 12px !important;
+  }
+
+  .about-bento-portrait {
+    min-height: 195px;
+  }
+
+  .cert-bento {
+    height: 265px;
+  }
+}
