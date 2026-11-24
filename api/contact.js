@@ -108,7 +108,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       ok: true,
-      message: "Terima kasih! Pesanmu sudah terkirim ke Vittorio.",
+      message: "Terima kasih! Pesanmu sudah terkirim ke Vittorio0521@student.abudzar.sch.id.",
     });
   } catch (err) {
     console.error("Contact email error:", err);
