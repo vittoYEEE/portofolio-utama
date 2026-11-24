@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Tampilkan hingga 5 sertifikat di kipas bento home (sisanya tetap bisa dilihat di certificates.html)
-      const visibleCerts = data.certificates.slice(0, 5);
+     const visibleCerts = data.certificates.slice(-5);
       fanContainer.innerHTML = "";
 
       visibleCerts.forEach((cert, idx) => {
